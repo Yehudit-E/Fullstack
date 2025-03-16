@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace music.Core.Entities
+{
+    public enum GenreType
+    {
+        Pop,
+        Rock,
+        Jazz,
+        Classical,
+        HipHop,
+        Electronic
+    }
+    public class Song
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Artist { get; set; }
+        public GenreType Genre { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public bool IsPublic { get; set; }
+        public int  Likes { get; set; }
+        public string AudioFilePath { get; set; }
+        public string ImageFilePath { get; set; }
+        public bool IsDelited { get; set; }
+        //public List<Playlist> Playlists { get; set; }
+        public int PlaylistId { get; set; }
+        public Playlist playlist { get; set; }
+
+        public Song()
+        {
+            Likes = 0;
+        }
+    }
+}
