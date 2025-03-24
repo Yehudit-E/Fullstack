@@ -1,4 +1,5 @@
-﻿using music.Core.Entities;
+﻿using music.Core.DTOs;
+using music.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace music.Core.Intefaces.IRepositories
         Task<IEnumerable<User>> GetFullAsync();
         Task<User>? GetFullByIdAsync(int id);
         User? GetUserWithRoles(string email);
+        Task<User> GetByEmailAsync(string UserEmail);
     }
 }

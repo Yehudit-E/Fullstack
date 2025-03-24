@@ -84,6 +84,7 @@ namespace music.API.Controllers
             if (!flag)
                 return Forbid();
             SongDto songDto = _mapper.Map<SongDto>(songPostModel);
+            songDto.CreatedAt = DateTime.Now;
             songDto = await _iService.UpdateAsync(id, songDto);
             if (songDto == null)
                 return NotFound();

@@ -60,7 +60,7 @@ namespace music.API.Controllers
 
         // POST api/<UserControllers>
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<UserDto>> Post([FromBody] UserPostModel userPostModel)
         {
             if (userPostModel == null)

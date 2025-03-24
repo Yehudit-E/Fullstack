@@ -11,5 +11,7 @@ namespace music.Core.Intefaces.IRepositories
     {
         Task<IEnumerable<Playlist>> GetFullAsync();
         Task<Playlist> GetFullByIdAsync(int id);
+        Task<List<Playlist>> GetUserSharedPlaylistsAsync(int userId);
+        Task<List<Playlist>> GetUserPlaylistsAsync(int userId);
     }
 }

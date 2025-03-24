@@ -1,12 +1,12 @@
 import { FormEvent, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../store/userSlice";
-import { AddDispatch } from "../store/store";
+import { Dispatch } from "../store/store";
 import { UserRegister } from "../models/UserAuth";
 import { useNavigate } from "react-router";
 
 const Register = () => {
-    const dispatch = useDispatch<AddDispatch>();
+    const dispatch = useDispatch<Dispatch>();
     const navigate = useNavigate();
 
     const emailRef = useRef<HTMLInputElement>(null)

@@ -14,10 +14,13 @@ namespace music.Core.Intefaces.IServices
         Task<IEnumerable<Playlist>> GetFullAsync();
         Task<PlaylistDto> GetByIdAsync(int id);
         Task<Playlist> GetFullByIdAsync(int id);
+        Task<List<Playlist>> GetUserSharedPlaylistsAsync(int userId);
+        Task<List<Playlist>> GetUserPlaylistsAsync(int userId);
         Task<PlaylistDto> AddAsync(PlaylistDto playListsongDto);
         Task<PlaylistDto> UpdateAsync(int id, PlaylistDto playListsongDto);
         Task<bool> DeleteAsync(int id);
         Task<bool> RemoveSongFromPlaylistAsync(int playlistId, int songId);
-        Task<Playlist> AddUserAsync(Playlist playlist, int userId);
+        Task<Playlist> AddUserAsync(Playlist playlist, string userEmail);
+
     }
 }

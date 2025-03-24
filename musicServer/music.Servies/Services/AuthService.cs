@@ -42,6 +42,7 @@ namespace music.Service
                 new Claim("id", user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+
             };
             // Add roles as claims
             foreach (var role in user.Roles.Select(r => r.Name))

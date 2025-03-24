@@ -43,7 +43,16 @@ namespace music.Service.Services
             Playlist playlist = await _iManager._playlistRepository.GetFullByIdAsync(id);
             return playlist;
         }
-
+        public async Task<List<Playlist>> GetUserSharedPlaylistsAsync(int userId)
+        {
+            List<Playlist> playlists = await _iManager._playlistRepository.GetUserSharedPlaylistsAsync(userId);
+            return playlists;
+        }
+        public async Task<List<Playlist>> GetUserPlaylistsAsync(int userId)
+        {
+            List<Playlist> playlists = await _iManager._playlistRepository.GetUserPlaylistsAsync(userId);
+            return playlists;
+        }
         public async Task<PlaylistDto> AddAsync(PlaylistDto playlistDto)
         {
             Playlist playlist = _mapper.Map<Playlist>(playlistDto);
@@ -85,8 +94,10 @@ namespace music.Service.Services
             await _iManager.SaveAsync();
             return true;
         }
-        public  async Task<Playlist> AddUserAsync(Playlist playlist, int userId)
+        public  async Task<Playlist> AddUserAsync(Playlist playlist, string userEmail)
         {
+            var u =await  _iManager._userRepository.GetByEmailAsync(userEmail);
+            var userId = u.Id;
             if (playlist.SharedUsers.Any(x => x.Id == userId))
                 return null;
             var user = await _iManager._userRepository.GetByIdAsync(userId);

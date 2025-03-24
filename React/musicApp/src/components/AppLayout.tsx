@@ -1,13 +1,16 @@
 import { Outlet } from "react-router"
 import Header from "./Header"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {  load } from "../store/userSlice";
-import { AddDispatch } from "../store/store";
+import { Dispatch, StoreType } from "../store/store";
+import SongPlayer from "./SongPlayer";
+import { loadSong } from "../store/songSlice";
 const AppLayout = () => {
-    const dispatch = useDispatch<AddDispatch>();
-    function getUserIdFromToken(): string | null {
-        const token = localStorage.getItem("authToken");
+    const dispatch = useDispatch<Dispatch>();
+    const songPlayer=useSelector((state:StoreType)=>state.songPlayer.song)
+    const authState = useSelector((state:StoreType)=>state.user.authState)
+    function getUserIdFromToken(token:string): string | null {
         if (!token) {
             return null;
         }
@@ -20,16 +23,40 @@ const AppLayout = () => {
             return null;
         }
     }
+
     useEffect(() => {
-        const id=getUserIdFromToken();
-        if(id)
-            dispatch(load(id));
-    
-    }, []);
+        console.log(authState);
+        
+        // if(!authState)
+        //   return;
+        const fetchData = async () => {
+          const token = localStorage.getItem("authToken");
+          const song = sessionStorage.getItem("songPlayer");  
+          console.log(song);      
+          if (token ) {
+            const id = getUserIdFromToken(token);
+            if (id) {
+              await dispatch(load(id));
+            }
+          }
+          if (song) {
+            dispatch(loadSong(JSON.parse(song)));
+            console.log(JSON.parse(song))
+            console.log(songPlayer)
+          }
+        };  
+        fetchData();
+      }, [authState]);
+      console.log("songId"+songPlayer.id);
+      const songId=songPlayer.id;
     return (<>
-        <Header />
+        <Header /> 
         <Outlet />
+        {songId !=0 && 
+        <SongPlayer/>}
     </>)
 }
 
 export default AppLayout
+
+

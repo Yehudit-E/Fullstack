@@ -1,0 +1,87 @@
+.playlist-list-container {
+    position: fixed; /* מקבע את החלון במקום קבוע */
+    top: 50%; /* ממקם את החלון באמצע האנך */
+    left: 50%; /* ממקם את החלון באמצע האופקי */
+    transform: translate(-50%, -50%); /* מעביר את החלון במרכז המסך */
+    width: 80%; /* ברוחב 80% מהמסך */
+    max-width: 600px; /* עד 600px רוחב מקסימלי */
+   color: white; /* טקסט לבן */
+    border-radius: 10px; /* פינות מעוגלות */
+    padding: 20px; /* ריפוד פנימי */
+    z-index: 9999; /* מוודא שהחלון נמצא מעל כל התוכן */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6); /* הצללה עבור החלון */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 5px;
+}
+
+.playlist-list {
+    width: 100%;
+    background-color: #222;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+}
+
+.playlist-item {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+}
+
+.playlist-item:last-child {
+    border-bottom: none;
+}
+
+.playlist-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+button {
+    background-color: transparent;
+    color: white;
+    border: 1px solid #444;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul li {
+    margin: 5px 0;
+}
+
+.cancel-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.cancel-button:hover {
+    background-color: #c0392b;
+}

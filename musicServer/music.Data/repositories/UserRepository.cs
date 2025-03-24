@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using music.Core.DTOs;
 using music.Core.Entities;
 using music.Core.Intefaces.IRepositories;
 using System;
@@ -25,6 +26,10 @@ namespace music.Data.repositories
         public User? GetUserWithRoles(string email)
         {
             return  _dataSet.Where(x=>x.Email==email).Include(x=>x.Roles).Include(x => x.OwnedPlaylists).FirstOrDefault();
+        }
+        public async Task<User> GetByEmailAsync(string UserEmail)
+        {
+            return await _dataSet.FirstOrDefaultAsync(x => x.Email == UserEmail);
         }
     }
 }

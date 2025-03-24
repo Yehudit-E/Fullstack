@@ -7,6 +7,16 @@ export type Playlist ={
     ownerId:number, 
     owner :User,
     songs :Song[],
-    SharedUsers:User[],
+    sharedUsers:User[],
+    createdAt :Date
+} 
+export type PlaylistDto ={
+    id :number,
+    name :string,
+    ownerId:number, 
     CreatedAt :Date
+} 
+export type PlaylistPostModel ={
+    name :string,
+    ownerId:number, 
 } 

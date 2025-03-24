@@ -1,12 +1,12 @@
 import { useDispatch } from "react-redux";
-import { AddDispatch } from "../store/store";
+import { Dispatch } from "../store/store";
 import { FormEvent, useRef } from "react";
 import { loginUser } from "../store/userSlice";
 import { UserLogin } from "../models/UserAuth";
 import { useNavigate } from "react-router";
 
 const Login = () => {
-    const dispatch = useDispatch<AddDispatch>();
+    const dispatch = useDispatch<Dispatch>();
     const navigate = useNavigate();
     
     const emailRef = useRef<HTMLInputElement>(null);
