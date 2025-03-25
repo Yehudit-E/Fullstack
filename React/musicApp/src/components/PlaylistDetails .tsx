@@ -108,12 +108,8 @@ const PlaylistDetails = ({ playlistId, ownedPlaylists, setOwnedPlaylists }: Play
               </div>
               </div>
 
-
-
             </div>
           </div>
-
-
 
         </>
       ) : (
