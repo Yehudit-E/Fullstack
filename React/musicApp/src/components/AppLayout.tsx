@@ -48,10 +48,21 @@ const AppLayout = () => {
         fetchData();
       }, [authState]);
       console.log("songId"+songPlayer.id);
+      console.log("song"+songPlayer);
       const songId=songPlayer.id;
     return (<>
         <Header /> 
-        <Outlet />
+        {songPlayer.id!=0 &&<>
+        <div style={{marginBottom:"100px"}}>
+            <Outlet />
+        </div>
+        </>
+        }
+          {songPlayer.id===0 &&
+            <Outlet />
+        }
+
+        
         {songId !=0 && 
         <SongPlayer/>}
     </>)

@@ -1,16 +1,29 @@
 :root {
+  --color-black: #000000;   
+  --color-white: #ffffff;
+  --color-gray: #282828;   
+
   --gradient-start: #f05371; 
   --gradient-middle: #bd4ed5; 
   --gradient-end: #6186fa; 
 }
+@font-face {
+  font-family: "FbBangyNew-Regular";
+  src: url("/fonts/FbBangyNew-Regular.otf") format("opentype"),
+       url("/fonts/FbBangyNew-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
-  background-color: #000000;
-  color: #ffffff; 
+  /* font-family: "FbBangyNew-Regular", sans-serif; */
+  font-family: Arial, sans-serif;
+  background-color: var(--color-black);
+  color: var(--color-white); 
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
   direction: rtl;
 }
 ::-webkit-scrollbar {
-  display: none; /* מחבא את סמן הגלילה */
+  display: none; 
 }

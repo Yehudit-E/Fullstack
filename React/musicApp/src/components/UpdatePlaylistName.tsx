@@ -1,6 +1,5 @@
 import { useState } from "react";
-import DeletePlaylist from "./DeletePlaylist";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import PlaylistService from "../services/PlaylistService";
 import { Playlist } from "../models/Playlist";
@@ -9,11 +8,10 @@ interface UpdatePlaylistNameProps {
   playlistId: number;
   playlist: Playlist | null;
   setPlaylist: React.Dispatch<React.SetStateAction<Playlist | null>>;
-  ownedPlaylists: Playlist[];
   setOwnedPlaylists: React.Dispatch<React.SetStateAction<Playlist[]>>;
 }
 
-const UpdatePlaylistName = ({ playlistId, playlist, setPlaylist, ownedPlaylists, setOwnedPlaylists }: UpdatePlaylistNameProps) => {
+const UpdatePlaylistName = ({ playlistId, playlist, setPlaylist, setOwnedPlaylists }: UpdatePlaylistNameProps) => {
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState("");
 
@@ -36,28 +34,18 @@ const UpdatePlaylistName = ({ playlistId, playlist, setPlaylist, ownedPlaylists,
 
   return (
     <>
-      <DeletePlaylist playlistId={playlistId} setPlaylist={setPlaylist} playlists={ownedPlaylists} setPlaylists={setOwnedPlaylists} />
-      <Button
-        variant="outlined"
-        startIcon={<Edit sx={{ marginLeft: "14px" }} />}
+      <IconButton
         onClick={() => setShowRenameDialog(true)}
         style={{
           color: "#fff",
-          textTransform: "none",
           borderRadius: "8px",
-          border: "none",
           backgroundColor: "transparent",
-          boxShadow: "none",
-          outline: "none",
-          transition: "none",
           cursor: "default",
         }}
         disableRipple
-        disableElevation
-        disableFocusRipple
       >
-        שנה שם
-      </Button>
+        <Edit />
+      </IconButton>
 
       {/* דיאלוג לשינוי שם */}
       <Dialog open={showRenameDialog} onClose={() => setShowRenameDialog(false)} PaperProps={{

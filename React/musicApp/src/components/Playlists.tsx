@@ -50,7 +50,7 @@ const Playlists: React.FC = () => {
   }
 
   return (
-    <div style={{ display: "flex", color: "white", marginBottom: "100px" }}>
+    <div style={{ display: "flex", color: "white" }}>
       {/* צד ימין - פלייליסטים שלי ופלייליסטים ששותפו */}
       <div style={{ width: "30%", padding: "20px" }}>
         <AddPlaylist playlists={ownedPlaylists} setPlaylists={setOwnedPlaylists}></AddPlaylist>
@@ -61,7 +61,7 @@ const Playlists: React.FC = () => {
             style={{
               cursor: "pointer",
               padding: "0.5px",
-              color: "#fff",
+              color: "var(--color-white)",
               borderRadius: "8px",
               display: "flex",
               justifyContent: "space-between",
@@ -73,7 +73,7 @@ const Playlists: React.FC = () => {
           >
             <div
               style={{
-                backgroundColor: "#363636",
+                backgroundColor: "var(--color-gray)",
                 borderRadius: "8px",
                 width: "100%",
                 padding:"2px",
@@ -83,7 +83,7 @@ const Playlists: React.FC = () => {
               }}
             >
               <span>רשימות השמעה שלי</span>
-              {openOwned ? <ExpandLess style={{ fontSize: "20px", color: "#fff" }} /> : <ExpandMore style={{ fontSize: "20px", color: "#fff" }} />}
+              {openOwned ? <ExpandLess style={{ fontSize: "20px", color: "var(--color-white)" }} /> : <ExpandMore style={{ fontSize: "20px", color: "var(--color-white)" }} />}
             </div>
           </h3>
           {openOwned && (
@@ -93,12 +93,12 @@ const Playlists: React.FC = () => {
                   key={playlist.id}
                   onClick={() => handlePlaylistClick(playlist.id)}
                   style={{
-                    backgroundColor: "#363636",
+                    backgroundColor: "var(--color-gray)",
                     marginBottom: "10px",
                     borderRadius: "8px",
                     padding: "10px",
                     cursor: "pointer",
-                    color: "#fff",
+                    color: "var(--color-white)",
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
@@ -119,7 +119,7 @@ const Playlists: React.FC = () => {
             style={{
               cursor: "pointer",
               padding: "0.5px",
-              color: "#fff",
+              color: "var(--color-white)",
               borderRadius: "8px",
               display: "flex",
               justifyContent: "space-between",
@@ -131,7 +131,7 @@ const Playlists: React.FC = () => {
           >
             <div
               style={{
-                backgroundColor: "#363636",
+                backgroundColor: "var(--color-gray)",
                 borderRadius: "8px",
                 width: "100%",
                 padding:"2px",
@@ -141,7 +141,7 @@ const Playlists: React.FC = () => {
               }}
             >
             <span>רשימות ששותפו איתי</span>
-            {openShared ? <ExpandLess style={{ fontSize: "20px", color: "#fff" }} /> : <ExpandMore style={{ fontSize: "20px", color: "#fff" }} />}
+            {openShared ? <ExpandLess style={{ fontSize: "20px", color: "var(--color-white)" }} /> : <ExpandMore style={{ fontSize: "20px", color: "var(--color-white)" }} />}
             </div>
          </h3>
           {openShared && (
@@ -151,12 +151,12 @@ const Playlists: React.FC = () => {
                   key={playlist.id}
                   onClick={() => handlePlaylistClick(playlist.id)}
                   style={{
-                    backgroundColor: "#363636",
+                    backgroundColor: "var(--color-gray)",
                     marginBottom: "10px",
                     borderRadius: "8px",
                     padding: "10px",
                     cursor: "pointer",
-                    color: "#fff",
+                    color: "var(--color-white)",
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",

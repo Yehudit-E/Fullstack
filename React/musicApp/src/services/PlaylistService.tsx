@@ -65,7 +65,7 @@ const PlaylistService = {
     // 6. הסרת שיר מפלייליסט
     removeSongFromPlaylist: async (playlistId: number, songId: number) => {
         try {
-            const response = await api.delete(`${API_URL}/song/${songId}`, { data: { playlistId } });
+            const response = await api.delete(`${API_URL}/${playlistId}/song/${songId}`);
             return response.data;
         } catch (error) {
             console.error("Error removing song from playlist:", error);

@@ -41,4 +41,4 @@ const Register = () => {
         </form>
      </>)
 }
-export default Register
+export default Register;

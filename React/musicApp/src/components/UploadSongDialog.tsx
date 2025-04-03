@@ -2,7 +2,7 @@ import { useState } from "react";
 import SongService from "../services/SongService";
 import { Song, SongPostModel } from "../models/Song";
 import { Playlist } from "../models/Playlist";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, LinearProgress } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, LinearProgress } from "@mui/material";
 import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
 
 interface UploadSongDialogProps {
@@ -66,28 +66,19 @@ const UploadSongDialog = ({ playlist, setPlaylist }: UploadSongDialogProps) => {
 
   return (
     <>
-      <Button
-        variant="outlined"
-        startIcon={<CloudUploadIcon sx={{ marginLeft: "14px" }} />}
-        onClick={() => setShowUploadDialog(true)}
-        style={{
-          color: "#fff",
-          textTransform: "none",
-          borderRadius: "8px",
-          border: "none",
-          backgroundColor: "transparent",
-          boxShadow: "none",
-          outline: "none",
-          transition: "none",
-          cursor: "default",
-        }}
-        disableRipple
-        disableElevation
-        disableFocusRipple
-      >
-        העלאת שיר
-      </Button>
 
+<IconButton
+  onClick={() => setShowUploadDialog(true)}
+  style={{
+    color: "#fff",
+    borderRadius: "8px",
+    backgroundColor: "transparent",
+    cursor: "default",
+  }}
+  disableRipple
+>
+<CloudUploadIcon/>
+</IconButton>
       <Dialog
         open={showUploadDialog}
         onClose={() => setShowUploadDialog(false)}

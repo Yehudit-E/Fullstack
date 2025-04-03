@@ -1,5 +1,5 @@
 import { Share } from "@mui/icons-material";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import { useState } from "react";
 import PlaylistService from "../services/PlaylistService";
 import { Playlist } from "../models/Playlist";
@@ -34,27 +34,18 @@ const SharePlaylist = ({ playlistId, setPlaylist }: SharePlaylistProps) => {
 
   return (
     <>
-      <Button
-        variant="outlined"
-        startIcon={<Share sx={{ marginLeft: "14px" }} />}
+      <IconButton
         onClick={() => setShowShareDialog(true)}
         style={{
           color: "#fff",
-          textTransform: "none",
           borderRadius: "8px",
-          border: "none",
           backgroundColor: "transparent",
-          boxShadow: "none",
-          outline: "none",
-          transition: "none",
           cursor: "default",
         }}
         disableRipple
-        disableElevation
-        disableFocusRipple
       >
-        שתף
-      </Button>
+        <Share />
+      </IconButton>
 
       {/* דיאלוג שיתוף */}
       <Dialog

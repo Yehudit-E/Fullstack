@@ -141,8 +141,8 @@ namespace music.API.Controllers
             return await _iService.DeleteAsync(id);
         }
         //Task<bool> RemoveSongFromPlaylistAsync(int playlistId, int songId)
-        [HttpDelete("song/{songId}")]
-        public async Task<ActionResult<bool>> RemoveSongFromPlaylistAsync(int songId,int playlistId)
+        [HttpDelete("{playlistId}/song/{songId}")]
+        public async Task<ActionResult<bool>> RemoveSongFromPlaylistAsync(int playlistId,int songId)
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
             var tokenId = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import { Playlist } from "../models/Playlist";
 import PlaylistService from "../services/PlaylistService";
 import { Delete } from "@mui/icons-material";
@@ -33,27 +33,18 @@ const DeletePlaylist = ({ playlistId, setPlaylist, playlists, setPlaylists }: De
 
   return (
     <>
-      <Button
-        variant="outlined"
-        startIcon={<Delete sx={{ marginLeft: "14px" }} />}
+      <IconButton
         onClick={() => setOpenDialog(true)}
         style={{
           color: "#fff",
-          textTransform: "none",
           borderRadius: "8px",
-          border: "none",
           backgroundColor: "transparent",
-          boxShadow: "none",
-          outline: "none",
-          transition: "none",
           cursor: "default",
         }}
         disableRipple
-        disableElevation
-        disableFocusRipple
       >
-        מחק
-      </Button>
+        <Delete />
+      </IconButton>
 
       <Dialog
         open={openDialog}
@@ -84,7 +75,7 @@ const DeletePlaylist = ({ playlistId, setPlaylist, playlists, setPlaylists }: De
           >
             <span
               style={{
-                color:"white",
+                color: "white",
                 backgroundColor: "#363636",
                 borderRadius: "8px",
                 padding: "8px 16px",
@@ -100,13 +91,13 @@ const DeletePlaylist = ({ playlistId, setPlaylist, playlists, setPlaylists }: De
             style={{
               background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
               padding: "1px",
-              marginRight:"20px",
+              marginRight: "20px",
               borderRadius: "8px",
             }}
           >
             <span
               style={{
-                color:"white",
+                color: "white",
                 backgroundColor: "#363636",
                 borderRadius: "8px",
                 padding: "8px 16px",
