@@ -4,6 +4,7 @@ import { FormEvent, useRef } from "react";
 import { loginUser } from "../store/userSlice";
 import { UserLogin } from "../models/UserAuth";
 import { useNavigate } from "react-router";
+import Swal from 'sweetalert2';
 
 const Login = () => {
     const dispatch = useDispatch<Dispatch>();
@@ -22,6 +23,7 @@ const Login = () => {
         const resultAction = await dispatch(loginUser(userLog));
         
         if (loginUser.fulfilled.match(resultAction)) {
+            
             // navigate to home page or dashboard
             navigate('/');
         } else {

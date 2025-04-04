@@ -144,12 +144,13 @@ const PublicSongs = () => {
       {/* תיבת הסינון והמיון */}
       <div className="filters-container"
         style={{
-          marginRight: "15px",
+          marginRight: "12px",
+          marginLeft: "1px",
           marginTop: "30px",
           display: "flex",
           flexDirection: "column",
           gap: "10px",
-          width: "150px",
+          width: "151px",
           height: "100%",
           alignItems: "flex-start"
         }}
@@ -173,7 +174,7 @@ const PublicSongs = () => {
             display: "flex",
             alignItems: "center",
           }}>
-            <img src="/images/lock-icon.png" alt="חיפוש" style={{ height: "20px", marginRight: "10px" }} />
+            {/* <img src="/images/lock-icon.png" alt="חיפוש" style={{ height: "20px", marginRight: "10px" }} /> */}
             <input
               type="text"
               placeholder="חפש שיר..."
@@ -196,16 +197,16 @@ const PublicSongs = () => {
             value: sortBy,
             setValue: setSortBy,
             options: [{ label: "שם", value: "name" }, { label: "תאריך", value: "date" }, { label: "אמן", value: "artist" }],
-            icon: "/images/lock-icon.png"//////////////
+            // icon: "/images/lock-icon.png"//////////////
           },
           {
             label: "ז'אנר",
             value: genre,
             setValue: setGenre,
             options: getGenres().map(g => ({ label: g === "all" ? "הכל" : g, value: g })),
-            icon: "/images/lock-icon.png"//////////////////
+            // icon: "/images/lock-icon.png"//////////////////
           },
-        ].map(({ label, value, setValue, options, icon }, index) => (
+        ].map(({ label, value, setValue, options }, index) => (
           <div key={index} style={{
             cursor: "pointer",
             padding: "0.5px",
@@ -230,11 +231,12 @@ const PublicSongs = () => {
                 fontSize: "14px",
                 cursor: "pointer",
                 display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center"
+                alignItems: "center",
+                overflow: "hidden"/* מונע חריגה וחותך תוכן שחורג */
+
               }}
             >
-              <img src={icon} alt={label} style={{ height: "20px" }} />
+              {/* <img src={icon} alt={label} style={{ height: "20px" }} /> */}
               <span>{label}:</span>
               <select
                 value={value}
@@ -243,6 +245,7 @@ const PublicSongs = () => {
                   backgroundColor: "var(--color-gray)",
                   borderRadius: "8px",
                   width: "auto",
+                  maxWidth: "100%",
                   marginRight: "6px",
                   height: "25px",
                   color: "#707070",
@@ -302,7 +305,7 @@ const PublicSongs = () => {
               </div>
               <Divider sx={{ width: "90%", marginTop: "30px", borderBottomWidth: 0.5, borderColor: "var(--color-white)" }} />
               <div className="song-info">
-                <span className="song-text">{song.name} - {song.artist}</span>
+                <span className="song-text">{song.name} </span>
                 <div className="song-icons">
                   <IconButton onClick={(e) => openMenu(e, song.id)} >
                     <MoreVertIcon sx={{ color: "white", fontSize: 20 }} />

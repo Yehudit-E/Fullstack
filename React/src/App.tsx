@@ -9,6 +9,7 @@ function App() {
 
   return (
     <>
+
     <AudioPlayerProvider>
       <Provider store={store}>
         <RouterProvider router={router} />

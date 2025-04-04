@@ -1,9 +1,7 @@
 .songs-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 35px;
-  justify-content: flex-start;
-  margin-right: 15px;
+  gap: 20px;
 }
 
 .song-card {

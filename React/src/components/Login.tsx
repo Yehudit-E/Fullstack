@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import { IconButton } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-
+import Swal from 'sweetalert2';
 const Login = () => {
     const dispatch = useDispatch<Dispatch>();
     const navigate = useNavigate();
@@ -49,7 +49,18 @@ const Login = () => {
         const userLog: UserLogin = { email, password };
         const resultAction = await dispatch(loginUser(userLog));
 
-        if (loginUser.fulfilled.match(resultAction)) navigate('/');
+        if (loginUser.fulfilled.match(resultAction)) 
+            {
+                // Swal.fire({
+                //     title: 'הודעה ברקע כהה',
+                //     text: 'התאמה אישית עם CSS',
+                //     icon: 'warning',
+                //     background: 'var(--color-black)',  // רקע כהה
+                //     color: 'var(--color-white)',        // צבע טקסט בהיר
+                //     confirmButtonColor: 'var(--color-gray)' // צבע לכפתור
+                // });
+                navigate('/');
+            }
     };
 
     return (

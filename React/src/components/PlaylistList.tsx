@@ -4,35 +4,35 @@ import { Playlist } from '../models/Playlist';
 import { StoreType } from '../store/store';
 import LockIcon from '@mui/icons-material/Lock';
 import GroupIcon from '@mui/icons-material/Group';
-import "./style/PlaylistList.css"
+import "./style/PlaylistList.css";
+
 interface PlaylistListProps {
     playlists: Playlist[];
     onSelectPlaylist: (playlistId: number) => void;
-    onClose: () => void; // פונקציה שתסגור את החלון
+    onClose: () => void;
 }
 
 const PlaylistList: React.FC<PlaylistListProps> = ({ playlists, onSelectPlaylist, onClose }) => {
-    const user = useSelector((state: StoreType) => state.user.user); // בחר את המשתמש הנוכחי מ-RRedux
+    const user = useSelector((state: StoreType) => state.user.user);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [expandedPlaylist, setExpandedPlaylist] = useState<number | null>(null); // מנהל את הפלייליסט שהורחב
-    // מסנן את הפלייליסטים לפי חיפוש
+    const [expandedPlaylist, setExpandedPlaylist] = useState<number | null>(null);
+
+    // סינון פלייליסטים לפי חיפוש
     const filteredPlaylists = playlists.filter((playlist) =>
         playlist.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // פונקציה להרחבת הפלייליסט
+    // פונקציה להרחבת פלייליסט
     const handleExpand = (playlistId: number) => {
         setExpandedPlaylist(expandedPlaylist === playlistId ? null : playlistId);
     };
 
-    // פונקציה שמחזירה את האיקון המתאים (מנעול או קבוצה)
+    // פונקציה לקביעת האייקון הנכון
     const getPlaylistIcon = (playlist: Playlist) => {
-        // בדיקה אם SharedUsers קיים ולא undefined
-        const sharedUsers = playlist.sharedUsers || [];
-        return sharedUsers.length === 0 ? (
-            <LockIcon /> // מנעול עבור פלייליסט פרטי
+        return (playlist.sharedUsers && playlist.sharedUsers.length > 0) ? (
+            <GroupIcon />
         ) : (
-            <GroupIcon /> // קבוצה עבור פלייליסט משותף
+            <LockIcon />
         );
     };
 
@@ -51,29 +51,29 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ playlists, onSelectPlaylist
                 ) : (
                     filteredPlaylists.map((playlist) => (
                         <div key={playlist.id} className="playlist-item">
-                            <div className="playlist-info" onClick={() => onSelectPlaylist(playlist.id)}>
-                                <span>{playlist.name}</span>
+                            <div className="playlist-info">
+                                <span onClick={() => onSelectPlaylist(playlist.id)}>
+                                    {playlist.name}
+                                </span>
                                 {getPlaylistIcon(playlist)}
                             </div>
-                            <div>
-                                <button onClick={() => handleExpand(playlist.id)}>
-                                    {expandedPlaylist === playlist.id ? 'הסתר שותפים' : 'הראה שותפים'}
-                                </button>
-                                {expandedPlaylist === playlist.id && (
-                                    <div>
-                                        <p>בעלים: {playlist.owner ? playlist.owner.userName : 'לא זמין'}</p>
-                                        <ul>
-                                            {playlist.sharedUsers && playlist.sharedUsers.length > 0 ? (
-                                                playlist.sharedUsers.map((user) => (
-                                                    <li key={user.id}>{user.userName}</li>
-                                                ))
-                                            ) : (
-                                                <li>לא שותף אף אחד</li>
-                                            )}
-                                        </ul>
-                                    </div>
-                                )}
-                            </div>
+                            <button onClick={() => handleExpand(playlist.id)}>
+                                {expandedPlaylist === playlist.id ? 'הסתר שותפים' : 'הראה שותפים'}
+                            </button>
+                            {expandedPlaylist === playlist.id && (
+                                <div className="playlist-shared-users">
+                                    <p>בעלים: {playlist.owner ? playlist.owner.userName : 'לא זמין'}</p>
+                                    <ul>
+                                        {playlist.sharedUsers && playlist.sharedUsers.length > 0 ? (
+                                            playlist.sharedUsers.map((sharedUser) => (
+                                                <li key={sharedUser.id}>{sharedUser.userName}</li>
+                                            ))
+                                        ) : (
+                                            <li>לא שותף אף אחד</li>
+                                        )}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
                     ))
                 )}

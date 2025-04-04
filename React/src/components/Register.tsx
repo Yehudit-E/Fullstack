@@ -76,7 +76,7 @@ const Register = () => {
         }
 
         const userReg: UserRegister = { userName, email, password };
-
+debugger
         const resultAction = await dispatch(registerUser(userReg));
         if (registerUser.fulfilled.match(resultAction)) navigate('/');
     };

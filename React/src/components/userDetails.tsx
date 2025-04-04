@@ -4,6 +4,7 @@ import { Avatar, Popover, Typography, IconButton, Button, Box } from "@mui/mater
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { logout } from "../store/userSlice";
+import { useNavigate } from "react-router";
 
 const UserDetails = () => {
     const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const UserDetails = () => {
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
+    const navigate = useNavigate();
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -22,6 +24,7 @@ const UserDetails = () => {
     const handleLogout = () => {
         dispatch(logout());
         handleClose();
+        navigate("/home");
     };
 
     const open = Boolean(anchorEl);

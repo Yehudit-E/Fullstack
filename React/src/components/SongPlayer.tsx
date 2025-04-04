@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { VolumeUp, VolumeOff } from "@mui/icons-material";
+import { VolumeUp, VolumeOff, Close } from "@mui/icons-material";
 import { Box, IconButton, Slider, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch, StoreType } from "../store/store";
 import { useNavigate } from "react-router";
 import { SkipPreviousRounded, Replay10Rounded, PlayArrowRounded, PauseRounded, Forward30Rounded, SkipNextRounded } from '@mui/icons-material';
-import { setChange } from "../store/songSlice";
+import { resetSong, setChange } from "../store/songSlice";
 
 const formatTime = (time: number) => {
     const hours = Math.floor(time / 3600).toString().padStart(2, '0');
@@ -78,10 +78,15 @@ const SongPlayer = () => {
             setCurrentTime(newTime);
         }
     };
-
+    const handleClosePlayer = () => {
+        // פעולה לניקוי הסטייט של השיר ב-redux
+        dispatch(resetSong());
+        // גם נגבה את sessionStorage
+        sessionStorage.removeItem('songPlayer');
+    };
     return (
         <>{songPlayer.id !== 0 && (
-            <Box sx={{ position: "fixed", bottom: 0, width: "100%", height: "100px", backgroundColor: "#000000", color: "white", direction: "rtl" }}>
+            <Box sx={{ zIndex: 9999, position: "fixed", bottom: 0, width: "100%", height: "100px", backgroundColor: "#000000", color: "white", direction: "rtl" }}>
                 <audio ref={audioRef} src={songPlayer.audioFilePath} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleTimeUpdate} onEnded={handleSongEnd} />
 
                 {/* פס התקדמות */}
@@ -115,11 +120,13 @@ const SongPlayer = () => {
                     </Box>
                 </Box>
 
-
                 {/* נגן */}
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: -10 }}>
 
                     <Box sx={{ display: "flex", alignItems: "center", marginRight: "40px" }}>
+                        <IconButton sx={{marginLeft: '20px',padding: 0,marginRight:0, color: 'var(--color-white)' }} onClick={handleClosePlayer}>
+                            <Close sx={{ fontSize: 20 }} />
+                        </IconButton>
                         <Slider value={muted ? 0 : volume} min={0} max={1} step={0.01} onChange={(_, newValue) => setVolume(newValue as number)} sx={{
                             color: 'var( --gradient-start)',
                             height: 2,
@@ -201,11 +208,12 @@ const SongPlayer = () => {
                     </Box>
                     <Box
                         sx={{
+                            marginLeft: "45px",
                             display: "flex",
                             alignItems: "center",
                             marginBottom: 1,
+                            marginTop: 1,
                             position: "relative",
-                            cursor: songPlayer.isPublic ? "pointer" : "default",
                             '&::before': songPlayer.isPublic ? {
                                 content: '""',
                                 position: 'absolute',
@@ -226,7 +234,10 @@ const SongPlayer = () => {
                         }}
                         onClick={() => { if (songPlayer.isPublic) navigate('songComments/' + songPlayer.id) }} // כאן תוכל להוסיף ניווט
                     >
-                        <Typography variant="h6">{songPlayer.name}</Typography>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                            <Typography sx={{ fontSize: 15 }}>{songPlayer.name + " - "}</Typography>
+                            <Typography sx={{ fontSize: 15 }}>{songPlayer.artist}</Typography>
+                        </Box>
 
                     </Box>
                 </Box>

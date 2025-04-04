@@ -58,12 +58,12 @@ const Header = () => {
 
       {/* Header עם טקסט על התמונה */}
       <AppBar position="static" sx={{ backgroundColor: "transparent", boxShadow: "none", height: `${imageHeight}px` }}>
-        <Toolbar sx={{marginTop: "20px", display: "flex", justifyContent: "space-between", alignItems: "center", height: "100%" }}>
+        <Toolbar sx={{ marginTop: "20px", display: "flex", justifyContent: "space-between", alignItems: "center", height: "100%" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Typography variant="h6" component="div" sx={{ color: "#ffffff", ml: 2 }}>
               Music App
             </Typography>
-            {["/home", "/songs", "/playlists"].map((path) => (
+            {["/home", "/music"].map((path) => (
               <Button
                 key={path}
                 color="inherit"
@@ -95,19 +95,53 @@ const Header = () => {
                     : {},
                 }}
               >
-                {path === "/home" ? "בית" : path === "/songs" ? "מוזיקה" : "הפלייליסטים שלי"}
+                {path === "/home" ? "בית" : "מוזיקה"}
               </Button>
             ))}
+            {/* הצגת כפתור הפלייליסטים רק אם המשתמש מחובר */}
+            {authState && (
+              <Button
+                key="/playlists"
+                color="inherit"
+                component={Link}
+                to="/playlists"
+                sx={{
+                  fontSize: "16px",
+                  height: "23px",
+                  borderRadius: "32px",
+                  padding: "6px",
+                  minWidth: "unset",
+                  position: "relative",
+                  marginLeft: "10px",
+                  "&::before": isActive("/playlists")
+                    ? {
+                        content: '""',
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: "32px",
+                        padding: "0.5px",
+                        background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
+                        WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                        WebkitMaskComposite: "destination-out",
+                        maskComposite: "exclude",
+                      }
+                    : {},
+                }}
+              >
+                הפלייליסטים שלי
+              </Button>
+            )}
           </Box>
 
           {/* שם המשתמש בקצה השמאלי */}
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {!authState && (
-              <>
-                <Button color="inherit" component={Link} to="/auth">
-                  התחברות
-                </Button>
-              </>
+              <Button color="inherit" component={Link} to="/auth">
+                התחברות
+              </Button>
             )}
             {authState && <UserDetails />}
           </Box>

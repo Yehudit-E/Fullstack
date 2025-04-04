@@ -1,9 +1,12 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
+import { useNavigate } from "react-router";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   return (
-    <Box sx={{ width: "100vw", overflow: "hidden" }}>
-      {/* תמונת רקע ברוחב מלא עם גובה שמתאים לה */}
+    <Box sx={{ width: "100vw", overflow: "hidden", position: "relative" }}>
+      {/* תמונת רקע ברוחב מלא */}
       <Box
         component="img"
         src="/images/home-page.jpg"
@@ -14,28 +17,28 @@ export default function Home() {
           display: "block",
         }}
       />
-      {/* כפתור ממורכז על התמונה */}
+
+      {/* כפתור ממורכז בתוך התמונה */}
       <Box
         sx={{
           position: "absolute",
-          top: "50%",
+          top: "77.5%",
           left: "50%",
           transform: "translate(-50%, -50%)",
         }}
       >
-        <Button
-          variant="contained"
-          sx={{
-            bgcolor: "rgba(255, 255, 255, 0.8)",
-            color: "black",
+        <button
+          onClick={() => navigate("/music")}
+          style={{
+            color: "var(--color-white)",
+            border: "none",
             fontSize: "1.2rem",
-            padding: "10px 20px",
-            borderRadius: "8px",
-            "&:hover": { bgcolor: "rgba(255, 255, 255, 1)" },
+            background: "none", // ללא רקע
+            cursor: "pointer", // מציין שזה לחיץ
+            pointerEvents: "auto", // כדי שהכפתור יישאר פעיל למרות ה-background
           }}
-        >
-          Get Started
-        </Button>
+        >למוזיקה {" >"}
+        </button>
       </Box>
     </Box>
   );

@@ -11,7 +11,7 @@ import { IconButton, Divider, Menu, MenuItem, Dialog, DialogActions, DialogConte
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Song } from "../models/Song";
-import { updateSong } from "../store/songSlice";
+import { resetSong, updateSong } from "../store/songSlice";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -33,7 +33,9 @@ const PlaylistDetails = ({ playlistId, ownedPlaylists, setOwnedPlaylists }: Play
 
   const userId = useSelector((state: StoreType) => state.user.user.id);
   const dispatch = useDispatch<Dispatch>();
-
+  const currentSong  =useSelector((state:StoreType)=>state.songPlayer.song) 
+  console.log("currentSong",currentSong);
+       
   const handlePlaylistMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElPlaylist(event.currentTarget);
   };
@@ -99,17 +101,41 @@ const PlaylistDetails = ({ playlistId, ownedPlaylists, setOwnedPlaylists }: Play
     // Here you can perform additional actions after updating the song
   };
 
+  // const handleDeleteSong = async () => {
+  //   if (songToDelete === null || !playlist) return;
+  //   try {
+  //     await PlaylistService.removeSongFromPlaylist(playlist.id, songToDelete);
+
+  //     // עדכון הסטייט של הפלייליסט לאחר מחיקה
+  //     setPlaylist((prev) => {
+  //       if (!prev) return prev;
+  //       return { ...prev, songs: prev.songs?.filter((song) => song.id !== songToDelete) };
+  //     });
+
+  //     alert("השיר נמחק בהצלחה!");
+  //   } catch (error) {
+  //     alert("שגיאה במחיקת השיר.");
+  //   }
+  //   setOpenDialog(false); // Close the dialog after deletion
+  // };
   const handleDeleteSong = async () => {
+    
     if (songToDelete === null || !playlist) return;
     try {
       await PlaylistService.removeSongFromPlaylist(playlist.id, songToDelete);
-
+  
       // עדכון הסטייט של הפלייליסט לאחר מחיקה
       setPlaylist((prev) => {
         if (!prev) return prev;
         return { ...prev, songs: prev.songs?.filter((song) => song.id !== songToDelete) };
       });
-
+  
+      // // אם השיר שהתנגן נמחק, אז נבצע reset לנגן
+      // const currentSong  =useSelector((state:StoreType)=>state.songPlayer.song)      
+      if (currentSong?.id === songToDelete) {
+        dispatch(resetSong());  
+      }
+  
       alert("השיר נמחק בהצלחה!");
     } catch (error) {
       alert("שגיאה במחיקת השיר.");
@@ -133,9 +159,14 @@ const PlaylistDetails = ({ playlistId, ownedPlaylists, setOwnedPlaylists }: Play
           <div className="playlist-header" style={{ display: "flex", alignItems: "center" }}>
             <div style={{ flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                {playlist.ownerId==userId &&
                 <IconButton onClick={handlePlaylistMenuOpen}>
                   <MoreVertIcon sx={{ marginRight: "25px", fontSize: "25px", color: "white" }} />
                 </IconButton>
+                }
+                {playlist.ownerId!=userId &&
+                <UploadSongDialog playlist={playlist} setPlaylist={setPlaylist} />
+                }
                 <h2
                   style={{
                     background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
@@ -246,7 +277,7 @@ const PlaylistDetails = ({ playlistId, ownedPlaylists, setOwnedPlaylists }: Play
                   </div>
                   <Divider sx={{ width: "90%", marginTop: "30px", borderBottomWidth: 0.5, borderColor: "var(--color-white)" }} />
                   <div className="song-info">
-                    <span className="song-text">{song.name} - {song.artist}</span>
+                    <span className="song-text">{song.name} </span>
                     <div className="song-icons">
                       <IconButton onClick={(e) => handleSongMenuOpen(e, song.id)}>
                         <MoreVertIcon sx={{ color: "white", fontSize: 20 }} />
