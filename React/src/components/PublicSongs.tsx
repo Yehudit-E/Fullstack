@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react";
 import SongService from "../services/SongService";
-import PlaylistService from "../services/PlaylistService";
-import { Song, SongPostModel } from "../models/Song";
-import { Playlist } from "../models/Playlist";
+import { Song } from "../models/Song";
 import "./style/PublicSongs.css";
 import { MenuItem, IconButton, Menu, Divider } from "@mui/material";
 import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
-import PlaylistList from "./PlaylistList";
 import DownloadIcon from "@mui/icons-material/Download";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useSelector } from "react-redux";
 import { Dispatch, StoreType } from "../store/store";
 import { useDispatch } from "react-redux";
 import { updateSong } from "../store/songSlice";
+import AddToPlaylistModel from "./AddToPlaylistModel";
 
 const PublicSongs = () => {
   const [songs, setSongs] = useState<Song[]>([]);
@@ -24,8 +22,7 @@ const PublicSongs = () => {
   const [genre, setGenre] = useState<string>("all");
   const [search, setSearch] = useState<string>("");
   const [menuAnchor, setMenuAnchor] = useState<{ [key: string]: HTMLElement | null }>({});
-  const [playlists, setPlaylists] = useState<Playlist[]>([]);
-  const [currentSong, setCurrentSong] = useState<Song>();
+  const [currentSong, setCurrentSong] = useState<Song>({} as Song);
   const [showPlaylistList, setShowPlaylistList] = useState<boolean>(false);
   const dispatch = useDispatch<Dispatch>();
 
@@ -43,21 +40,6 @@ const PublicSongs = () => {
         setError("Failed to load songs.");
         setLoading(false);
       });
-    // Fetch user playlists (both personal and shared)
-    const fetchPlaylists = async () => {
-      try {
-        const userId = 1; // Assuming the user ID is 1. Change this to actual user ID logic.
-        const [userPlaylists, sharedPlaylists] = await Promise.all([
-          PlaylistService.getUserPlaylists(userId),
-          PlaylistService.getUserSharedPlaylists(userId)
-        ]);
-        setPlaylists([...userPlaylists, ...sharedPlaylists]);
-      } catch (err) {
-        console.error("Error fetching playlists:", err);
-      }
-    };
-    if (authState)
-      fetchPlaylists();
   }, []);
 
   const sortSongs = (songs: Song[], sortBy: string) => {
@@ -112,26 +94,6 @@ const PublicSongs = () => {
     } catch (error) {
       console.error("שגיאה בהורדה:", error);
     }
-
-  };
-  const handleSelectPlaylist = (playlistId: number) => {
-    console.log(currentSong);
-    setShowPlaylistList(false);
-    const newSong: SongPostModel = {
-      name: currentSong ? currentSong.name : "",
-      description: currentSong?.description,
-      artist: currentSong ? currentSong.artist : "",
-      genre: currentSong?.genre,
-      audioFilePath: currentSong ? currentSong.audioFilePath : "",
-      playlistId: playlistId
-    }
-    SongService.addSong(newSong).then(() => {
-      console.log("Song added successfully")
-      alert("song added successfully");
-    }).catch(err => {
-      console.error("Error editing song details:", err);
-      alert("Failed to edit song details.");
-    })
 
   };
   const handlePlaySong = (song: Song) => {
@@ -323,7 +285,7 @@ const PublicSongs = () => {
                       <DownloadIcon sx={{ marginLeft: "7px" ,fontSize: "16px"}} />הורדה
                     </MenuItem>
                     {authState &&
-                      <MenuItem onClick={() => { setCurrentSong(song); setShowPlaylistList(true); }}>
+                      <MenuItem onClick={() => {closeMenu(song.id); setCurrentSong(song); setShowPlaylistList(true); }}>
                         <QueueMusicIcon sx={{ marginLeft: "7px",fontSize: "16px" }} />הוספה לפלייליסט
                       </MenuItem>}
                   </Menu>
@@ -335,9 +297,8 @@ const PublicSongs = () => {
       </div>
 
       {showPlaylistList && (
-        <PlaylistList
-          playlists={playlists}
-          onSelectPlaylist={handleSelectPlaylist}
+        <AddToPlaylistModel
+          song={currentSong}
           onClose={() => setShowPlaylistList(false)}
         />
       )}
