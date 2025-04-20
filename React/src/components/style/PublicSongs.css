@@ -2,12 +2,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  margin-bottom: 20px;
 }
 
 .song-card {
-  width: 280px;
+  width: 255px;
   height: 180px;
-  margin-bottom: 1px;
+  margin:8px;
   border: 1px solid #282727;
   border-radius: 25px;
   overflow: hidden;
@@ -60,6 +61,7 @@
 
 .song-text {
   margin-right: 15px;
+  font-size: 14px;
 }
 
 .song-icons {

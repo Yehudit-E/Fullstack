@@ -149,6 +149,7 @@ const PublicSongs = () => {
                 color: "var(--color-white)",
                 outline: "none",
                 fontSize: "14px",
+                marginRight: "6px",
               }}
             />
           </div>
@@ -199,7 +200,7 @@ const PublicSongs = () => {
               }}
             >
               {/* <img src={icon} alt={label} style={{ height: "20px" }} /> */}
-              <span>{label}:</span>
+              <span style={{ marginRight: "6px" }}>{label}:</span>
               <select
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
@@ -243,7 +244,7 @@ const PublicSongs = () => {
       </div>
 
       {/* רשימת השירים */}
-      <div className="songs-container" style={{ flexGrow: 1 }}>
+      <div className="songs-container" style={{ flexGrow: 1,marginRight:"37px" }}>
         <div className="songs-grid">
           {filteredSongs.map((song: Song) => (
             <div key={song.id} className="song-card">
@@ -270,7 +271,7 @@ const PublicSongs = () => {
                 <span className="song-text">{song.name} </span>
                 <div className="song-icons">
                   <IconButton onClick={(e) => openMenu(e, song.id)} >
-                    <MoreVertIcon sx={{ color: "white", fontSize: 20 }} />
+                    <MoreVertIcon sx={{ color: "white", fontSize: 20}} />
                   </IconButton>
                   <Menu
                     anchorEl={menuAnchor[song.id]}
