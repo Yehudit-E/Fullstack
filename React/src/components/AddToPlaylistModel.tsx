@@ -19,6 +19,17 @@ const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({ song, onClose }
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [expandedPlaylist, setExpandedPlaylist] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false); // חדש
+
+  useEffect(() => {
+    // נועלים גלילה
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => setIsVisible(true), 10); // כדי לאפשר transition חלק
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   useEffect(() => {
     const fetchPlaylists = async () => {
@@ -58,7 +69,7 @@ const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({ song, onClose }
         playlistId,
       });
       alert("השיר נוסף בהצלחה!");
-      onClose();
+      handleClose();
     } catch (error) {
       console.error("שגיאה בהוספת השיר:", error);
       alert("אירעה שגיאה בעת הוספת השיר.");
@@ -67,31 +78,42 @@ const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({ song, onClose }
     }
   };
 
+  const handleClose = () => {
+    setIsVisible(false);
+    setTimeout(() => onClose(), 300); // המתנה לסיום האנימציה
+  };
+
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      zIndex: 1000,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      direction: 'rtl',
-      fontSize: '16px'
-    }}>
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        zIndex: 9000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        direction: 'rtl',
+        fontSize: '16px',
+        opacity: isVisible ? 1 : 0,
+        transition: 'opacity 0.3s ease',
+      }}
+    >
       <div style={{
         backgroundColor: 'var(--color-gray)',
         color: 'var(--color-white)',
-        borderRadius: '12px',
+        borderRadius: '32px',
         padding: '16px',
         width: '600px',
         height: '450px',
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        transform: isVisible ? 'translateY(0)' : 'translateY(50px)',
+        transition: 'transform 0.3s ease'
       }}>
         <h2 style={{
           fontSize: '20px',
@@ -107,7 +129,7 @@ const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({ song, onClose }
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{
             padding: '10px',
-            borderRadius: '6px',
+            borderRadius: '32px',
             border: '1px solid var(--color-black)',
             marginBottom: '12px',
             backgroundColor: 'var(--color-gray)',
@@ -126,9 +148,9 @@ const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({ song, onClose }
           ) : (
             filteredPlaylists.map((playlist) => (
               <div key={playlist.id} style={{
-                backgroundColor: '#333', 
+                backgroundColor: '#333',
                 padding: '10px',
-                borderRadius: '8px',
+                borderRadius: '32px',
                 marginBottom: '12px'
               }}>
                 <div style={{
@@ -146,17 +168,15 @@ const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({ song, onClose }
                         backgroundColor: '#333',
                         color: '#888',
                         padding: '8px 14px',
-                        borderRadius: '6px',
                         border: 'none',
                         cursor: 'pointer',
                         fontSize: '15px'
                       }}
                     >
-                      {expandedPlaylist === playlist.id ? ' < הסתר': ' > הצג פרטים נוספים'}
+                      {expandedPlaylist === playlist.id ? ' < הסתר' : ' > הצג פרטים נוספים'}
                     </button>
                   </div>
                   <div style={{ display: 'flex', gap: '8px' }}>
-
                     <button
                       onClick={() => handleAddSong(playlist.id)}
                       disabled={loading}
@@ -164,12 +184,13 @@ const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({ song, onClose }
                         background: 'linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))',
                         color: 'white',
                         padding: '8px 14px',
-                        borderRadius: '6px',
+                        borderRadius: '32px',
                         border: 'none',
                         fontWeight: 'bold',
                         cursor: 'pointer',
                         width: '120px',
-                        fontSize: '15px'
+                        fontSize: '15px',
+                        backgroundBlendMode: 'overlay',
                       }}
                     >
                       הוסף
@@ -198,11 +219,11 @@ const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({ song, onClose }
 
         <div style={{ marginTop: '12px', textAlign: 'center' }}>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             style={{
               background: 'linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))',
               padding: '0.5px',
-              borderRadius: '8px',
+              borderRadius: '32px',
               fontWeight: 'bold',
               border: 'none',
               cursor: 'pointer',
@@ -212,7 +233,7 @@ const AddToPlaylistModal: React.FC<AddToPlaylistModalProps> = ({ song, onClose }
             <span style={{
               color: 'white',
               backgroundColor: 'var(--color-gray)',
-              borderRadius: '8px',
+              borderRadius: '32px',
               padding: '10px 20px',
               display: 'inline-block'
             }}>ביטול</span>

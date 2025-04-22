@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import PlaylistService from "../services/PlaylistService";
 import { Playlist } from "../models/Playlist";
-import UploadSongDialog from "./UploadSongDialog";
 import SharePlaylist from "./SharePlaylist";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch, StoreType } from "../store/store";
 import UpdatePlaylistName from "./UpdatePlaylistName";
-import DeletePlaylist from "./DeletePlaylist";
 import { IconButton, Divider, Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -16,6 +14,8 @@ import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateSong from "./UpdateSong"; // Importing the UpdateSong component
+import UploadSongDialog from "./UploadSongDialog";
+import DeletePlaylist from "./DeletePlaylist";
 
 interface PlaylistDetailsProps {
   playlistId: number;

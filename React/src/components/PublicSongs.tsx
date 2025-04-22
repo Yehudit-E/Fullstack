@@ -121,7 +121,7 @@ const PublicSongs = () => {
           cursor: "pointer",
           padding: "0.5px",
           color: "var(--color-white)",
-          borderRadius: "8px",
+          borderRadius: "32px",
           width: "100%",
           height: "25px",
           marginBottom: "5px",
@@ -130,7 +130,7 @@ const PublicSongs = () => {
         }}>
           <div style={{
             backgroundColor: "var(--color-gray)",
-            borderRadius: "8px",
+            borderRadius: "32px",
             width: "100%",
             height: "25px",
             display: "flex",
@@ -174,7 +174,7 @@ const PublicSongs = () => {
             cursor: "pointer",
             padding: "0.5px",
             color: "var(--color-white)",
-            borderRadius: "8px",
+            borderRadius: "32px",
             width: "100%",
             height: "25px",
             background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
@@ -184,7 +184,7 @@ const PublicSongs = () => {
             <button
               style={{
                 backgroundColor: "var(--color-gray)",
-                borderRadius: "8px",
+                borderRadius: "32px",
                 width: "100%",
                 height: "25px",
                 color: "white",
@@ -206,7 +206,7 @@ const PublicSongs = () => {
                 onChange={(e) => setValue(e.target.value)}
                 style={{
                   backgroundColor: "var(--color-gray)",
-                  borderRadius: "8px",
+                  borderRadius: "32px",
                   width: "auto",
                   maxWidth: "100%",
                   marginRight: "6px",

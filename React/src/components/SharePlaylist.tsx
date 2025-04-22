@@ -12,6 +12,7 @@ interface SharePlaylistProps {
 const SharePlaylist = ({ playlistId, setPlaylist }: SharePlaylistProps) => {
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleSharePlaylist = async () => {
     if (!userEmail.trim()) {
@@ -32,10 +33,22 @@ const SharePlaylist = ({ playlistId, setPlaylist }: SharePlaylistProps) => {
     }
   };
 
+  const openModal = () => {
+    setShowShareDialog(true);
+    setTimeout(() => setIsVisible(true), 10);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeModal = () => {
+    setIsVisible(false);
+    setTimeout(() => setShowShareDialog(false), 300);
+    document.body.style.overflow = "";
+  };
+
   return (
     <>
       <IconButton
-        onClick={() => setShowShareDialog(true)}
+        onClick={openModal}
         style={{
           color: "#fff",
           borderRadius: "8px",
@@ -48,86 +61,139 @@ const SharePlaylist = ({ playlistId, setPlaylist }: SharePlaylistProps) => {
       </IconButton>
 
       {/* דיאלוג שיתוף */}
-      <Dialog
-        open={showShareDialog}
-        onClose={() => setShowShareDialog(false)}
-        PaperProps={{
-          style: {
-            backgroundColor: "#363636",
-            color: "#fff",
-            borderRadius: "12px",
-            padding: "16px",
-          },
-        }}
-      >
-        <DialogTitle style={{ fontSize: "18px", fontWeight: "bold", textAlign: "center" }}>
-          שתף פלייליסט עם משתמש
-        </DialogTitle>
-        <DialogContent style={{ fontSize: "16px", textAlign: "center" }}>
-          <input
-            type="email"
-            value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}
-            placeholder="אימייל המשתמש"
+      {showShareDialog && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            zIndex: 9000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            direction: "rtl",
+            fontSize: "16px",
+            opacity: isVisible ? 1 : 0,
+            transition: "opacity 0.3s ease",
+          }}
+        >
+          <div
             style={{
-              width: "100%",
-              padding: "10px",
-              fontSize: "16px",
-              backgroundColor: "#363636",
-              color: "#fff",
-              border: "1px solid #555",
-              borderRadius: "8px",
-              marginBottom: "10px",
-              outline: "none",
-            }}
-          />
-        </DialogContent>
-        <DialogActions style={{ justifyContent: "center" }}>
-          <Button
-            onClick={() => setShowShareDialog(false)}
-            style={{
-              background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
-              padding: "1px",
-              borderRadius: "8px",
+              backgroundColor: "var(--color-gray)",
+              color: "var(--color-white)",
+              borderRadius: "32px",
+              padding: "16px",
+              width: "500px",
+              height: "auto",
+              display: "flex",
+              flexDirection: "column",
+              transform: isVisible ? "translateY(0)" : "translateY(50px)",
+              transition: "transform 0.3s ease",
             }}
           >
-            <span
+            {/* תמונה למעלה */}
+            <img
+              src="/images/share-icon.png"
+              alt="Playlist"
               style={{
-                color: "white",
-                backgroundColor: "#363636",
-                borderRadius: "8px",
-                padding: "8px 16px",
+                width: "80px",
+                height: "80px",
+                objectFit: "cover",
+                borderRadius: "24px",
+                margin: "0 auto 16px",
+              }}
+            />
+
+            <h2
+              style={{
+                fontSize: "20px",
                 fontWeight: "bold",
-                display: "block",
+                textAlign: "center",
+                marginBottom: "16px",
               }}
             >
-              ביטול
-            </span>
-          </Button>
-          <Button
-            onClick={handleSharePlaylist}
-            style={{
-              background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
-              padding: "1px",
-              marginRight: "20px",
-              borderRadius: "8px",
-            }}
-          >
-            <span
+              שתף פלייליסט עם משתמש
+            </h2>
+
+            <input
+              type="email"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+              placeholder="אימייל המשתמש"
               style={{
+                padding: "10px",
+                borderRadius: "32px",
+                border: "1px solid var(--color-black)",
+                backgroundColor: "var(--color-gray)",
                 color: "white",
-                backgroundColor: "#363636",
-                borderRadius: "8px",
-                padding: "8px 16px",
-                fontWeight: "bold",
-                display: "block",
+                fontSize: "16px",
+                marginBottom: "16px",
+              }}
+            />
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "16px",
               }}
             >
-              שתף
-            </span>
-          </Button>
-        </DialogActions>
-      </Dialog>
+              <button
+                onClick={closeModal}
+                style={{
+                  background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
+                  padding: "1px",
+                  borderRadius: "32px",
+                  fontWeight: "bold",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "16px",
+                }}
+              >
+                <span
+                  style={{
+                    color: "white",
+                    backgroundColor: "var(--color-gray)",
+                    borderRadius: "32px",
+                    padding: "10px 20px",
+                    display: "inline-block",
+                  }}
+                >
+                  ביטול
+                </span>
+              </button>
+
+              <button
+                onClick={handleSharePlaylist}
+                style={{
+                  background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
+                  padding: "1px",
+                  borderRadius: "32px",
+                  fontWeight: "bold",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "16px",
+                }}
+              >
+                <span
+                  style={{
+                    color: "white",
+                    // backgroundColor: "var(--color-gray)",
+                    borderRadius: "32px",
+                    padding: "10px 20px",
+                    display: "inline-block",
+                  }}
+                >
+                  שתף
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

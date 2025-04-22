@@ -43,7 +43,6 @@ const AddPlaylist = ({ playlists, setPlaylists }: AddPlaylistProps) => {
         <>
             <Button
                 variant="outlined"
-                color="secondary"
                 startIcon={<AddCircleOutline />}
                 onClick={handleClick}
                 style={{
@@ -51,16 +50,15 @@ const AddPlaylist = ({ playlists, setPlaylists }: AddPlaylistProps) => {
                     height: "26px",
                     width: "180px",
                     textTransform: "none",
-                    borderRadius: "8px",
+                    borderRadius: "32px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
                     padding: "10px",
-                    border: "1px solid #333",
-                    color: "#000000",
+                    color: "var(--color-black)",
                     background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#444")}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
             >
                 <span style={{ flexGrow: 1, textAlign: "center" }}>צור פלייליסט חדש</span>
@@ -78,16 +76,20 @@ const AddPlaylist = ({ playlists, setPlaylists }: AddPlaylistProps) => {
                     vertical: "top",
                     horizontal: "center",
                 }}
-                style={{ zIndex: 1000 }}
+                style={{ zIndex: 9000 }}
+                PaperProps={{
+                    style: {
+                        backgroundColor: "var(--color-gray)",
+                        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
+                        borderRadius: "8px",
+
+                    },
+                }}
             >
                 <div
                     style={{
-                        backgroundColor: "#363636",
                         padding: "15px",
-                        // borderRadius: "8px",
-                        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
                         color: "white",
-                        // minWidth: "200px",
                     }}
                 >
                     <input
@@ -125,6 +127,7 @@ const AddPlaylist = ({ playlists, setPlaylists }: AddPlaylistProps) => {
                     </button>
                 </div>
             </Popover>
+
         </>
     );
 };
