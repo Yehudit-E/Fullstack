@@ -5,8 +5,10 @@ export type Request={
     id:number,
     userId:number,
     user:User,
-    songId:number,
-    song:Song,
+    songAudioFilePath :string,
+    songName:string,
+    songArtist:string,
+    songGenre:string,
     status:string,
     isAmswered:boolean,
     isApproved:boolean,
@@ -14,9 +16,8 @@ export type Request={
 }
 export type RequestPostModel={
     userId:number,
-    songId:number,
-    status:string,
-    isAmswered:boolean,
-    isApproved:boolean,
-    reqestedAt:Date
+    songAudioFilePath :string,
+    songName:string,
+    songArtist:string,
+    songGenre:string,
 }

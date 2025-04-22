@@ -166,6 +166,7 @@ const styles: { [key: string]: CSSProperties } = {
         border: "1.5px solid var(--color-gray)",
         borderRadius: "25px",
         cursor: "pointer",
+        backgroundColor: "var(--color-black)",
     },
     eyeIcon: {
         position: "absolute",

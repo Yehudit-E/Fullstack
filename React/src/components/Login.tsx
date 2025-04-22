@@ -127,6 +127,7 @@ const styles: { [key: string]: CSSProperties } = {
         padding: "10px",
         fontSize: "16px",
         marginTop: "15px",
+        backgroundColor: "var(--color-black)",
         color: "var(--color-white)",
         border: "1.5px solid var(--color-gray)",
         borderRadius: "25px",

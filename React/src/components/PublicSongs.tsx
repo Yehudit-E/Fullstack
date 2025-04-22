@@ -13,6 +13,8 @@ import { Dispatch, StoreType } from "../store/store";
 import { useDispatch } from "react-redux";
 import { updateSong } from "../store/songSlice";
 import AddToPlaylistModel from "./AddToPlaylistModel";
+import RequestUploadDialog from "./UploadSongRequestDialog";
+import UploadSongRequestDialog from "./UploadSongRequestDialog";
 
 const PublicSongs = () => {
   const [songs, setSongs] = useState<Song[]>([]);
@@ -117,6 +119,8 @@ const PublicSongs = () => {
           alignItems: "flex-start"
         }}
       >
+                          <UploadSongRequestDialog/>
+
         <div style={{
           cursor: "pointer",
           padding: "0.5px",
@@ -242,7 +246,6 @@ const PublicSongs = () => {
 
 
       </div>
-
       {/* רשימת השירים */}
       <div className="songs-container" style={{ flexGrow: 1,marginRight:"37px" }}>
         <div className="songs-grid">
@@ -294,7 +297,9 @@ const PublicSongs = () => {
               </div>
             </div>
           ))}
+
         </div>
+
       </div>
 
       {showPlaylistList && (

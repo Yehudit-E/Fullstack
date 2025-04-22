@@ -20,7 +20,6 @@ namespace music.Core.Entities
         public int  Likes { get; set; }
         public string AudioFilePath { get; set; }
         //public string ImageFilePath { get; set; }
-        public bool IsDelited { get; set; }
         //public List<Playlist> Playlists { get; set; }
         public int PlaylistId { get; set; }
         public Playlist playlist { get; set; }

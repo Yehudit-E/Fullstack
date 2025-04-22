@@ -52,7 +52,7 @@ const Playlists: React.FC = () => {
       {/* Sidebar */}
       <div
         style={{
-          width: sidebarOpen ? "30%" : "40px",
+          width: sidebarOpen ? "20%" : "40px",
           transition: "width 0.3s",
           overflow: "hidden",
           padding: sidebarOpen ? "20px" : "0",
@@ -104,7 +104,7 @@ const Playlists: React.FC = () => {
         {/* התוכן של הסיידבר */}
         {sidebarOpen && (
           <>
-            {/* Owned playlists */}
+            {/*Owned playlists*/}
             <div style={{ marginBottom: "20px", marginTop: "20px" }}>
               <h4
                 onClick={() => setOpenOwned(!openOwned)}

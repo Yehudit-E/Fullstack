@@ -86,30 +86,34 @@ const SongPlayer = () => {
     };
     return (
         <>{songPlayer.id !== 0 && (
-            <Box sx={{ zIndex: 9999, position: "fixed", bottom: 0, width: "100%", height: "100px", backgroundColor: "#000000", color: "white", direction: "rtl" }}>
+            <Box sx={{ zIndex: 9999, position: "fixed", bottom: 0, width: "100%", height: "130px",     background: "linear-gradient(to top, rgba(0,0,0,1) 62%, rgba(0,0,0,0))",
+                color: "white", direction: "rtl" }}>
                 <audio ref={audioRef} src={songPlayer.audioFilePath} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleTimeUpdate} onEnded={handleSongEnd} />
 
                 {/* פס התקדמות */}
-                <Box sx={{ width: "95%", display: 'flex', flexDirection: 'column', alignItems: 'stretch', mb: -2, margin: '0 auto' }}>
+                <Box sx={{ width: "95%", display: 'flex', flexDirection: 'column', alignItems: 'stretch', mb: -2, margin: '0 auto' ,marginTop:"30px"}}>
                     <Slider
                         value={currentTime}
                         max={duration}
                         onChange={handleSeek}
                         sx={{
-                            color: 'var( --gradient-start)',
-                            height: 2,
+                            color: 'var( --gradient-end)',
+                            height: "1px",
                             width: '100%',  // הגדרת רוחב של 100% כך שיתפשט על כל הרוחב
                             '& .MuiSlider-thumb': {
-                                width: 20,
-                                height: 20,
-                                backgroundColor: 'var( --gradient-start)',
-                                border: '4px solid rgba(60, 60, 60, 0.8)',
+                                width:13,
+                                height: 13,
+                                backgroundColor: 'var( --gradient-end)',
+                                '&:hover': {
+                                    boxShadow: 'none',
+                                    backgroundColor: 'var(--gradient-end)', // מונע שינוי צבע
+                                },
                             },
                             '& .MuiSlider-track': {
-                                backgroundColor: 'var( --gradient-start)',
+                                backgroundColor: 'var( --gradient-end)',
                             },
                             '& .MuiSlider-rail': {
-                                backgroundColor: 'rgba(240, 240, 240, 0.88)',
+                                backgroundColor: 'rgba(240, 240, 240, 0.8)',
                             },
                         }}
                     />
@@ -125,26 +129,33 @@ const SongPlayer = () => {
 
                     <Box sx={{ display: "flex", alignItems: "center", marginRight: "40px" }}>
                         <IconButton sx={{marginLeft: '20px',padding: 0,marginRight:0, color: 'var(--color-white)' }} onClick={handleClosePlayer}>
-                            <Close sx={{ fontSize: 20 }} />
+                            <Close sx={{ fontSize: 22}} />
                         </IconButton>
                         <Slider value={muted ? 0 : volume} min={0} max={1} step={0.01} onChange={(_, newValue) => setVolume(newValue as number)} sx={{
-                            color: 'var( --gradient-start)',
-                            height: 2,
+                            color: 'var( --gradient-end)',
+                            height: "1px",
                             '& .MuiSlider-thumb': {
-                                width: 16,
-                                height: 16,
-                                backgroundColor: 'var( --gradient-start)',
-                                border: '4px solid rgba(60, 60, 60, 0.8)',
+                                width: 11,
+                                height: 11,
+                                backgroundColor: 'var( --gradient-end)',
+                                '&:hover': {
+                                    boxShadow: 'none',
+                                    backgroundColor: 'var(--gradient-end)', // מונע שינוי צבע
+                                }
                             },
                             '& .MuiSlider-track': {
-                                backgroundColor: 'var( --gradient-start)',
+                                backgroundColor: 'var( --gradient-end)',
                             },
                             '& .MuiSlider-rail': {
-                                backgroundColor: 'rgba(240, 240, 240, 0.89)',
+                                backgroundColor: 'rgba(240, 240, 240, 0.8)',
                             },
                             width: 100, mx: 0
                         }} />
-                        <IconButton sx={{ color: 'rgba(240, 240, 240, 0.8)' }} onClick={() => setMuted(!muted)}>{muted ? <VolumeOff /> : <VolumeUp />}</IconButton>
+                        <IconButton  sx={{ 
+        color: 'rgba(240, 240, 240, 0.8)', 
+        padding: '4px',  // מצמצם את גודל הלחיצה
+        '& svg': { fontSize: 20 } // מקטין את האייקון עצמו
+    }}  onClick={() => setMuted(!muted)}>{muted ? <VolumeOff /> : <VolumeUp />}</IconButton>
                     </Box>
 
                     <Box
@@ -159,18 +170,18 @@ const SongPlayer = () => {
                     >
                         {/* כפתור הבא */}
                         <IconButton sx={{ color: 'rgba(240, 240, 240, 0.8)' }} onClick={() => { }}>
-                            <SkipNextRounded sx={{ fontSize: 25 }} />
+                            <SkipNextRounded sx={{ fontSize: 20 }} />
                         </IconButton>
                         {/* כפתור קדימה 30 שניות */}
                         <IconButton sx={{ color: 'rgba(240, 240, 240, 0.8)' }} onClick={() => skipTime(30)}>
-                            <Forward30Rounded sx={{ fontSize: 30 }} />
+                            <Forward30Rounded sx={{ fontSize: 25 }} />
                         </IconButton>
 
                         {/* כפתור Play/Pause עם אפקט מעגלי צבעוני */}
                         <Box
                             sx={{
-                                width: 43,
-                                height: 43,
+                                width: 42,
+                                height: 42,
                                 borderRadius: "50%",
                                 background: "linear-gradient( 90deg,var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
                                 display: "flex",
@@ -182,26 +193,26 @@ const SongPlayer = () => {
                             <IconButton
                                 onClick={togglePlay}
                                 sx={{
-                                    backgroundColor: "#111",
+                                    backgroundColor: "var(--color-gray)",
                                     borderRadius: "50%",
-                                    width: 38,
-                                    height: 35,
-                                    color: "white",
+                                    width: 40,
+                                    height: 40,
+                                    color: "var(--color-white)",
                                     "&:hover": {
-                                        backgroundColor: "#111",
+                                        backgroundColor: "var(--color-gray)",
                                     },
                                 }}
                             >
-                                {isPlaying ? <PauseRounded sx={{ fontSize: 30 }} /> : <PlayArrowRounded sx={{ fontSize: 30 }} />}
+                                {isPlaying ? <PauseRounded sx={{ fontSize: 28 }} /> : <PlayArrowRounded sx={{ fontSize: 30 }} />}
                             </IconButton>
                         </Box>
                         {/* כפתור חזור 10 שניות */}
                         <IconButton sx={{ color: 'rgba(240, 240, 240, 0.8)' }} onClick={() => skipTime(-10)}>
-                            <Replay10Rounded sx={{ fontSize: 30 }} />
+                            <Replay10Rounded sx={{ fontSize: 25 }} />
                         </IconButton>
                         {/* כפתור קודם */}
                         <IconButton sx={{ color: 'rgba(240, 240, 240, 0.8)' }} onClick={() => { }}>
-                            <SkipPreviousRounded sx={{ fontSize: 25 }} />
+                            <SkipPreviousRounded sx={{ fontSize: 20 }} />
                         </IconButton>
 
 
@@ -235,8 +246,9 @@ const SongPlayer = () => {
                         onClick={() => { if (songPlayer.isPublic) navigate('songComments/' + songPlayer.id) }} // כאן תוכל להוסיף ניווט
                     >
                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                            <Typography sx={{ fontSize: 15 }}>{songPlayer.name + " - "}</Typography>
-                            <Typography sx={{ fontSize: 15 }}>{songPlayer.artist}</Typography>
+                            {/* <Typography sx={{ fontSize: 15 }}>{songPlayer.name + " - "}</Typography>
+                            <Typography sx={{ fontSize: 15 }}>{songPlayer.artist}</Typography> */}
+                        <Typography sx={{ fontSize: 15 }}>{songPlayer.name}</Typography>
                         </Box>
 
                     </Box>

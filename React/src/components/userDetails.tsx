@@ -1,13 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
-import { StoreType } from "../store/store";
+import { Dispatch, StoreType } from "../store/store";
 import { Avatar, Popover, Typography, IconButton, Button, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { logout } from "../store/userSlice";
 import { useNavigate } from "react-router";
+import { resetSong } from "../store/songSlice";
 
 const UserDetails = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<Dispatch>();
     const user = useSelector((state: StoreType) => state.user.user);
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -25,6 +26,10 @@ const UserDetails = () => {
         dispatch(logout());
         handleClose();
         navigate("/home");
+                // פעולה לניקוי הסטייט של השיר ב-redux
+                dispatch(resetSong());
+                // גם נגבה את sessionStorage
+                sessionStorage.removeItem('songPlayer');
     };
 
     const open = Boolean(anchorEl);
@@ -55,7 +60,7 @@ const UserDetails = () => {
                         alignItems: "center",
                         borderRadius: 4,
                         padding: 3,
-                        boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
+                        boxShadow: "0px 4px 10px var(--color-black)",
                         minWidth: 220,
                         textAlign: "center",
                         backgroundColor: "#1e1e1e",
@@ -81,7 +86,7 @@ const UserDetails = () => {
                 </Typography>
 
                 {/* אימייל */}
-                <Typography variant="body2" color="#fff" sx={{ marginTop: 1 }}>
+                <Typography variant="body2" color="var(--whith-color)" sx={{ marginTop: 1 }}>
                     {user?.email || ""}
                 </Typography>
 
@@ -91,13 +96,14 @@ const UserDetails = () => {
                         variant="outlined"
                         onClick={handleLogout}
                         sx={{
-                            width: "50%",
-                            borderColor: "#fff",
-                            color: "#fff",
+                            width: "40%",
+                            borderColor: "var(--whith-color)",
+                            color: "var(--whith-color)",
+                            borderRadius:"32px",
                             "&:hover": {
                                 backgroundColor: "transparent", // מונע שינוי צבע רקע
-                                borderColor: "#fff", // שומר על צבע המסגרת
-                                color: "#fff", // מונע שינוי צבע טקסט
+                                borderColor: "var(--whith-color)", // שומר על צבע המסגרת
+                                color: "var(--whith-color)", // מונע שינוי צבע טקסט
                             },
                         }}
                     >
