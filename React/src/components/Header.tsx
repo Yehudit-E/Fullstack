@@ -82,9 +82,10 @@ const Header = () => {
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography variant="h6" component="div" sx={{ color: "#ffffff", ml: 2 }}>
+              {/* <Typography variant="h6" component="div" sx={{ color: "#ffffff", ml: 2 }}>
                 Music App
-              </Typography>
+              </Typography> */}
+              <img src="/images/musical-notes.png" alt="Logo" style={{ height: "44px", width: "44px",margin:"0px 15px 10px 30px"}}></img>
               {["/home", "/music"].map((path) => (
                 <Button
                   key={path}

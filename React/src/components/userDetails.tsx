@@ -61,7 +61,7 @@ const UserDetails = () => {
                         borderRadius: 4,
                         padding: 3,
                         boxShadow: "0px 4px 10px var(--color-black)",
-                        minWidth: 220,
+                        minWidth: 160,
                         textAlign: "center",
                         backgroundColor: "#1e1e1e",
                         color: "white",

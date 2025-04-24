@@ -52,59 +52,44 @@ const Playlists: React.FC = () => {
       {/* Sidebar */}
       <div
         style={{
-          width: sidebarOpen ? "20%" : "40px",
+          width: sidebarOpen ? "20%" : "30px",
           transition: "width 0.3s",
           overflow: "hidden",
           padding: sidebarOpen ? "20px" : "0",
           position: "relative",
+          marginTop: "20px",
         }}
       >
-        {/* Toggle button - ממוקם שונה לפי מצב הפתיחה */}
-        {sidebarOpen ? (
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <AddPlaylist playlists={ownedPlaylists} setPlaylists={setOwnedPlaylists} />
-            <div
-              onClick={() => setSidebarOpen(false)}
-              style={{
-                top: 10,
-                borderRadius: "50%",
-                // width: "30px",
-                // height: "30px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                // marginRight: "10px",
-              }}
-            >
+        {/* Toggle button */}
+        <div
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          style={{
+            position: "absolute",
+            top: 10,
+            left: sidebarOpen ? "calc(100% - 40px)" : "calc(100% - 30px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            zIndex: 10,
+            marginBottom: "50px",
+            transition: "left 0.3s",
+          }}
+        >
+          {sidebarOpen ? (
             <ChevronRight style={{ color: "white" }} />
-            </div>
-          </div>
-        ) : (
-          <div
-            onClick={() => setSidebarOpen(true)}
-            style={{
-              top:10,
-              position: "absolute",
-              // right: "-15px",
-              borderRadius: "50%",
-              // width: "30px",
-              // height: "30px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              zIndex: 10,
-            }}
-          >
+          ) : (
             <ChevronLeft style={{ color: "white" }} />
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* התוכן של הסיידבר */}
+        {/* Sidebar content */}
         {sidebarOpen && (
           <>
-            {/*Owned playlists*/}
+            {/* Add Playlist button */}
+            <AddPlaylist playlists={ownedPlaylists} setPlaylists={setOwnedPlaylists} />
+
+            {/* Owned playlists */}
             <div style={{ marginBottom: "20px", marginTop: "20px" }}>
               <h4
                 onClick={() => setOpenOwned(!openOwned)}
@@ -227,8 +212,24 @@ const Playlists: React.FC = () => {
         )}
       </div>
 
+      {/* Separator line
+      <div
+        style={{
+          width: sidebarOpen ? "2px" : "0px",
+          backgroundColor: "var(--color-black)",
+          boxShadow: "-10px 0px 15px rgba(255, 255, 255, 0.5)" ,        transition: "width 0.3s",
+        }}
+      /> */}
+
       {/* Playlist details */}
-      <div style={{ width: "70%", padding: "20px" }}>
+      <div
+        style={{
+          width: sidebarOpen ? "60%" : "80%",
+          padding: "20px",
+          display: "flex",
+          minHeight: "100vh",
+        }}
+      >
         {selectedPlaylistId ? (
           <PlaylistDetails
             playlistId={selectedPlaylistId}

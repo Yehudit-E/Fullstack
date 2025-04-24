@@ -1,6 +1,7 @@
 .songs-grid {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 20px;
   margin-bottom: 20px;
 }
@@ -43,7 +44,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1;
+  z-index: 0  !important;
 }
 
 .song-info {

@@ -6,6 +6,7 @@ import { Dispatch, StoreType } from "../store/store";
 import { useNavigate } from "react-router";
 import { SkipPreviousRounded, Replay10Rounded, PlayArrowRounded, PauseRounded, Forward30Rounded, SkipNextRounded } from '@mui/icons-material';
 import { resetSong, setChange } from "../store/songSlice";
+import PlayerOptionsMenu from "./playerOptionsMenu";
 
 const formatTime = (time: number) => {
     const hours = Math.floor(time / 3600).toString().padStart(2, '0');
@@ -25,6 +26,8 @@ const SongPlayer = () => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const navigate = useNavigate();
     const dispatch = useDispatch<Dispatch>();
+    const [playbackRate, setPlaybackRate] = useState(1);
+
     useEffect(() => {
         if (audioRef.current) {
             audioRef.current.volume = muted ? 0 : volume;
@@ -78,20 +81,16 @@ const SongPlayer = () => {
             setCurrentTime(newTime);
         }
     };
-    const handleClosePlayer = () => {
-        // פעולה לניקוי הסטייט של השיר ב-redux
-        dispatch(resetSong());
-        // גם נגבה את sessionStorage
-        sessionStorage.removeItem('songPlayer');
-    };
     return (
         <>{songPlayer.id !== 0 && (
-            <Box sx={{ zIndex: 9999, position: "fixed", bottom: 0, width: "100%", height: "130px",     background: "linear-gradient(to top, rgba(0,0,0,1) 62%, rgba(0,0,0,0))",
-                color: "white", direction: "rtl" }}>
+            <Box sx={{
+                zIndex: 1200, position: "fixed", bottom: 0, width: "100%", height: "130px", background: "linear-gradient(to top, rgba(0,0,0,1) 62%, rgba(0,0,0,0))",
+                color: "white"
+            }}>
                 <audio ref={audioRef} src={songPlayer.audioFilePath} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleTimeUpdate} onEnded={handleSongEnd} />
 
                 {/* פס התקדמות */}
-                <Box sx={{ width: "95%", display: 'flex', flexDirection: 'column', alignItems: 'stretch', mb: -2, margin: '0 auto' ,marginTop:"30px"}}>
+                <Box sx={{ width: "95%", display: 'flex', flexDirection: 'column', alignItems: 'stretch', mb: -2, margin: '0 auto', marginTop: "30px" }}>
                     <Slider
                         value={currentTime}
                         max={duration}
@@ -101,7 +100,7 @@ const SongPlayer = () => {
                             height: "1px",
                             width: '100%',  // הגדרת רוחב של 100% כך שיתפשט על כל הרוחב
                             '& .MuiSlider-thumb': {
-                                width:13,
+                                width: 13,
                                 height: 13,
                                 backgroundColor: 'var( --gradient-end)',
                                 '&:hover': {
@@ -127,10 +126,18 @@ const SongPlayer = () => {
                 {/* נגן */}
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: -10 }}>
 
-                    <Box sx={{ display: "flex", alignItems: "center", marginRight: "40px" }}>
-                        <IconButton sx={{marginLeft: '20px',padding: 0,marginRight:0, color: 'var(--color-white)' }} onClick={handleClosePlayer}>
-                            <Close sx={{ fontSize: 22}} />
-                        </IconButton>
+                    <Box sx={{ display: "flex", alignItems: "center", marginRight: "30px" }}>
+                        <PlayerOptionsMenu
+                            song={songPlayer}
+                            playbackRate={playbackRate}
+                            onRateChange={(rate) => {
+                                setPlaybackRate(rate);
+                                if (audioRef.current) {
+                                    audioRef.current.playbackRate = rate;
+                                }
+                            }}
+                        />
+
                         <Slider value={muted ? 0 : volume} min={0} max={1} step={0.01} onChange={(_, newValue) => setVolume(newValue as number)} sx={{
                             color: 'var( --gradient-end)',
                             height: "1px",
@@ -151,11 +158,11 @@ const SongPlayer = () => {
                             },
                             width: 100, mx: 0
                         }} />
-                        <IconButton  sx={{ 
-        color: 'rgba(240, 240, 240, 0.8)', 
-        padding: '4px',  // מצמצם את גודל הלחיצה
-        '& svg': { fontSize: 20 } // מקטין את האייקון עצמו
-    }}  onClick={() => setMuted(!muted)}>{muted ? <VolumeOff /> : <VolumeUp />}</IconButton>
+                        <IconButton sx={{
+                            color: 'rgba(240, 240, 240, 0.8)',
+                            padding: '4px',  // מצמצם את גודל הלחיצה
+                            '& svg': { fontSize: 20 } // מקטין את האייקון עצמו
+                        }} onClick={() => setMuted(!muted)}>{muted ? <VolumeOff /> : <VolumeUp />}</IconButton>
                     </Box>
 
                     <Box
@@ -248,7 +255,7 @@ const SongPlayer = () => {
                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                             {/* <Typography sx={{ fontSize: 15 }}>{songPlayer.name + " - "}</Typography>
                             <Typography sx={{ fontSize: 15 }}>{songPlayer.artist}</Typography> */}
-                        <Typography sx={{ fontSize: 15 }}>{songPlayer.name}</Typography>
+                            <Typography sx={{ fontSize: 15 }}>{songPlayer.name}</Typography>
                         </Box>
 
                     </Box>

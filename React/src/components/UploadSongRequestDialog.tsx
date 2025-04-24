@@ -140,7 +140,7 @@ const UploadSongRequestDialog = () => {
             width: "100vw",
             height: "100vh",
             backgroundColor: "rgba(0,0,0,0.6)",
-            zIndex: 9000,
+            zIndex: 99999,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -252,7 +252,7 @@ const UploadSongRequestDialog = () => {
                 <span
                   style={{
                     color: "white",
-                    backgroundColor: "var(--color-gray)",
+                    // backgroundColor: "var(--color-gray)",
                     borderRadius: "32px",
                     padding: "10px 20px",
                     display: "inline-block",

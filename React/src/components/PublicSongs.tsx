@@ -107,147 +107,142 @@ const PublicSongs = () => {
     <div style={{ marginTop: "45px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
       {/* תיבת הסינון והמיון */}
       <div className="filters-container"
+  style={{
+    marginRight: "12px",
+    marginLeft: "1px",
+    marginTop: "30px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    width: "151px",
+    height: "100%",
+    alignItems: "flex-start",
+    position: "sticky",
+    top: "169px", // כאן את יכולה לשחק עם המרווח מלמעלה
+    zIndex: 1, // חשוב לוודא שהמרכיבים האלו לא יהיו מתחת לתוכן אחר
+  }}
+>
+  {authState && <UploadSongRequestDialog />}
+  {/* תיבת חיפוש */}
+  <div style={{
+    cursor: "pointer",
+    padding: "0.5px",
+    color: "var(--color-white)",
+    borderRadius: "32px",
+    width: "100%",
+    height: "25px",
+    marginBottom: "5px",
+    background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
+    position: "relative",
+  }}>
+    <div style={{
+      backgroundColor: "var(--color-gray)",
+      borderRadius: "32px",
+      width: "100%",
+      height: "25px",
+      display: "flex",
+      alignItems: "center",
+    }}>
+      <input
+        type="text"
+        placeholder="חפש שיר..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
         style={{
-          marginRight: "12px",
-          marginLeft: "1px",
-          marginTop: "30px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          width: "151px",
-          height: "100%",
-          alignItems: "flex-start"
-        }}
-      >
-                          <UploadSongRequestDialog/>
-
-        <div style={{
-          cursor: "pointer",
-          padding: "0.5px",
+          width: "100%",
+          backgroundColor: "transparent",
+          border: "none",
           color: "var(--color-white)",
+          outline: "none",
+          fontSize: "14px",
+          marginRight: "6px",
+        }}
+      />
+    </div>
+  </div>
+  {/* תיבת מיון */}
+  {[
+    {
+      label: "מיין לפי",
+      value: sortBy,
+      setValue: setSortBy,
+      options: [{ label: "שם", value: "name" }, { label: "תאריך", value: "date" }, { label: "אמן", value: "artist" }],
+    },
+    {
+      label: "ז'אנר",
+      value: genre,
+      setValue: setGenre,
+      options: getGenres().map(g => ({ label: g === "all" ? "הכל" : g, value: g })),
+    },
+  ].map(({ label, value, setValue, options }, index) => (
+    <div key={index} style={{
+      cursor: "pointer",
+      padding: "0.5px",
+      color: "var(--color-white)",
+      borderRadius: "32px",
+      width: "100%",
+      height: "25px",
+      background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
+      position: "relative",
+      marginBottom: "5px"
+    }}>
+      <button
+        style={{
+          backgroundColor: "var(--color-gray)",
           borderRadius: "32px",
           width: "100%",
           height: "25px",
-          marginBottom: "5px",
-          background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
-          position: "relative",
-        }}>
-          <div style={{
+          color: "white",
+          border: "none",
+          appearance: "none",
+          outline: "none",
+          fontSize: "14px",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          overflow: "hidden"
+        }}
+      >
+        <span style={{ marginRight: "6px" }}>{label}:</span>
+        <select
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          style={{
             backgroundColor: "var(--color-gray)",
             borderRadius: "32px",
-            width: "100%",
+            width: "auto",
+            maxWidth: "100%",
+            marginRight: "6px",
             height: "25px",
-            display: "flex",
-            alignItems: "center",
-          }}>
-            {/* <img src="/images/lock-icon.png" alt="חיפוש" style={{ height: "20px", marginRight: "10px" }} /> */}
-            <input
-              type="text"
-              placeholder="חפש שיר..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              style={{
-                width: "100%",
-                backgroundColor: "transparent",
-                border: "none",
-                color: "var(--color-white)",
-                outline: "none",
-                fontSize: "14px",
-                marginRight: "6px",
-              }}
-            />
-          </div>
-        </div>
-        {[
-          {
-            label: "מיין לפי",
-            value: sortBy,
-            setValue: setSortBy,
-            options: [{ label: "שם", value: "name" }, { label: "תאריך", value: "date" }, { label: "אמן", value: "artist" }],
-            // icon: "/images/lock-icon.png"//////////////
-          },
-          {
-            label: "ז'אנר",
-            value: genre,
-            setValue: setGenre,
-            options: getGenres().map(g => ({ label: g === "all" ? "הכל" : g, value: g })),
-            // icon: "/images/lock-icon.png"//////////////////
-          },
-        ].map(({ label, value, setValue, options }, index) => (
-          <div key={index} style={{
+            color: "#707070",
+            border: "none",
+            appearance: "none",
+            outline: "none",
+            fontSize: "14px",
             cursor: "pointer",
-            padding: "0.5px",
-            color: "var(--color-white)",
-            borderRadius: "32px",
-            width: "100%",
-            height: "25px",
-            background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
-            position: "relative",
-            marginBottom: "5px"
-          }}>
-            <button
+          }}
+        >
+          {options.map(({ label, value }) => (
+            <option
+              key={value}
+              value={value}
               style={{
                 backgroundColor: "var(--color-gray)",
-                borderRadius: "32px",
-                width: "100%",
-                height: "25px",
-                color: "white",
-                border: "none",
-                appearance: "none",
-                outline: "none",
-                fontSize: "14px",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                overflow: "hidden"/* מונע חריגה וחותך תוכן שחורג */
-
+                color: "var(--color-white)",
+                padding: "5px",
               }}
             >
-              {/* <img src={icon} alt={label} style={{ height: "20px" }} /> */}
-              <span style={{ marginRight: "6px" }}>{label}:</span>
-              <select
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                style={{
-                  backgroundColor: "var(--color-gray)",
-                  borderRadius: "32px",
-                  width: "auto",
-                  maxWidth: "100%",
-                  marginRight: "6px",
-                  height: "25px",
-                  color: "#707070",
-                  border: "none",
-                  appearance: "none",
-                  outline: "none",
-                  fontSize: "14px",
-                  cursor: "pointer",
-                }}
-              >
-                {options.map(({ label, value }) => (
-                  <option
-                    key={value}
-                    value={value}
-                    style={{
-                      backgroundColor: "var(--color-gray)",
-                      color: "var(--color-white)",
-                      padding: "5px",
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--color-gray)'} // שינוי צבע על מעבר עכבר
-                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--color-gray)'} // החזרת צבע ברירת המחדל
-                  >
-                    {label}
-                  </option>
-                ))}
-              </select>
+              {label}
+            </option>
+          ))}
+        </select>
+      </button>
+    </div>
+  ))}
+</div>
 
-            </button>
-          </div>
-        ))}
-
-
-      </div>
       {/* רשימת השירים */}
-      <div className="songs-container" style={{ flexGrow: 1,marginRight:"37px" }}>
+      <div className="songs-container" style={{ flexGrow: 1, marginRight: "37px" }}>
         <div className="songs-grid">
           {filteredSongs.map((song: Song) => (
             <div key={song.id} className="song-card">
@@ -274,23 +269,26 @@ const PublicSongs = () => {
                 <span className="song-text">{song.name} </span>
                 <div className="song-icons">
                   <IconButton onClick={(e) => openMenu(e, song.id)} >
-                    <MoreVertIcon sx={{ color: "white", fontSize: 20}} />
+                    <MoreVertIcon sx={{ color: "white", fontSize: 20 }} />
                   </IconButton>
                   <Menu
                     anchorEl={menuAnchor[song.id]}
                     open={Boolean(menuAnchor[song.id])}
                     onClose={() => closeMenu(song.id)}
-                    sx={{ "& .MuiPaper-root": { backgroundColor: "var(--color-gray)", color: "white" } }}
+                    sx={{
+                      "& .MuiPaper-root": { backgroundColor: "var(--color-gray)", color: "white" },
+                      "& .MuiMenuItem-root": { "&:hover": { backgroundColor: "#222" }, },
+                    }}
                   >
                     <MenuItem onClick={() => {
                       closeMenu(song.id);
                       downloadSong(song.audioFilePath, song.name);
                     }}>
-                      <DownloadIcon sx={{ marginLeft: "7px" ,fontSize: "16px"}} />הורדה
+                      <DownloadIcon sx={{ marginLeft: "7px", fontSize: "16px" }} />הורדה
                     </MenuItem>
                     {authState &&
-                      <MenuItem onClick={() => {closeMenu(song.id); setCurrentSong(song); setShowPlaylistList(true); }}>
-                        <QueueMusicIcon sx={{ marginLeft: "7px",fontSize: "16px" }} />הוספה לפלייליסט
+                      <MenuItem onClick={() => { closeMenu(song.id); setCurrentSong(song); setShowPlaylistList(true); }}>
+                        <QueueMusicIcon sx={{ marginLeft: "7px", fontSize: "16px" }} />הוספה לפלייליסט
                       </MenuItem>}
                   </Menu>
                 </div>
