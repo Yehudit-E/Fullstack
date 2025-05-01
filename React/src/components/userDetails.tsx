@@ -5,7 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { logout } from "../store/userSlice";
 import { useNavigate } from "react-router";
-import { resetSong } from "../store/songSlice";
+import { resetSongs } from "../store/songSlice";
 
 const UserDetails = () => {
     const dispatch = useDispatch<Dispatch>();
@@ -27,7 +27,7 @@ const UserDetails = () => {
         handleClose();
         navigate("/home");
                 // פעולה לניקוי הסטייט של השיר ב-redux
-                dispatch(resetSong());
+                dispatch(resetSongs());
                 // גם נגבה את sessionStorage
                 sessionStorage.removeItem('songPlayer');
     };

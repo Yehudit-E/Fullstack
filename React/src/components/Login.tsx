@@ -67,7 +67,7 @@ const Login = () => {
         <form onSubmit={handleSubmit} style={styles.form}>
             <input
                 type="text"
-                placeholder="אימייל"
+                placeholder="email"
                 ref={emailRef}
                 style={styles.input}
             />
@@ -76,12 +76,12 @@ const Login = () => {
             <div style={styles.passwordContainer}>
                 <input
                     type={passwordVisible ? "text" : "password"}
-                    placeholder="סיסמה"
+                    placeholder="password"
                     ref={passwordRef}
                     style={styles.input}
                 />
                 <IconButton
-                    style={styles.eyeIcon}
+                    style={{ ...styles.eyeIcon }} 
                     onClick={() => setPasswordVisible(!passwordVisible)}
                     edge="start"
                 >
@@ -97,7 +97,7 @@ const Login = () => {
                 type="submit"
                 style={styles.button}
             >
-                התחבר
+                Login
             </button>
         </form>
     );
@@ -125,6 +125,7 @@ const styles: { [key: string]: CSSProperties } = {
     button: {
         width: "520px",
         padding: "10px",
+        paddingLeft: "30px",
         fontSize: "16px",
         marginTop: "15px",
         backgroundColor: "var(--color-black)",
@@ -135,7 +136,7 @@ const styles: { [key: string]: CSSProperties } = {
     },
     eyeIcon: {
         position: "absolute",
-        left: "10px",
+        right: "10px",
         top: "40%",
         transform: "translateY(-50%)",
         color: "#707070",

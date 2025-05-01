@@ -25,7 +25,7 @@ const UploadSongDialog = ({ playlist, setPlaylist }: UploadSongDialogProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [metaData, setMetaData] = useState({ artist: "", genre: "" });
+  const [metaData, setMetaData] = useState({ artist: "", genre: "",title:"" });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const xhrRef = useRef<XMLHttpRequest | null>(null); // נוספה שמירת רפרנס ל־xhr
 
@@ -53,33 +53,39 @@ const UploadSongDialog = ({ playlist, setPlaylist }: UploadSongDialogProps) => {
 
   const handleUploadFile = async () => {
     if (!file) return alert("בחר קובץ להעלאה");
+  
     try {
       setLoading(true);
       setProgress(0);
+  
+      // שלב חילוץ המטא-דאטה כולל תמונה
+      const imageUrl = await extractMetaData(file);  
       const uploadUrl = await SongService.getUploadUrl(file.name, file.type);
       const xhr = new XMLHttpRequest();
-      xhrRef.current = xhr; // שמירת הרפרנס
-
+      xhrRef.current = xhr;
+  
       xhr.open("PUT", uploadUrl);
       xhr.setRequestHeader("Content-Type", file.type);
-
+  
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
           const percentage = Math.round((event.loaded * 100) / event.total);
           setProgress(percentage);
         }
       };
-
+  
       xhr.onload = async () => {
+        const metadata = await mm.parseBlob(file);
         if (xhr.status === 200) {
           const songPostModel: SongPostModel = {
-            name: file.name.replace(/\.[^/.]+$/, ""),
-            description: "",
-            artist: metaData.artist,
-            genre: metaData.genre,
+            name:file.name.replace(/\.[^/.]+$/, ""),
+            artist: metadata.common.artist || metadata.common.albumartist || "אמן לא ידוע",
+            genre: metadata.common.genre?.[0] || "ז'אנר לא ידוע",
             audioFilePath: uploadUrl.split("?")[0],
+            imageFilePath: imageUrl?imageUrl:"",  // הוספת קישור לתמונה
             playlistId: playlist!.id,
           };
+  
           const song: Song = await SongService.addSong(songPostModel);
           if (playlist) {
             setPlaylist((prev) => ({
@@ -94,20 +100,22 @@ const UploadSongDialog = ({ playlist, setPlaylist }: UploadSongDialogProps) => {
         }
         setLoading(false);
       };
-
+  
       xhr.onerror = () => {
         if (xhr.statusText !== "abort") {
           alert("אירעה שגיאה בהעלאת הקובץ");
         }
         setLoading(false);
       };
-
+  
       xhr.send(file);
     } catch (err) {
       alert("שגיאה בהעלאת הקובץ");
       setLoading(false);
     }
   };
+  
+  
 
   const handleFileDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -128,15 +136,58 @@ const UploadSongDialog = ({ playlist, setPlaylist }: UploadSongDialogProps) => {
 
   const extractMetaData = async (file: File) => {
     try {
+
       const metadata = await mm.parseBlob(file);
-      const artist = metadata.common.artist || metadata.common.albumartist || "אמן לא ידוע";
-      const genre = metadata.common.genre?.[0] || "ז'אנר לא ידוע";
-      setMetaData({ artist, genre });
+
+  
+      // חילוץ התמונה אם קיימת
+      const image = metadata.common.picture?.[0]?.data;
+      const imageFormat = metadata.common.picture?.[0]?.format || "jpeg";  // סוג התמונה
+      const imageName = `${file.name.replace(/\.[^/.]+$/, "")}_cover.${imageFormat.split("/")[1] || "jpg"}`;
+      
+      const imageUrl = image ? await uploadImage(image, imageName, imageFormat) : null;
+
+  console.log("imageUrl ggg", imageUrl);
+  
+  
+      return imageUrl; // מחזיר את כתובת התמונה אם קיימת
     } catch (e) {
       console.error("שגיאה בהפקת מטא-דאטה:", e);
+      return null;
     }
   };
-
+  const uploadImage = async (imageData: Buffer, imageName: string, imageFormat: string): Promise<string | null> => {
+    try {
+      let uploadUrl = await SongService.getUploadUrl(imageName, `image/${imageFormat}`);
+      uploadUrl=uploadUrl.split("?")[0]; // מחיקת הפרמטרים מה-URL
+      // יצירת Promise כך שתחזור ערך רק אחרי שה-XHR יסתיים
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("PUT", uploadUrl);
+        xhr.setRequestHeader("Content-Type", `image/${imageFormat}`);
+        
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            resolve(uploadUrl); // מחזיר את ה-URL של התמונה
+          } else {
+            alert("אירעה שגיאה בהעלאת התמונה");
+            reject(null); // דוחה את ה-Promise אם הייתה שגיאה
+          }
+        };
+        
+        xhr.onerror = () => {
+          alert("שגיאה בהעלאת התמונה");
+          reject(null); // דוחה את ה-Promise אם הייתה שגיאה
+        };
+  
+        xhr.send(imageData);
+      });
+    } catch (err) {
+      console.error("שגיאה בהעלאת התמונה", err);
+      return null;
+    }
+  };
+  
   return (
     <>
       <IconButton onClick={() => setShowUploadDialog(true)} style={{ color: "var(--color-white)" }}>

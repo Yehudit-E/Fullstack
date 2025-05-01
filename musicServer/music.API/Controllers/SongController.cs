@@ -119,17 +119,16 @@ namespace music.API.Controllers
             return Ok(new { url });
         }
 
-        // ⬇️ שלב 2: קבלת URL להורדת קובץ מה-S3
-        //[HttpGet("download-url/{fileName}")]
-        //public async Task<IActionResult> GetDownloadUrl(string fileName)
+        //// ⬆️ שלב 1: קבלת URL להעלאת קובץ ל-S3
+        //[HttpGet("upload-image-url")]
+        //[Authorize]
+        //public async Task<IActionResult> GetUploadImageUrl([FromQuery] string fileName, [FromQuery] string contentType)
         //{
-        //    var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
-        //    var tokenId = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
-        //    bool flag = await _iService.IsOwnerOfSong()
-        //    if ()
-        //        return Forbid();
-        //    var url = await _s3Service.GetDownloadUrlAsync(fileName);
-        //    return Ok(new { downloadUrl = url });
+        //    if (string.IsNullOrEmpty(fileName))
+        //        return BadRequest("Missing file name");
+        //    var url = await _s3Service.GeneratePresignedUrlAsync(
+        //        "" + fileName, contentType);
+        //    return Ok(new { url });
         //}
     }
 

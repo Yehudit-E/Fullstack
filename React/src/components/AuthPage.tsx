@@ -7,35 +7,35 @@ const AuthPage = () => {
 
     return (
         <div style={styles.container}>
-            {/* כפתור בחירה דו-מצבי */}
+            {/* Toggle Button */}
             <div style={styles.switchContainer}>
                 <div
                     style={{
                         ...styles.switchOption,
-                        color:"var(--color-white)", 
+                        color: "var(--color-white)", 
                         zIndex: isLogin ? 1 : 2 
                     }}
                     onClick={() => setIsLogin(true)}  
                 >
-                    התחברות
+                    Login
                 </div>
 
                 <div
                     style={{
                         ...styles.switchOption,
-                        color: "var(--color-white)" ,
-                        zIndex: isLogin ? 2 : 1 // החלק שנבחר יהיה מעל
+                        color: "var(--color-white)",
+                        zIndex: isLogin ? 2 : 1 // The selected section will be above
                     }}
-                    onClick={() => setIsLogin(false)} // לוחצים על "התחברות" כדי לעבור
+                    onClick={() => setIsLogin(false)} // Clicking "Login" to switch
                 >
-                    הרשמה
+                    Register
                 </div>
 
-                {/* החלק שנע עליהם */}
+                {/* Sliding section */}
                 <div
                     style={{
                         ...styles.slider,
-                        left: !isLogin ? "5px" : "calc(50% - 5px)", // הזזה הפוכה!
+                        left: isLogin ? "5px" : "calc(50% - 5px)", // Reverse movement!
                     }}
                 ></div>
             </div>
@@ -45,13 +45,13 @@ const AuthPage = () => {
     );
 };
 
-// **עיצוב**
+// **Styles**
 const styles: any = {
     container: {
         display: "flex",
         flexDirection: "column",
-        justifyContent: "flex-start", // שים לב שזה משנה את המיקום בגובה
-        alignItems: "center", // מרכוז לרוחב
+        justifyContent: "flex-start", // Notice this changes vertical alignment
+        alignItems: "center", // Center horizontally
         height: "100vh",
         background: "var(--color-black)",
     },
@@ -81,7 +81,7 @@ const styles: any = {
         background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
         borderRadius: "25px",
         transition: "left 0.3s ease-in-out",
-        zIndex: 0, // כדי שהכפתורים יישבו מעליו
+        zIndex: 0, // To ensure the buttons are above it
     }
 };
 

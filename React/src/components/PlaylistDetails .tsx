@@ -9,7 +9,7 @@ import { IconButton, Divider, Menu, MenuItem, Dialog, DialogActions, DialogConte
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Song } from "../models/Song";
-import { resetSong, updateSong } from "../store/songSlice";
+import { resetSongs, updateSongs } from "../store/songSlice";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -34,9 +34,8 @@ const PlaylistDetails = ({ playlistId, ownedPlaylists, setOwnedPlaylists }: Play
 
   const userId = useSelector((state: StoreType) => state.user.user.id);
   const dispatch = useDispatch<Dispatch>();
-  const currentSong = useSelector((state: StoreType) => state.songPlayer.song)
+  const currentSong = useSelector((state: StoreType) => state.songPlayer.songs)[useSelector((state: StoreType) => state.songPlayer.currentIndex)];
   console.log("currentSong", currentSong);
-
 
   const handlePlaylistMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElPlaylist(event.currentTarget);
@@ -55,7 +54,8 @@ const PlaylistDetails = ({ playlistId, ownedPlaylists, setOwnedPlaylists }: Play
   }, [playlistId]);
 
   const handlePlaySong = (song: Song) => {
-    dispatch(updateSong(song));
+    console.log("url", song.audioFilePath);
+    dispatch(updateSongs([song]));
   };
 
   const handleSongMenuOpen = (event: React.MouseEvent<HTMLButtonElement>, songId: number) => {
@@ -100,44 +100,22 @@ const PlaylistDetails = ({ playlistId, ownedPlaylists, setOwnedPlaylists }: Play
       }
       return prev;
     });
-    // Here you can perform additional actions after updating the song
   };
 
-  // const handleDeleteSong = async () => {
-  //   if (songToDelete === null || !playlist) return;
-  //   try {
-  //     await PlaylistService.removeSongFromPlaylist(playlist.id, songToDelete);
-
-  //     // עדכון הסטייט של הפלייליסט לאחר מחיקה
-  //     setPlaylist((prev) => {
-  //       if (!prev) return prev;
-  //       return { ...prev, songs: prev.songs?.filter((song) => song.id !== songToDelete) };
-  //     });
-
-  //     alert("השיר נמחק בהצלחה!");
-  //   } catch (error) {
-  //     alert("שגיאה במחיקת השיר.");
-  //   }
-  //   setOpenDialog(false); // Close the dialog after deletion
-  // };
   const handleDeleteSong = async () => {
-
     if (songToDelete === null || !playlist) return;
     try {
       await PlaylistService.removeSongFromPlaylist(playlist.id, songToDelete);
-
       // עדכון הסטייט של הפלייליסט לאחר מחיקה
       setPlaylist((prev) => {
         if (!prev) return prev;
         return { ...prev, songs: prev.songs?.filter((song) => song.id !== songToDelete) };
       });
-
       // // אם השיר שהתנגן נמחק, אז נבצע reset לנגן
       // const currentSong  =useSelector((state:StoreType)=>state.songPlayer.song)      
       if (currentSong?.id === songToDelete) {
-        dispatch(resetSong());
+        dispatch(resetSongs());
       }
-
       alert("השיר נמחק בהצלחה!");
     } catch (error) {
       alert("שגיאה במחיקת השיר.");
@@ -173,7 +151,6 @@ const PlaylistDetails = ({ playlistId, ownedPlaylists, setOwnedPlaylists }: Play
               <h2
                 style={{
                   background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
-                  // backgroundColor: "var(--gradient-end)",
                   WebkitBackgroundClip: "text",
                   color: "transparent",
                   fontSize: "30px",
@@ -184,7 +161,7 @@ const PlaylistDetails = ({ playlistId, ownedPlaylists, setOwnedPlaylists }: Play
                 {playlist.name}
               </h2>
             </div>
-
+            <button onClick={()=>{dispatch(updateSongs(playlist.songs))}}></button>
             {/* פרופילים בצד ימין */}
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
 

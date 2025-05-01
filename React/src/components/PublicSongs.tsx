@@ -1,313 +1,270 @@
-import { useEffect, useState } from "react";
-import SongService from "../services/SongService";
-import { Song } from "../models/Song";
-import "./style/PublicSongs.css";
-import { MenuItem, IconButton, Menu, Divider } from "@mui/material";
-import React from "react";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import QueueMusicIcon from '@mui/icons-material/QueueMusic';
-import DownloadIcon from "@mui/icons-material/Download";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { useSelector } from "react-redux";
-import { Dispatch, StoreType } from "../store/store";
-import { useDispatch } from "react-redux";
-import { updateSong } from "../store/songSlice";
-import AddToPlaylistModel from "./AddToPlaylistModel";
-import RequestUploadDialog from "./UploadSongRequestDialog";
-import UploadSongRequestDialog from "./UploadSongRequestDialog";
+"use client"
+
+import type React from "react"
+
+import { useEffect, useState } from "react"
+import SongService from "../services/SongService"
+import type { Song } from "../models/Song"
+import { useSelector } from "react-redux"
+import type { Dispatch, StoreType } from "../store/store"
+import { useDispatch } from "react-redux"
+import { updateSongs } from "../store/songSlice"
+import AddToPlaylistModel from "./AddToPlaylistModel"
+import UploadSongRequestDialog from "./UploadSongRequestDialog"
+import MoreVertIcon from "@mui/icons-material/MoreVert"
+import QueueMusicIcon from "@mui/icons-material/QueueMusic"
+import DownloadIcon from "@mui/icons-material/Download"
+import PlayArrowIcon from "@mui/icons-material/PlayArrow"
+import PauseIcon from "@mui/icons-material/Pause"
+import SearchIcon from "@mui/icons-material/Search"
+import MusicNoteIcon from "@mui/icons-material/MusicNote"
+import AddIcon from "@mui/icons-material/Add"
+import { MenuItem, IconButton, Menu } from "@mui/material"
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
+import "./style/PublicSongs.css"
 
 const PublicSongs = () => {
-  const [songs, setSongs] = useState<Song[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
-  const [sortBy, setSortBy] = useState<string>("name");
-  const [genre, setGenre] = useState<string>("all");
-  const [search, setSearch] = useState<string>("");
-  const [menuAnchor, setMenuAnchor] = useState<{ [key: string]: HTMLElement | null }>({});
-  const [currentSong, setCurrentSong] = useState<Song>({} as Song);
-  const [showPlaylistList, setShowPlaylistList] = useState<boolean>(false);
-  const dispatch = useDispatch<Dispatch>();
+  const [songs, setSongs] = useState<Song[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string>("")
+  const [sortBy, setSortBy] = useState<string>("name")
+  const [genre, setGenre] = useState<string>("all")
+  const [search, setSearch] = useState<string>("")
+  const [menuAnchor, setMenuAnchor] = useState<{ [key: string]: HTMLElement | null }>({})
+  const [currentSong, setCurrentSong] = useState<Song>({} as Song)
+  const [showPlaylistList, setShowPlaylistList] = useState<boolean>(false)
+  const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(null)
+  const dispatch = useDispatch<Dispatch>()
 
-  const authState: boolean = useSelector((store: StoreType) => store.user.authState);
-  console.log(authState);
+  const authState: boolean = useSelector((store: StoreType) => store.user.authState)
 
   useEffect(() => {
     SongService.getPublicSongs()
       .then((data) => {
-        setSongs(data);
-        setLoading(false);
+        setSongs(data)
+        setLoading(false)
       })
       .catch((err) => {
-        console.error("Error fetching public songs:", err);
-        setError("Failed to load songs.");
-        setLoading(false);
-      });
-  }, []);
+        console.error("Error fetching public songs:", err)
+        setError("Failed to load songs.")
+        setLoading(false)
+      })
+  }, [])
 
   const sortSongs = (songs: Song[], sortBy: string) => {
-    const sortedSongs = [...songs];
+    const sortedSongs = [...songs]
     switch (sortBy) {
       case "date":
-        return sortedSongs.sort((a, b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime());
+        return sortedSongs.sort((a, b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime())
       case "artist":
-        return sortedSongs.sort((a, b) => a.artist.localeCompare(b.artist));
+        return sortedSongs.sort((a, b) => a.artist.localeCompare(b.artist))
       case "name":
       default:
-        return sortedSongs.sort((a, b) => a.name.localeCompare(b.name));
+        return sortedSongs.sort((a, b) => a.name.localeCompare(b.name))
     }
-  };
+  }
 
   const getGenres = () => {
-    const genres = new Set(songs.map(song => song.genre));
-    return ["all", ...genres];
-  };
+    const genres = new Set(songs.map((song) => song.genre))
+    return ["all", ...genres]
+  }
 
   const filteredSongs = sortSongs(songs, sortBy)
-    .filter(song => genre === "all" || song.genre === genre)
-    .filter(song => song.name.toLowerCase().includes(search.toLowerCase()));
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+    .filter((song) => genre === "all" || song.genre === genre)
+    .filter((song) => song.name.toLowerCase().includes(search.toLowerCase()))
 
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>, songId: number) => {
-    setMenuAnchor((prev) => ({ ...prev, [songId]: event.currentTarget }));
-  };
+    event.stopPropagation()
+    setMenuAnchor((prev) => ({ ...prev, [songId]: event.currentTarget }))
+  }
 
   const closeMenu = (songId: number) => {
-    setMenuAnchor((prev) => ({ ...prev, [songId]: null }));
-  };
+    setMenuAnchor((prev) => ({ ...prev, [songId]: null }))
+  }
 
-
-  const downloadSong = async (fileUrl: string, fileName: string) => {
+  const downloadSong = async (event: React.MouseEvent, fileUrl: string, fileName: string) => {
+    event.stopPropagation()
     try {
-      const response = await fetch(fileUrl);
-      if (!response.ok) throw new Error("שגיאה בהורדת הקובץ");
+      const response = await fetch(fileUrl)
+      if (!response.ok) throw new Error("שגיאה בהורדת הקובץ")
 
-      const blob = await response.blob();
-      const link = document.createElement("a");
+      const blob = await response.blob()
+      const link = document.createElement("a")
 
-      link.href = URL.createObjectURL(blob);
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
+      link.href = URL.createObjectURL(blob)
+      link.download = fileName
+      document.body.appendChild(link)
+      link.click()
 
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href); // משחרר את הזיכרון
+      document.body.removeChild(link)
+      URL.revokeObjectURL(link.href)
     } catch (error) {
-      console.error("שגיאה בהורדה:", error);
+      console.error("שגיאה בהורדה:", error)
     }
+  }
 
-  };
   const handlePlaySong = (song: Song) => {
-    dispatch(updateSong(song));
-  };
+    dispatch(updateSongs([song]))
+    setCurrentlyPlaying(song.id)
+  }
 
+  const handleAddToPlaylist = (event: React.MouseEvent, song: Song) => {
+    event.stopPropagation()
+    setCurrentSong(song)
+    setShowPlaylistList(true)
+  }
+
+  if (loading)
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p className="loading-text">טוען שירים...</p>
+      </div>
+    )
+
+  if (error) return <div className="error-message">{error}</div>
 
   return (
-    <div style={{ marginTop: "45px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-      {/* תיבת הסינון והמיון */}
-      <div className="filters-container"
-  style={{
-    marginRight: "12px",
-    marginLeft: "1px",
-    marginTop: "30px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-    width: "151px",
-    height: "100%",
-    alignItems: "flex-start",
-    position: "sticky",
-    top: "169px", // כאן את יכולה לשחק עם המרווח מלמעלה
-    zIndex: 1, // חשוב לוודא שהמרכיבים האלו לא יהיו מתחת לתוכן אחר
-  }}
->
-  {authState && <UploadSongRequestDialog />}
-  {/* תיבת חיפוש */}
-  <div style={{
-    cursor: "pointer",
-    padding: "0.5px",
-    color: "var(--color-white)",
-    borderRadius: "32px",
-    width: "100%",
-    height: "25px",
-    marginBottom: "5px",
-    background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
-    position: "relative",
-  }}>
-    <div style={{
-      backgroundColor: "var(--color-gray)",
-      borderRadius: "32px",
-      width: "100%",
-      height: "25px",
-      display: "flex",
-      alignItems: "center",
-    }}>
-      <input
-        type="text"
-        placeholder="חפש שיר..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{
-          width: "100%",
-          backgroundColor: "transparent",
-          border: "none",
-          color: "var(--color-white)",
-          outline: "none",
-          fontSize: "14px",
-          marginRight: "6px",
-        }}
-      />
-    </div>
-  </div>
-  {/* תיבת מיון */}
-  {[
-    {
-      label: "מיין לפי",
-      value: sortBy,
-      setValue: setSortBy,
-      options: [{ label: "שם", value: "name" }, { label: "תאריך", value: "date" }, { label: "אמן", value: "artist" }],
-    },
-    {
-      label: "ז'אנר",
-      value: genre,
-      setValue: setGenre,
-      options: getGenres().map(g => ({ label: g === "all" ? "הכל" : g, value: g })),
-    },
-  ].map(({ label, value, setValue, options }, index) => (
-    <div key={index} style={{
-      cursor: "pointer",
-      padding: "0.5px",
-      color: "var(--color-white)",
-      borderRadius: "32px",
-      width: "100%",
-      height: "25px",
-      background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
-      position: "relative",
-      marginBottom: "5px"
-    }}>
-      <button
-        style={{
-          backgroundColor: "var(--color-gray)",
-          borderRadius: "32px",
-          width: "100%",
-          height: "25px",
-          color: "white",
-          border: "none",
-          appearance: "none",
-          outline: "none",
-          fontSize: "14px",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          overflow: "hidden"
-        }}
-      >
-        <span style={{ marginRight: "6px" }}>{label}:</span>
-        <select
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          style={{
-            backgroundColor: "var(--color-gray)",
-            borderRadius: "32px",
-            width: "auto",
-            maxWidth: "100%",
-            marginRight: "6px",
-            height: "25px",
-            color: "#707070",
-            border: "none",
-            appearance: "none",
-            outline: "none",
-            fontSize: "14px",
-            cursor: "pointer",
-          }}
-        >
-          {options.map(({ label, value }) => (
-            <option
-              key={value}
-              value={value}
-              style={{
-                backgroundColor: "var(--color-gray)",
-                color: "var(--color-white)",
-                padding: "5px",
-              }}
-            >
-              {label}
-            </option>
-          ))}
-        </select>
-      </button>
-    </div>
-  ))}
-</div>
-
-      {/* רשימת השירים */}
-      <div className="songs-container" style={{ flexGrow: 1, marginRight: "37px" }}>
-        <div className="songs-grid">
-          {filteredSongs.map((song: Song) => (
-            <div key={song.id} className="song-card">
-              <div className="song-image-container">
-                <img src="/images/soundbar.png" alt={song.name} className="song-image" />
-                <div className="play-button-container">
-                  <IconButton sx={{
-                    border: "0.8px solid white",
-                    borderRadius: "50%",
-                    width: 40,
-                    height: 40,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center"
-                  }}
-                    onClick={() => handlePlaySong(song)}
-                  >
-                    <PlayArrowIcon sx={{ color: "white", fontSize: 30 }} />
-                  </IconButton>
-                </div>
-              </div>
-              <Divider sx={{ width: "90%", marginTop: "30px", borderBottomWidth: 0.5, borderColor: "var(--color-white)" }} />
-              <div className="song-info">
-                <span className="song-text">{song.name} </span>
-                <div className="song-icons">
-                  <IconButton onClick={(e) => openMenu(e, song.id)} >
-                    <MoreVertIcon sx={{ color: "white", fontSize: 20 }} />
-                  </IconButton>
-                  <Menu
-                    anchorEl={menuAnchor[song.id]}
-                    open={Boolean(menuAnchor[song.id])}
-                    onClose={() => closeMenu(song.id)}
-                    sx={{
-                      "& .MuiPaper-root": { backgroundColor: "var(--color-gray)", color: "white" },
-                      "& .MuiMenuItem-root": { "&:hover": { backgroundColor: "#222" }, },
-                    }}
-                  >
-                    <MenuItem onClick={() => {
-                      closeMenu(song.id);
-                      downloadSong(song.audioFilePath, song.name);
-                    }}>
-                      <DownloadIcon sx={{ marginLeft: "7px", fontSize: "16px" }} />הורדה
-                    </MenuItem>
-                    {authState &&
-                      <MenuItem onClick={() => { closeMenu(song.id); setCurrentSong(song); setShowPlaylistList(true); }}>
-                        <QueueMusicIcon sx={{ marginLeft: "7px", fontSize: "16px" }} />הוספה לפלייליסט
-                      </MenuItem>}
-                  </Menu>
-                </div>
-              </div>
-            </div>
-          ))}
-
+    <div className="music-page-container">
+      {/* Header Section */}
+      <div className="music-page-header">
+        <div className="header-text">
+          <h1
+            style={{ 
+              background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))" ,
+              WebkitBackgroundClip: "text",
+              color: "transparent",
+              fontSize: "22px",
+            }}
+            className="header-title">
+            Discover Music
+          </h1>
+          <p className="header-subtitle">Explore the latest music shared by our community</p>
         </div>
 
+        {authState && (
+          <div className="upload-button-container">
+            <UploadSongRequestDialog/>
+          </div>
+        )}
       </div>
 
-      {showPlaylistList && (
-        <AddToPlaylistModel
-          song={currentSong}
-          onClose={() => setShowPlaylistList(false)}
-        />
-      )}
-    </div>
-  );
-};
+      {/* Filter Bar */}
+      <div className="filter-bar">
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search songs..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="search-input"
+          />
+        </div>
 
-export default PublicSongs;
+        <div className="filter-select-container">
+          <select value={genre} onChange={(e) => setGenre(e.target.value)} className="filter-select">
+            {getGenres().map((g) => (
+              <option key={g} value={g}>
+                {g === "all" ? "All Genres" : g}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filter-select-container">
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="filter-select">
+            <option value="date">Newest</option>
+            <option value="name">Title</option>
+            <option value="artist">Artist</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Songs Grid */}
+      {
+        filteredSongs.length === 0 ? (
+          <div className="no-songs-container">
+            <MusicNoteIcon className="no-songs-icon" />
+            <h3 className="no-songs-title">No songs found</h3>
+            <p className="no-songs-subtitle">Try adjusting the filters or search terms</p>
+          </div>
+        ) : (
+          <div className="songs-grid">
+            {filteredSongs.map((song: Song) => (
+              <div key={song.id} className="song-card" onClick={() => handlePlaySong(song)}>
+                <div className="song-image-container">
+                  <img src={song.imageFilePath} alt={song.name} className="song-image" />
+                  <div className="song-overlay">
+                    <button className="play-button">
+                      {currentlyPlaying === song.id ? (
+                        <PauseIcon className="play-icon" />
+                      ) : (
+                        <PlayArrowIcon className="play-icon" />
+                      )}
+                    </button>
+                  </div>
+                  <div className="song-options">
+                    
+                    <IconButton className="options-button" onClick={(e) => openMenu(e, song.id)}>
+                      <MoreHorizIcon className="options-icon" />
+                    </IconButton>
+                    <Menu
+                      anchorEl={menuAnchor[song.id]}
+                      open={Boolean(menuAnchor[song.id])}
+                      onClose={() => closeMenu(song.id)}
+                      className="options-menu"
+                    >
+                      <MenuItem
+                        onClick={(e) => {
+                          closeMenu(song.id)
+                          downloadSong(e, song.audioFilePath, song.name)
+                        }}
+                      >
+                        <DownloadIcon className="menu-icon" />
+                        Download
+                      </MenuItem>
+                      {authState && (
+                        <MenuItem
+                          onClick={(e) => {
+                            closeMenu(song.id)
+                            handleAddToPlaylist(e, song)
+                          }}
+                        >
+                          <QueueMusicIcon className="menu-icon" />
+                          Add to Playlist
+                        </MenuItem>
+                      )}
+                    </Menu>
+                  </div>
+                </div>
+                <div className="song-info">
+                  <h4 className="song-title">{song.name}</h4>
+                  <p className="song-artist">{song.artist}</p>
+
+                  <div className="song-actions">
+                    <button className="action-button" onClick={(e) => downloadSong(e, song.audioFilePath, song.name)}>
+                      <DownloadIcon sx={{ fontSize: "0.88rem"}} className="action-icon" />
+                      <span style={{ fontSize: "0.62rem"}}>Download</span>
+                    </button>
+
+                    {authState && (
+                      <button className="action-button" onClick={(e) => handleAddToPlaylist(e, song)}>
+                        <AddIcon sx={{ fontSize: "0.88rem"}} className="action-icon" />
+                        <span style={{ fontSize: "0.62rem",marginRight:"0.5rem"}}>Add to playlist</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      }
+
+      {showPlaylistList && <AddToPlaylistModel song={currentSong} onClose={() => setShowPlaylistList(false)} />}
+    </div >
+  )
+}
+
+export default PublicSongs

@@ -25,7 +25,7 @@ namespace music.Data.repositories
         }
         public User? GetUserWithRoles(string email)
         {
-            return  _dataSet.Where(x=>x.Email==email).Include(x=>x.Roles).Include(x => x.OwnedPlaylists).FirstOrDefault();
+            return  _dataSet.Where(x=>x.Email==email).Include(x=>x.Roles).Include(x => x.OwnedPlaylists).Include(x=>x.SharedPlaylists ).FirstOrDefault();
         }
         public async Task<User> GetByEmailAsync(string UserEmail)
         {

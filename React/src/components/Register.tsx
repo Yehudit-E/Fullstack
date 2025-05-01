@@ -43,56 +43,56 @@ const Register = () => {
         const confirmPassword = confirmPasswordRef.current?.value || "";
         const userName = nameRef.current?.value || "";
 
-        // בדיקה אם השדות ריקים
+        // Check if fields are empty
         if (!userName || !email || !password || !confirmPassword) {
-            setFieldError("כל השדות הם שדות חובה");
+            setFieldError("All fields are required");
             return;
         } else {
             setFieldError("");
         }
 
-        // בדיקת תקינות אימייל
+        // Check email validity
         if (!validateEmail(email)) {
-            setEmailError("מייל לא תקין");
+            setEmailError("Invalid email address");
             return;
         } else {
             setEmailError("");
         }
 
-        // בדיקת תקינות סיסמה
+        // Check password validity
         if (!validatePassword(password)) {
-            setPasswordError("הסיסמה צריכה להיות באורך 6 תווים לפחות ולהכיל לפחות אות אחת באנגלית");
+            setPasswordError("Password must be at least 6 characters long and contain at least one letter");
             return;
         } else {
             setPasswordError("");
         }
 
-        // בדיקה שסיסמת האימות זהה
+        // Check if passwords match
         if (password !== confirmPassword) {
-            setConfirmPasswordError("אימות סיסמה נכשל");
+            setConfirmPasswordError("Password confirmation failed");
             return;
         } else {
             setConfirmPasswordError("");
         }
 
         const userReg: UserRegister = { userName, email, password };
-debugger
+
         const resultAction = await dispatch(registerUser(userReg));
         if (registerUser.fulfilled.match(resultAction)) navigate('/');
     };
 
     return (
         <form onSubmit={handleSubmit} style={styles.form}>
-            <input type="text" placeholder="שם משתמש" ref={nameRef} style={styles.input} />
+            <input type="text" placeholder="Username" ref={nameRef} style={styles.input} />
             
-            <input type="text" placeholder="אימייל" ref={emailRef} style={styles.input} />
+            <input type="text" placeholder="Email" ref={emailRef} style={styles.input} />
             {emailError && <span style={styles.error}>{emailError}</span>}
 
-            {/* סיסמה */}
+            {/* Password */}
             <div style={styles.passwordContainer}>
                 <input
                     type={passwordVisible ? "text" : "password"}
-                    placeholder="סיסמה"
+                    placeholder="Password"
                     ref={passwordRef}
                     style={styles.input}
                 />
@@ -106,14 +106,14 @@ debugger
             </div>
             {passwordError && <span style={styles.error}>{passwordError}</span>}
 
-            {/* אימות סיסמה */}
+            {/* Confirm Password */}
             <div style={styles.passwordContainer}>
                 <input
                     type={confirmPasswordVisible ? "text" : "password"}
-                    placeholder="אימות סיסמה"
+                    placeholder="Confirm Password"
                     ref={confirmPasswordRef}
                     style={styles.input}
-                    onPaste={(e) => e.preventDefault()} // חוסם העתקה/הדבקה
+                    onPaste={(e) => e.preventDefault()} // Block paste
                 />
                 <IconButton
                     style={styles.eyeIcon}
@@ -133,7 +133,7 @@ debugger
                 type="submit"
                 style={styles.button}
             >
-                הרשמה
+                Register
             </button>
         </form>
     );
@@ -160,6 +160,7 @@ const styles: { [key: string]: CSSProperties } = {
     button: {
         width: "520px",
         padding: "10px",
+        paddingLeft: "30px",
         fontSize: "16px",
         marginTop: "15px",
         color: "var(--color-white)",
@@ -170,7 +171,7 @@ const styles: { [key: string]: CSSProperties } = {
     },
     eyeIcon: {
         position: "absolute",
-        left: "10px",
+        right: "10px",
         top: "40%",
         transform: "translateY(-50%)",
         color: "#707070",

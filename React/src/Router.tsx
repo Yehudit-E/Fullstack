@@ -5,6 +5,7 @@ import Home from "./components/Home";
 import PublicSongs from "./components/PublicSongs";
 import Playlists from "./components/Playlists";
 import AuthPage from "./components/AuthPage";
+import PlaylistDetails from "./components/PlaylistDetails ";
 
 
 export const router = createBrowserRouter([
@@ -16,7 +17,13 @@ export const router = createBrowserRouter([
             { path: '',element:<Navigate to="home" replace /> },
             { path: 'home', element: <Home/> },
             { path: 'music', element: <PublicSongs/> },
-            { path: 'playlists',element: <Playlists/> },
+            { path: 'playlists',element: <Playlists/>,
+            // children:[
+            // {
+            //     path: "playlists/:id",
+            //     element: <PlaylistDetails />, // עובר לקומפוננטה PlaylistDetails
+            // }]
+        },
         ]
     }
 ])

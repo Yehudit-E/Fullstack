@@ -2,40 +2,91 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Song, SongDto } from '../models/Song';
 
 const emptySong: SongDto = {
-    id: 0,
-    name: '',
-    description: '',
-    artist: '',
-    genre: '',
-    create_at: '',
-    isPublic: false,
-    likes: 0,
-    audioFilePath: '',
-    playlistId: 0,
+  id: 0,
+  name: '',
+  description: '',
+  artist: '',
+  genre: '',
+  create_at: '',
+  isPublic: false,
+  likes: 0,
+  audioFilePath: '',
+  playlistId: 0,
 };
 
+// Slice Redux עבור נגן שירים
 const songSlice = createSlice({
   name: 'songPlayer',
-  initialState: { song: emptySong ,change: false},
+  initialState: { 
+    songs: [emptySong], // מערך של שירים
+    currentIndex: 0,    // אינדקס השיר הנוכחי
+    change: false       // מצב של שינוי
+  },
   reducers: {
-    loadSong:(state, action: PayloadAction<Song>) =>{
-      state.song = action.payload;
+    // טוען מערך שירים ומגדיר את האינדקס הנוכחי
+    loadSongs: (state, action: PayloadAction<Song[]>) => {
+      state.songs = action.payload;
+      state.currentIndex = 0; // התחלה של השיר הראשון במערך
     },
-    updateSong: (state, action: PayloadAction<Song>) => {
-      state.song = action.payload;
-      state.change=true;
+
+    // עדכון שיר נוכחי
+    updateSongs: (state, action: PayloadAction<SongDto[]>) => {
+      const newSongs = action.payload;
+      // עדכון השיר הנוכחי במערך
+      state.songs = newSongs;
+      state.currentIndex=0;
+      state.change = true;
     },
-    deleteSong: (state) => {
-      state.song = emptySong;
+
+    // אתחול של המערך חזרה למצב ההתחלתי
+    resetSongs: (state) => {
+      state.songs = [emptySong];
+      state.currentIndex = 0;
     },
-    resetSong: (state) => {
-      state.song = emptySong;
-    },
+
+    // עדכון מצב השינוי
     setChange: (state) => {
       state.change = false;
     },
+
+    // שינוי אינדקס השיר הנוכחי
+    setCurrentIndex: (state, action: PayloadAction<number>) => {
+      const newIndex = action.payload;
+      // אם האינדקס בתוך גבולות המערך, עדכן אותו
+      if (newIndex >= 0 && newIndex < state.songs.length) {
+        state.currentIndex = newIndex;
+      }
+    },
+
+    // מעבר לשיר הבא במערך
+    nextSong: (state) => {
+      const nextIndex = state.currentIndex + 1;
+      if (nextIndex < state.songs.length) {
+        state.currentIndex = nextIndex;
+      }
+      state.change = true;
+    },
+
+    // מעבר לשיר הקודם במערך
+    prevSong: (state) => {
+      const prevIndex = state.currentIndex - 1;
+      if (prevIndex >= 0) {
+        state.currentIndex = prevIndex;
+      }
+      state.change = true;
+    }
   },
 });
 
-export const { updateSong, deleteSong, resetSong,setChange,loadSong } = songSlice.actions;
+// פעולות ה-Redux
+export const { 
+  loadSongs, 
+  updateSongs, 
+  resetSongs, 
+  setChange, 
+  setCurrentIndex, 
+  nextSong, 
+  prevSong 
+} = songSlice.actions;
+
 export default songSlice;

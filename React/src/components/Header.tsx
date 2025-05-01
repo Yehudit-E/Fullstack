@@ -47,21 +47,7 @@ const Header = () => {
           zIndex: 1100, // מודלים יהיו עם zIndex גבוה יותר
         }}
       >
-        {/* תמונת רקע */}
-        <Box
-          component="img"
-          src="/images/header.jpg"
-          alt="Header Background"
-          className="header-background"
-          sx={{
-            width: "100%",
-            height: "auto",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            zIndex: -1,
-          }}
-        />
+        
 
         {/* תוכן ההדר */}
         <AppBar
@@ -70,6 +56,8 @@ const Header = () => {
             backgroundColor: "transparent",
             boxShadow: "none",
             height: `${imageHeight}px`,
+            paddingBottom: "50 0px",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
           }}
         >
           <Toolbar
@@ -82,9 +70,6 @@ const Header = () => {
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              {/* <Typography variant="h6" component="div" sx={{ color: "#ffffff", ml: 2 }}>
-                Music App
-              </Typography> */}
               <img src="/images/musical-notes.png" alt="Logo" style={{ height: "44px", width: "44px",margin:"0px 15px 10px 30px"}}></img>
               {["/home", "/music"].map((path) => (
                 <Button

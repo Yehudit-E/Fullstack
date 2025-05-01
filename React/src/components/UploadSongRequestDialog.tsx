@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { IconButton, LinearProgress } from "@mui/material";
+import { Button, IconButton, LinearProgress } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
 import * as mm from "music-metadata-browser";
 import { Buffer } from "buffer";
@@ -127,9 +127,23 @@ const UploadSongRequestDialog = () => {
 
   return (
     <>
-      <IconButton onClick={() => setShowDialog(true)} style={{ color: "var(--color-white)" }}>
-        <AddIcon />
-      </IconButton>
+      <button 
+      onClick={() => setShowDialog(true)} 
+      style={{ 
+        background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
+        color: "var(--color-white)",
+        borderRadius: "3px", // פינות מעוגלות
+        padding: "4px 8px", // ריווח פנימי
+        display: "flex", // מאפשר למרכז את התוכן
+        alignItems: "center", // מרכז אנכית
+        justifyContent: "center", // מרכז אופקית
+        fontSize: "13px", // גודל הטקסט (אפשר לשנות אם צריך)
+        border: "none", // לבטל את הגבול אם יש
+        cursor: "pointer" // להפוך את הכפתור ללחיץ
+      }}
+      >
+        <AddIcon/> Upload Music
+      </button>
 
       {showDialog && (
         <div

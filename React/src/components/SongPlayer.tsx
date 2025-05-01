@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Dispatch, StoreType } from "../store/store";
 import { useNavigate } from "react-router";
 import { SkipPreviousRounded, Replay10Rounded, PlayArrowRounded, PauseRounded, Forward30Rounded, SkipNextRounded } from '@mui/icons-material';
-import { resetSong, setChange } from "../store/songSlice";
-import PlayerOptionsMenu from "./playerOptionsMenu";
+import { nextSong, prevSong, resetSongs, setChange, updateSongs } from "../store/songSlice";
+import PlayerOptionsMenu from "./PlayerOptionsMenu";
+
 
 const formatTime = (time: number) => {
     const hours = Math.floor(time / 3600).toString().padStart(2, '0');
@@ -16,7 +17,8 @@ const formatTime = (time: number) => {
 };
 
 const SongPlayer = () => {
-    const songPlayer = useSelector((state: StoreType) => state.songPlayer.song);
+    const songsList = useSelector((state: StoreType) => state.songPlayer.songs);
+    const currentSongIndex = useSelector((state: StoreType) => state.songPlayer.currentIndex);
     const change = useSelector((state: StoreType) => state.songPlayer.change);
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(1);
@@ -35,13 +37,14 @@ const SongPlayer = () => {
     }, [volume, muted]);
 
     useEffect(() => {
-        if (songPlayer.id !== 0 && audioRef.current && change) {
+        if (audioRef.current && change) {
             audioRef.current.currentTime = 0;
             audioRef.current.play();
             dispatch(setChange())
             setIsPlaying(true);
         }
-        sessionStorage.setItem('songPlayer', JSON.stringify(songPlayer));
+        sessionStorage.setItem('songsList', JSON.stringify(songsList));
+        sessionStorage.setItem('currentSongIndex', JSON.stringify(currentSongIndex));
     }, [change]);
 
     const togglePlay = () => {
@@ -66,11 +69,18 @@ const SongPlayer = () => {
     };
 
     const handleSongEnd = () => {
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0;
-            setIsPlaying(false);
-            setCurrentTime(0);
+        // if (currentSongIndex === songsList.length-1){
+        //     dispatch(updateSongs(songsList));
+        // }
+        // if (audioRef.current) {
+        //     audioRef.current.pause();
+        //     audioRef.current.currentTime = 0;
+        //     setIsPlaying(false);
+        //     setCurrentTime(0);
+        // }
+        if (songsList.length > currentSongIndex && songsList.length !== 1 && currentSongIndex !== songsList.length - 1) {
+            console.log(songsList.length);
+            dispatch(nextSong());
         }
     };
 
@@ -82,12 +92,13 @@ const SongPlayer = () => {
         }
     };
     return (
-        <>{songPlayer.id !== 0 && (
+        <>{songsList[0].id !== 0 && (
             <Box sx={{
                 zIndex: 1200, position: "fixed", bottom: 0, width: "100%", height: "130px", background: "linear-gradient(to top, rgba(0,0,0,1) 62%, rgba(0,0,0,0))",
-                color: "white"
+                color: "white",
+                direction: "rtl",
             }}>
-                <audio ref={audioRef} src={songPlayer.audioFilePath} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleTimeUpdate} onEnded={handleSongEnd} />
+                <audio ref={audioRef} src={songsList[currentSongIndex].audioFilePath} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleTimeUpdate} onEnded={handleSongEnd} />
 
                 {/* פס התקדמות */}
                 <Box sx={{ width: "95%", display: 'flex', flexDirection: 'column', alignItems: 'stretch', mb: -2, margin: '0 auto', marginTop: "30px" }}>
@@ -128,7 +139,7 @@ const SongPlayer = () => {
 
                     <Box sx={{ display: "flex", alignItems: "center", marginRight: "30px" }}>
                         <PlayerOptionsMenu
-                            song={songPlayer}
+                            song={songsList[currentSongIndex]}
                             playbackRate={playbackRate}
                             onRateChange={(rate) => {
                                 setPlaybackRate(rate);
@@ -176,7 +187,17 @@ const SongPlayer = () => {
                         }}
                     >
                         {/* כפתור הבא */}
-                        <IconButton sx={{ color: 'rgba(240, 240, 240, 0.8)' }} onClick={() => { }}>
+                        <IconButton
+                            sx={{
+                                color: currentSongIndex === songsList.length - 1
+                                    ? 'rgba(240, 240, 240, 0.3)'  // צבע אפור כשלא פעיל
+                                    : 'rgba(240, 240, 240, 0.8)'  // צבע רגיל כשהוא פעיל
+                            }}
+                            onClick={() => { dispatch(nextSong()); }}
+                            disabled={currentSongIndex === songsList.length - 1}
+                            style={{ pointerEvents: currentSongIndex === songsList.length - 1 ? 'none' : 'auto' }}  // מוודא שהכפתור יוצג תמיד
+
+                        >
                             <SkipNextRounded sx={{ fontSize: 20 }} />
                         </IconButton>
                         {/* כפתור קדימה 30 שניות */}
@@ -218,7 +239,11 @@ const SongPlayer = () => {
                             <Replay10Rounded sx={{ fontSize: 25 }} />
                         </IconButton>
                         {/* כפתור קודם */}
-                        <IconButton sx={{ color: 'rgba(240, 240, 240, 0.8)' }} onClick={() => { }}>
+                        <IconButton
+                            sx={{ color: 'rgba(240, 240, 240, 0.8)' }}
+                            onClick={() => { dispatch(prevSong()); }}
+                            disabled={currentSongIndex === 0}
+                        >
                             <SkipPreviousRounded sx={{ fontSize: 20 }} />
                         </IconButton>
 
@@ -232,7 +257,7 @@ const SongPlayer = () => {
                             marginBottom: 1,
                             marginTop: 1,
                             position: "relative",
-                            '&::before': songPlayer.isPublic ? {
+                            '&::before': songsList[currentSongIndex].isPublic ? {
                                 content: '""',
                                 position: 'absolute',
                                 top: '-10px',
@@ -245,17 +270,17 @@ const SongPlayer = () => {
                                 opacity: 0,
                                 zIndex: -1,
                             } : {},
-                            '&:hover::before': songPlayer.isPublic ? {
+                            '&:hover::before': songsList[currentSongIndex].isPublic ? {
                                 transform: 'scale(1)',
                                 opacity: 1,
                             } : {},
                         }}
-                        onClick={() => { if (songPlayer.isPublic) navigate('songComments/' + songPlayer.id) }} // כאן תוכל להוסיף ניווט
+                        onClick={() => { if (songsList[currentSongIndex].isPublic) navigate('songComments/' + songsList[currentSongIndex].id) }} // כאן תוכל להוסיף ניווט
                     >
                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                             {/* <Typography sx={{ fontSize: 15 }}>{songPlayer.name + " - "}</Typography>
                             <Typography sx={{ fontSize: 15 }}>{songPlayer.artist}</Typography> */}
-                            <Typography sx={{ fontSize: 15 }}>{songPlayer.name}</Typography>
+                            <Typography sx={{ fontSize: 15 }}>{songsList[currentSongIndex].name}</Typography>
                         </Box>
 
                     </Box>
@@ -265,4 +290,4 @@ const SongPlayer = () => {
     );
 };
 
-export default SongPlayer;
+export default SongPlayer; 

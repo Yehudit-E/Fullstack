@@ -22,7 +22,8 @@ body {
   color: var(--color-white); 
   margin: 0;
   padding: 0;
-  direction: rtl;
+  direction: ltr;
+  font-size: "1px";
 }
 ::-webkit-scrollbar {
   display: none; 

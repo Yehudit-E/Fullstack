@@ -38,9 +38,10 @@ const SongService = {
     },
 
     // 5. עדכון שיר
-    updateSong: async (id:number, songPostModel:SongDto) => {
+    updateSong: async (id:number, song:SongDto) => {
+        
         try {
-            const response = await api.put(`/song/${id}`, songPostModel);
+            const response = await api.put(`/song/${id}`, song);
             return response.data;
         } catch (error) {
             console.error("Error updating song:", error);
@@ -62,8 +63,11 @@ const SongService = {
     // 7. קבלת URL להעלאת קובץ ל-S3
     getUploadUrl: async (fileName:string, contentType:string) => {
         try {
+            console.log("filename"+fileName);
+            console.log("contentType"+contentType);
+            
             const response = await api.get("/song/upload-url", {
-                params: { fileName, contentType },
+                params: { fileName, contentType},
             });
             return response.data.url;
         } catch (error) {
@@ -71,6 +75,8 @@ const SongService = {
             throw error;
         }
     },
+
+
 };
 
 export default SongService;

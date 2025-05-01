@@ -10,36 +10,7 @@ let userEmpty: User={
     create_at:"",
 }
 let baseUrl="https://localhost:7044";
-// const token = localStorage.getItem("authToken");
-// function getUserIdFromToken(token: string): string | null {
-//     try {
-//         const payload = JSON.parse(atob(token.split('.')[1])); // מפענחים את החלק השני
-//         return payload.id || null; // מחזירים את ה-id אם קיים
-//     } catch (e) {
-//         console.error("Invalid token:", e);
-//         return null;
-//     }
-// }
-// export const fetchUserById = createAsyncThunk(
-//     "user/fetchById",
-//     async (_, thunkAPI) => {
-        
-//         const token = localStorage.getItem("authToken");
-//         if (!token) return thunkAPI.rejectWithValue("No token");
-        
-//         const userId = getUserIdFromToken(token);
-//         console.log("User ID:", userId);
-        
-//         if (!userId) return thunkAPI.rejectWithValue("Invalid token");
 
-//         try {
-//             const response = await axios.get(`${api}/User/${userId}`);
-//             return response.data;
-//         } catch (e: any) {
-//             return thunkAPI.rejectWithValue(e.message);
-//         }
-//     }
-// );
 export const load = createAsyncThunk('user/load',
     async (id:string, thunkAPI) => {
         

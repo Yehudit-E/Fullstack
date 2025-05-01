@@ -5,10 +5,11 @@ import { useEffect } from "react";
 import {  load } from "../store/userSlice";
 import { Dispatch, StoreType } from "../store/store";
 import SongPlayer from "./SongPlayer";
-import { loadSong } from "../store/songSlice";
+import { loadSongs } from "../store/songSlice";
 const AppLayout = () => {
     const dispatch = useDispatch<Dispatch>();
-    const songPlayer=useSelector((state:StoreType)=>state.songPlayer.song)
+    const songsList=useSelector((state:StoreType)=>state.songPlayer.songs)
+    const currentSongIndex=useSelector((state:StoreType)=>state.songPlayer.currentIndex)
     const authState = useSelector((state:StoreType)=>state.user.authState)
     function getUserIdFromToken(token:string): string | null {
         if (!token) {
@@ -16,7 +17,6 @@ const AppLayout = () => {
         }
         try {
             const payload = JSON.parse(atob(token.split('.')[1])); // מפענחים את החלק השני
-            
             return payload.id || null; // מחזירים את ה-id אם קיים
         } catch (e) {
             console.error("Invalid token:", e);
@@ -31,38 +31,34 @@ const AppLayout = () => {
         //   return;
         const fetchData = async () => {
           const token = localStorage.getItem("authToken");
-          const song = sessionStorage.getItem("songPlayer");  
-          console.log(song);      
+          const songsList = sessionStorage.getItem('songsList') ? JSON.parse(sessionStorage.getItem('songsList')!) : []; // מערך שירים
+          const currentSongIndex = sessionStorage.getItem('currentSongIndex') ? JSON.parse(sessionStorage.getItem('currentSongIndex')!) : 0; // מספר          console.log("---------------------------------------");
+          
+          console.log(songsList[currentSongIndex]);      
           if (token ) {
             const id = getUserIdFromToken(token);
             if (id) {
               await dispatch(load(id));
             }
           }
-          if (song) {
-            dispatch(loadSong(JSON.parse(song)));
-            console.log(JSON.parse(song))
-            console.log(songPlayer)
+          console.log(songsList);
+          
+          if (songsList.length > 0) {
+            console.log(songsList);
+            dispatch(loadSongs(songsList));
           }
         };  
         fetchData();
       }, [authState]);
-      console.log("songId"+songPlayer.id);
-      console.log("song"+songPlayer);
-      const songId=songPlayer.id;
+      console.log("songId"+songsList[currentSongIndex].id);
+      console.log("song"+songsList[currentSongIndex]);
+      const songId=songsList[currentSongIndex].id;
     return (<>
-        <Header /> 
-        {songPlayer.id!=0 &&<>
-        <div style={{marginBottom:"100px"}}>
-            <Outlet />
-        </div>
-        </>
+        <Header />
+         <Outlet />
+        {songsList[0].id!=0 &&
+        <div style={{marginBottom:"100px"}}> </div>
         }
-          {songPlayer.id===0 &&
-            <Outlet />
-        }
-
-        
         {songId !=0 && 
         <SongPlayer/>}
     </>)
