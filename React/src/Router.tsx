@@ -3,9 +3,10 @@ import {  } from "react-router-dom";
 import AppLayout from "./components/AppLayout";
 import Home from "./components/Home";
 import PublicSongs from "./components/PublicSongs";
-import Playlists from "./components/Playlists";
 import AuthPage from "./components/AuthPage";
 import PlaylistDetails from "./components/PlaylistDetails ";
+import MyPlaylists from "./components/MyPlaylists";
+import AddPlaylistPage from "./components/AddPlaylistPage";
 
 
 export const router = createBrowserRouter([
@@ -17,13 +18,21 @@ export const router = createBrowserRouter([
             { path: '',element:<Navigate to="home" replace /> },
             { path: 'home', element: <Home/> },
             { path: 'music', element: <PublicSongs/> },
-            { path: 'playlists',element: <Playlists/>,
+            { path: 'myPlaylists',element: <MyPlaylists/>
             // children:[
             // {
             //     path: "playlists/:id",
-            //     element: <PlaylistDetails />, // עובר לקומפוננטה PlaylistDetails
+            //     element: <>fxf</>, 
             // }]
         },
+        {
+            path: "myPlaylists/playlist/:id",
+            element: <PlaylistDetails/>,
+          },
+          {
+            path: "myPlaylists/add",
+            element: <AddPlaylistPage />,
+          },
         ]
     }
 ])

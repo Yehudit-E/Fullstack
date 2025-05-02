@@ -111,7 +111,7 @@ const Header = () => {
                   key="/playlists"
                   color="inherit"
                   component={Link}
-                  to="/playlists"
+                  to="/myplaylists"
                   sx={{
                     fontSize: "16px",
                     height: "23px",

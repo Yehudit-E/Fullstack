@@ -8,6 +8,8 @@ let userEmpty: User={
     email:"",
     password: "",
     create_at:"",
+    ownedPlaylists:[],
+    sharedPlaylists:[],
 }
 let baseUrl="https://localhost:7044";
 

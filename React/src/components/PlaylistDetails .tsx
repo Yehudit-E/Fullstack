@@ -1,411 +1,209 @@
-import React, { useState, useEffect } from "react";
-import PlaylistService from "../services/PlaylistService";
-import { Playlist } from "../models/Playlist";
-import SharePlaylist from "./SharePlaylist";
-import { useDispatch, useSelector } from "react-redux";
-import { Dispatch, StoreType } from "../store/store";
-import UpdatePlaylistName from "./UpdatePlaylistName";
-import { IconButton, Divider, Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, Badge, Tooltip } from "@mui/material";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Song } from "../models/Song";
-import { resetSongs, updateSongs } from "../store/songSlice";
-import DownloadIcon from "@mui/icons-material/Download";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import UpdateSong from "./UpdateSong"; // Importing the UpdateSong component
-import UploadSongDialog from "./UploadSongDialog";
-import DeletePlaylist from "./DeletePlaylist";
-import { Person } from "@mui/icons-material";
+"use client"
 
-interface PlaylistDetailsProps {
-  playlistId: number;
-  ownedPlaylists: Playlist[];
-  setOwnedPlaylists: React.Dispatch<React.SetStateAction<Playlist[]>>;
-}
+import type React from "react"
 
-const PlaylistDetails = ({ playlistId, ownedPlaylists, setOwnedPlaylists }: PlaylistDetailsProps) => {
-  const [playlist, setPlaylist] = useState<Playlist | null>(null);
-  const [anchorElPlaylist, setAnchorElPlaylist] = useState<null | HTMLElement>(null);
-  const [anchorElSong, setAnchorElSong] = useState<{ [key: string]: HTMLElement | null }>({});
-  const [editingSong, setEditingSong] = useState<Song | null>(null); // State to handle editing song
-  const [openDialog, setOpenDialog] = useState(false); // State to control the delete confirmation dialog
-  const [songToDelete, setSongToDelete] = useState<number | null>(null); // State to store the song ID for deletion
+import { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
+import { useSelector } from "react-redux"
+import type { StoreType } from "../store/store"
+import type { Playlist } from "../models/Playlist"
+import type { Song } from "../models/Song"
+import { IconButton, Menu, MenuItem } from "@mui/material"
+import PlayArrowIcon from "@mui/icons-material/PlayArrow"
+import PauseIcon from "@mui/icons-material/Pause"
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
+import DownloadIcon from "@mui/icons-material/Download"
+import DeleteIcon from "@mui/icons-material/Delete"
+import { useDispatch } from "react-redux"
+import type { Dispatch } from "../store/store"
+import { updateSongs } from "../store/songSlice"
+import "./style/PlaylistDetails.css"
 
-  const userId = useSelector((state: StoreType) => state.user.user.id);
-  const dispatch = useDispatch<Dispatch>();
-  const currentSong = useSelector((state: StoreType) => state.songPlayer.songs)[useSelector((state: StoreType) => state.songPlayer.currentIndex)];
-  console.log("currentSong", currentSong);
+const PlaylistDetails = () => {
+  const { id } = useParams()
+  const playlistId = Number(id)
+  const dispatch = useDispatch<Dispatch>()
 
-  const handlePlaylistMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElPlaylist(event.currentTarget);
-  };
-
-  const handlePlaylistMenuClose = () => {
-    setAnchorElPlaylist(null);
-  };
+  const user = useSelector((state: StoreType) => state.user.user)
+  const [playlist, setPlaylist] = useState<Playlist | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string>("")
+  const [menuAnchor, setMenuAnchor] = useState<{ [key: string]: HTMLElement | null }>({})
+  const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(null)
 
   useEffect(() => {
-    const fetchPlaylist = async () => {
-      const playlistData = await PlaylistService.getFullPlaylistById(playlistId);
-      setPlaylist(playlistData);
-    };
-    fetchPlaylist();
-  }, [playlistId]);
+    // Find the playlist in user's owned or shared playlists
+    const foundPlaylist = [...user.ownedPlaylists, ...user.sharedPlaylists].find((p) => p.id === playlistId)
+
+    if (foundPlaylist) {
+      setPlaylist(foundPlaylist)
+    } else {
+      setError("Playlist not found")
+    }
+    setLoading(false)
+  }, [playlistId, user])
+
+  const openMenu = (event: React.MouseEvent<HTMLButtonElement>, songId: number) => {
+    event.stopPropagation()
+    setMenuAnchor((prev) => ({ ...prev, [songId]: event.currentTarget }))
+  }
+
+  const closeMenu = (songId: number) => {
+    setMenuAnchor((prev) => ({ ...prev, [songId]: null }))
+  }
 
   const handlePlaySong = (song: Song) => {
-    console.log("url", song.audioFilePath);
-    dispatch(updateSongs([song]));
-  };
+    dispatch(updateSongs([song]))
+    setCurrentlyPlaying(song.id)
+  }
 
-  const handleSongMenuOpen = (event: React.MouseEvent<HTMLButtonElement>, songId: number) => {
-    setAnchorElSong((prev) => ({ ...prev, [songId]: event.currentTarget }));
-  };
-
-  const handleSongMenuClose = (songId: number) => {
-    setAnchorElSong((prev) => ({ ...prev, [songId]: null }));
-  };
-
-  const downloadSong = async (fileUrl: string, fileName: string) => {
+  const downloadSong = async (event: React.MouseEvent, fileUrl: string, fileName: string) => {
+    event.stopPropagation()
     try {
-      const response = await fetch(fileUrl);
-      if (!response.ok) throw new Error("שגיאה בהורדת הקובץ");
+      const response = await fetch(fileUrl)
+      if (!response.ok) throw new Error("שגיאה בהורדת הקובץ")
 
-      const blob = await response.blob();
-      const link = document.createElement("a");
+      const blob = await response.blob()
+      const link = document.createElement("a")
 
-      link.href = URL.createObjectURL(blob);
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
+      link.href = URL.createObjectURL(blob)
+      link.download = fileName
+      document.body.appendChild(link)
+      link.click()
 
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href); // משחרר את הזיכרון
+      document.body.removeChild(link)
+      URL.revokeObjectURL(link.href)
     } catch (error) {
-      console.error("שגיאה בהורדה:", error);
+      console.error("שגיאה בהורדה:", error)
     }
-  };
+  }
 
-  const handleEditSong = (song: Song) => {
-    setEditingSong(song);
-    handleSongMenuClose(song.id); // Close the song menu
-  };
+  const removeSongFromPlaylist = (event: React.MouseEvent, songId: number) => {
+    event.stopPropagation()
+    // Implement the logic to remove a song from the playlist
+    // This would need to call your API or service
+    console.log("Remove song", songId, "from playlist", playlistId)
+    closeMenu(songId)
+  }
 
-  const handleUpdateSong = (updatedSong: Song) => {
-    setEditingSong(null);
-    setPlaylist((prev) => {
-      if (prev) {
-        const updatedSongs = prev.songs?.map((song) => (song.id === updatedSong.id ? updatedSong : song));
-        return { ...prev, songs: updatedSongs };
-      }
-      return prev;
-    });
-  };
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p className="loading-text">Loading playlist...</p>
+      </div>
+    )
+  }
 
-  const handleDeleteSong = async () => {
-    if (songToDelete === null || !playlist) return;
-    try {
-      await PlaylistService.removeSongFromPlaylist(playlist.id, songToDelete);
-      // עדכון הסטייט של הפלייליסט לאחר מחיקה
-      setPlaylist((prev) => {
-        if (!prev) return prev;
-        return { ...prev, songs: prev.songs?.filter((song) => song.id !== songToDelete) };
-      });
-      // // אם השיר שהתנגן נמחק, אז נבצע reset לנגן
-      // const currentSong  =useSelector((state:StoreType)=>state.songPlayer.song)      
-      if (currentSong?.id === songToDelete) {
-        dispatch(resetSongs());
-      }
-      alert("השיר נמחק בהצלחה!");
-    } catch (error) {
-      alert("שגיאה במחיקת השיר.");
-    }
-    setOpenDialog(false); // Close the dialog after deletion
-  };
+  if (error) {
+    return <div className="error-message">{error}</div>
+  }
 
-  const openDeleteDialog = (songId: number) => {
-    setSongToDelete(songId);
-    setOpenDialog(true); // Open the dialog
-  };
+  if (!playlist) {
+    return <div className="error-message">Playlist not found</div>
+  }
 
-  const handleCancelDelete = () => {
-    setOpenDialog(false); // Close the dialog without deleting
-  };
+  const isOwner = user.ownedPlaylists.some((p) => p.id === playlist.id)
 
   return (
-    <div>
-      {playlist ? (
-        <>
-          <div className="playlist-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              {playlist.ownerId == userId &&
-                <IconButton onClick={handlePlaylistMenuOpen}>
-                  <MoreVertIcon sx={{ marginRight: "100px", fontSize: "25px", color: "white" }} />
-                </IconButton>
-              }
-              {playlist.ownerId != userId &&(
-              <div style={{ marginRight: "100px" }}>
-                <UploadSongDialog playlist={playlist} setPlaylist={setPlaylist}  />
-                </div>
-              )}
-              <h2
-                style={{
-                  background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
-                  WebkitBackgroundClip: "text",
-                  color: "transparent",
-                  fontSize: "30px",
-                  fontWeight: "bold",
-                  display: "inline-block",
-                }}
-              >
-                {playlist.name}
-              </h2>
-            </div>
-            <button onClick={()=>{dispatch(updateSongs(playlist.songs))}}></button>
-            {/* פרופילים בצד ימין */}
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+    <div className="playlist-details-container">
+      {/* Playlist Header */}
+      <div className="playlist-header">
+        <div className="playlist-image-container">
+          <img
+            src={playlist.imageFilePath || "/placeholder.svg?height=200&width=200"}
+            alt={playlist.name}
+            className="playlist-image"
+          />
+        </div>
+        <div className="playlist-info">
+          <h1 className="playlist-title">{playlist.name}</h1>
+          <p className="playlist-meta">
+            {isOwner ? "Your playlist" : `Shared by: ${playlist.owner?.userName || "User"}`} •
+            {playlist.songs?.length || 0} songs
+          </p>
+          <div className="playlist-actions">
+            <button
+              className="play-all-button"
+              onClick={() => {
+                if (playlist.songs && playlist.songs.length > 0) {
+                  dispatch(updateSongs(playlist.songs))
+                  setCurrentlyPlaying(playlist.songs[0].id)
+                }
+              }}
+            >
+              Play All
+            </button>
+          </div>
+        </div>
+      </div>
 
-              {/* פרופילים של המשתמשים המשותפים */}
-              {playlist.sharedUsers?.map((user) => (
-                <Tooltip
-                  key={user.id}
-                  title={
-                    <>
-                      {user.id === userId ? "אני" : user.userName}<br />
-                      {user.email}
-                    </>
-                  }
-                  arrow
-                  placement="bottom"
-                >
-                  <Badge
-                    overlap="circular"
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                    badgeContent={
-                      <div
-                        style={{
-                          backgroundColor: "var(--color-gray)",
-                          color: "var(--color-white)",
-                          width: "20px",
-                          height: "20px",
-                          borderRadius: "50%",
-                          border: "2px solid var(--color-black)",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          position: "absolute",
-                          bottom: "-4px",
-                          left: "-4px",
-                          
+      {/* Songs List */}
+      <div className="songs-list-container">
+        <h2 className="songs-list-title">Songs</h2>
+
+        {!playlist.songs || playlist.songs.length === 0 ? (
+          <div className="no-songs-message">
+            <p>This playlist doesn't have any songs yet.</p>
+          </div>
+        ) : (
+          <div className="songs-list">
+            {playlist.songs.map((song, index) => (
+              <div key={song.id} className="song-item" onClick={() => handlePlaySong(song)}>
+                <div className="song-number">{index + 1}</div>
+                <div className="song-image">
+                  <img src={song.imageFilePath || "/placeholder.svg"} alt={song.name} />
+                  <div className="song-play-overlay">
+                    {currentlyPlaying === song.id ? (
+                      <PauseIcon className="song-play-icon" />
+                    ) : (
+                      <PlayArrowIcon className="song-play-icon" />
+                    )}
+                  </div>
+                </div>
+                <div className="song-details">
+                  <div className="song-name">{song.name}</div>
+                  <div className="song-artist">{song.artist}</div>
+                </div>
+                <div className="song-genre">{song.genre}</div>
+                <div className="song-actions">
+                  <IconButton className="song-menu-button" onClick={(e) => openMenu(e, song.id)}>
+                    <MoreHorizIcon />
+                  </IconButton>
+                  <Menu
+                    anchorEl={menuAnchor[song.id]}
+                    open={Boolean(menuAnchor[song.id])}
+                    onClose={() => closeMenu(song.id)}
+                    className="song-menu"
+                  >
+                    <MenuItem
+                      onClick={(e) => {
+                        closeMenu(song.id)
+                        downloadSong(e, song.audioFilePath, song.name)
+                      }}
+                    >
+                      <DownloadIcon className="menu-icon" />
+                      Download
+                    </MenuItem>
+                    {isOwner && (
+                      <MenuItem
+                        onClick={(e) => {
+                          removeSongFromPlaylist(e, song.id)
                         }}
                       >
-                        {user.id === userId ? "א" : user.userName?.charAt(0).toUpperCase()}
-                      </div>
-                    }
-                  >
-                    <div
-                      style={{
-                        padding: "12px",
-                        borderRadius: "50%",
-                        backgroundColor: "var(--color-gray)",
-                        color: "var(--color-white)",
-                        fontSize: "14px",
-                        width: "16px",
-                        height: "16px",
-                        fontWeight: "bold",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        position: "relative",
-                      }}
-                    >
-                      <Person sx={{ fontSize: "24px", color: "white" }} />
-                    </div>
-                  </Badge>
-                </Tooltip>
-              ))}
-
-              <Divider orientation="vertical" flexItem sx={{ borderColor: 'var(--color-gray)', borderWidth: "1.25px" , marginRight: "15px"}} />
-              
-              {/* פרופיל של המנהל */}
-              <Tooltip
-                title={
-                  <>
-                    {playlist.ownerId === userId ? "אני" : playlist.owner.userName} (מנהל)<br />
-                    {playlist.owner.email}
-                  </>
-                }
-                arrow
-                placement="bottom"
-              >
-                <Badge
-                  overlap="circular"
-                  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                  badgeContent={
-                    <div
-                      style={{
-                        backgroundColor: "var(--color-gray)",
-                        color: "var(--color-white)",
-                        width: "20px",
-                        height: "20px",
-                        borderRadius: "50%",
-                        border: "2px solid var(--color-black)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        position: "absolute",
-                        bottom: "-4px", // מיקום קצת למטה
-                        left: "-4px",   // מיקום קצת לשמאל
-                      }}
-                    >
-                      {playlist.ownerId === userId ? "א" : playlist.owner.userName?.charAt(0).toUpperCase()}
-                    </div>
-                  }
-                >
-                  <div
-                    style={{
-                      backgroundColor: "var(--color-gray)",
-                      color: "var(--color-white)",
-                      fontSize: "14px",
-                      padding: "12px",
-                      width: "16px",
-                      height: "16px",
-                      borderRadius: "50%",
-                      fontWeight: "bold",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      position: "relative",
-                    }}
-                  >
-                    <Person sx={{ fontSize: "24px", color: "white" }} />
-                  </div>
-                </Badge>
-              </Tooltip>
-
-
-            </div>
-          </div>
-
-          {/* Menu עבור האפשרויות */}
-          <Menu
-            anchorEl={anchorElPlaylist}
-            open={Boolean(anchorElPlaylist)}
-            onClose={handlePlaylistMenuClose}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            PaperProps={{
-              sx: {
-                backgroundColor: "var(--color-gray)",
-              },
-            }}
-          >
-            <div style={{ backgroundColor: "var(--color-gray)", display: "grid", gridTemplateColumns: "repeat(2, 1fr)" }}>
-              <MenuItem >
-                <UpdatePlaylistName playlistId={playlistId} playlist={playlist} setPlaylist={setPlaylist} setOwnedPlaylists={setOwnedPlaylists} />
-              </MenuItem>
-              <MenuItem  >
-                <DeletePlaylist playlistId={playlistId} setPlaylist={setPlaylist} playlists={ownedPlaylists} setPlaylists={setOwnedPlaylists} />
-              </MenuItem>
-              <MenuItem >
-                <UploadSongDialog playlist={playlist} setPlaylist={setPlaylist} />
-              </MenuItem>
-              <MenuItem >
-                <SharePlaylist playlistId={playlistId} setPlaylist={setPlaylist} />
-              </MenuItem>
-            </div>
-          </Menu>
-
-
-          {/* רשימת השירים */}
-
-          <div className="songs-container" style={{ flexGrow: 1, marginTop: "20px" }}>
-            <div className="songs-grid" style={{marginRight:  "125px"}}>
-              {playlist.songs?.map((song) => (
-                <div key={song.id} className="song-card">
-                  <div className="song-image-container">
-                    <img src="/images/soundbar.png" alt={song.name} className="song-image" />
-                    <div className="play-button-container">
-                      <IconButton sx={{ border: "0.8px solid white", borderRadius: "50%", width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center" }}
-                        onClick={() => handlePlaySong(song)}
-                      >
-                        <PlayArrowIcon sx={{ color: "white", fontSize: 30 }} />
-                      </IconButton>
-                    </div>
-                  </div>
-                  <Divider sx={{ width: "90%", marginTop: "30px", borderBottomWidth: 0.5, borderColor: "var(--color-white)" }} />
-                  <div className="song-info">
-                    <span className="song-text">{song.name} </span>
-                    <div className="song-icons">
-                      <IconButton onClick={(e) => handleSongMenuOpen(e, song.id)}>
-                        <MoreVertIcon sx={{ color: "white", fontSize: 20 }} />
-                      </IconButton>
-                      <Menu
-                        anchorEl={anchorElSong[song.id]}
-                        open={Boolean(anchorElSong[song.id])}
-                        onClose={() => handleSongMenuClose(song.id)}
-                        sx={{ "& .MuiPaper-root": { backgroundColor: "var(--color-gray)", color: "white" } }}
-                      >
-                        <MenuItem onClick={() => {
-                          handleSongMenuClose(song.id);
-                          downloadSong(song.audioFilePath, song.name);
-                        }}>
-                          <DownloadIcon sx={{ marginLeft: "7px", fontSize: "16px" }} />הורדה
-                        </MenuItem>
-                        <MenuItem onClick={() => handleEditSong(song)}>
-                          <EditIcon sx={{ marginLeft: "7px", fontSize: "16px" }} />עדכן שיר
-                        </MenuItem>
-                        <MenuItem onClick={() => openDeleteDialog(song.id)}>
-                          <DeleteIcon sx={{ marginLeft: "7px", fontSize: "16px" }} /> מחק שיר
-                        </MenuItem>
-                      </Menu>
-                    </div>
-                  </div>
+                        <DeleteIcon className="menu-icon" />
+                        Remove from Playlist
+                      </MenuItem>
+                    )}
+                  </Menu>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-
-          {/* דיאלוג לשיתוף פלייליסט */}
-
-          {/* Dialog לעדכון שיר */}
-          {editingSong && (
-            <UpdateSong song={editingSong} onUpdate={handleUpdateSong} onClose={() => setEditingSong(null)} />
-          )}
-
-          {/* דיאלוג לאישור מחיקת שיר */}
-          <Dialog open={openDialog} onClose={handleCancelDelete} PaperProps={{ style: { backgroundColor: "var(--color-gray)", color: "var(--color-white)", borderRadius: "12px", padding: "16px" } }}>
-            <DialogTitle style={{ fontSize: "18px", fontWeight: "bold", textAlign: "center" }}>
-              אישור מחיקה
-            </DialogTitle>
-            <DialogContent style={{ fontSize: "16px", textAlign: "center" }}>
-              <p>האם אתה בטוח שברצונך למחוק את השיר?</p>
-            </DialogContent>
-            <DialogActions style={{ justifyContent: "center" }}>
-              <Button onClick={handleCancelDelete} style={{ background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))", padding: "1px", borderRadius: "8px" }}>
-                <span style={{ color: "white", backgroundColor: "var(--color-gray)", borderRadius: "8px", padding: "8px 16px", fontWeight: "bold", display: "block" }}>
-                  ביטול
-                </span>
-              </Button>
-              <Button onClick={handleDeleteSong} style={{ background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))", padding: "1px", marginRight: "20px", borderRadius: "8px" }}>
-                <span style={{ color: "white", backgroundColor: "var(--color-gray)", borderRadius: "8px", padding: "8px 16px", fontWeight: "bold", display: "block" }}>
-                  אישור ומחיקה
-                </span>
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </>
-      ) : (
-        <p>טעינת פלייליסט...</p>
-      )}
+        )}
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default PlaylistDetails;
+export default PlaylistDetails

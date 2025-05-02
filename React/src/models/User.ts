@@ -6,8 +6,8 @@ export type User ={
     email:string,
     password: string,
     create_at:string,
-    ownedPlaylists?:Playlist[],
-    sharedPlaylists?:Playlist[],
+    ownedPlaylists:Playlist[],
+    sharedPlaylists:Playlist[],
     requests?:Request[]
 } 
 export type UserDto ={
