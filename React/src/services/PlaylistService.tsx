@@ -93,7 +93,21 @@ const PlaylistService = {
             console.error("Error fetching user shared playlists:", error);
             throw error;
         }
-    }
+    },
+    getUploadUrl: async (fileName:string, contentType:string) => {
+        try {
+            console.log("filename"+fileName);
+            console.log("contentType"+contentType);
+            
+            const response = await api.get("/song/upload-url", {
+                params: { fileName, contentType},
+            });
+            return response.data.url;
+        } catch (error) {
+            console.error("Error getting upload URL:", error);
+            throw error;
+        }
+    },
 };
 
 export default PlaylistService;

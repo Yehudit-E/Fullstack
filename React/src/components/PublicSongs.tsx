@@ -9,20 +9,17 @@ import { useSelector } from "react-redux"
 import type { Dispatch, StoreType } from "../store/store"
 import { useDispatch } from "react-redux"
 import { updateSongs } from "../store/songSlice"
-import AddToPlaylistModel from "./AddToPlaylistModel"
+import AddToPlaylistModel from "./AddToPlaylist"
 import UploadSongRequestDialog from "./UploadSongRequestDialog"
-import MoreVertIcon from "@mui/icons-material/MoreVert"
-import QueueMusicIcon from "@mui/icons-material/QueueMusic"
-import DownloadIcon from "@mui/icons-material/Download"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import PauseIcon from "@mui/icons-material/Pause"
-import SearchIcon from "@mui/icons-material/Search"
 import MusicNoteIcon from "@mui/icons-material/MusicNote"
-import AddIcon from "@mui/icons-material/Add"
 import { MenuItem, IconButton, Menu } from "@mui/material"
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { Download, ListMusic, Plus } from "lucide-react"
 
 import "./style/PublicSongs.css"
+import "./style/MenuStyles.css" // Import the shared menu styles
 
 const PublicSongs = () => {
   const [songs, setSongs] = useState<Song[]>([])
@@ -131,8 +128,8 @@ const PublicSongs = () => {
       <div className="music-page-header">
         <div className="header-text">
           <h1
-            style={{ 
-              background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))" ,
+            style={{
+              background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
               WebkitBackgroundClip: "text",
               color: "transparent",
               fontSize: "22px",
@@ -145,7 +142,7 @@ const PublicSongs = () => {
 
         {authState && (
           <div className="upload-button-container">
-            <UploadSongRequestDialog/>
+            <UploadSongRequestDialog />
           </div>
         )}
       </div>
@@ -192,20 +189,19 @@ const PublicSongs = () => {
         ) : (
           <div className="songs-grid">
             {filteredSongs.map((song: Song) => (
-              <div key={song.id} className="song-card" onClick={() => handlePlaySong(song)}>
+              <div key={song.id} className="song-card" >
                 <div className="song-image-container">
                   <img src={song.imageFilePath} alt={song.name} className="song-image" />
                   <div className="song-overlay">
-                    <button className="play-button">
-                      {currentlyPlaying === song.id ? (
-                        <PauseIcon className="play-icon" />
-                      ) : (
-                        <PlayArrowIcon className="play-icon" />
-                      )}
+                    <button 
+                    className="play-button"
+                    onClick={() => handlePlaySong(song)}
+                    > 
+                        <PlayArrowIcon className="play-icon" />              
                     </button>
                   </div>
                   <div className="song-options">
-                    
+
                     <IconButton className="options-button" onClick={(e) => openMenu(e, song.id)}>
                       <MoreHorizIcon className="options-icon" />
                     </IconButton>
@@ -215,23 +211,28 @@ const PublicSongs = () => {
                       onClose={() => closeMenu(song.id)}
                       className="options-menu"
                     >
+                      <MenuItem className="menu-title" disabled>
+                        Options
+                      </MenuItem>
                       <MenuItem
+                        className="menu-item"
                         onClick={(e) => {
                           closeMenu(song.id)
                           downloadSong(e, song.audioFilePath, song.name)
                         }}
                       >
-                        <DownloadIcon className="menu-icon" />
+                        <Download size={17} className="menu-icon" />
                         Download
                       </MenuItem>
                       {authState && (
                         <MenuItem
+                          className="menu-item"
                           onClick={(e) => {
                             closeMenu(song.id)
                             handleAddToPlaylist(e, song)
                           }}
                         >
-                          <QueueMusicIcon className="menu-icon" />
+                          <ListMusic size={17} className="menu-icon" />
                           Add to Playlist
                         </MenuItem>
                       )}
@@ -244,14 +245,14 @@ const PublicSongs = () => {
 
                   <div className="song-actions">
                     <button className="action-button" onClick={(e) => downloadSong(e, song.audioFilePath, song.name)}>
-                      <DownloadIcon sx={{ fontSize: "0.88rem"}} className="action-icon" />
-                      <span style={{ fontSize: "0.62rem"}}>Download</span>
+                      <Download size={11.5} className="action-icon" />
+                      <span style={{ fontSize: "0.62rem" }}>Download</span>
                     </button>
 
                     {authState && (
                       <button className="action-button" onClick={(e) => handleAddToPlaylist(e, song)}>
-                        <AddIcon sx={{ fontSize: "0.88rem"}} className="action-icon" />
-                        <span style={{ fontSize: "0.62rem",marginRight:"0.5rem"}}>Add to playlist</span>
+                        <Plus size={11.5} className="action-icon" />
+                        <span style={{ fontSize: "0.62rem", marginRight: "0.5rem" }}>Add to playlist</span>
                       </button>
                     )}
                   </div>

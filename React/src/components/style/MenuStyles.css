@@ -1,0 +1,64 @@
+/* Shared Menu Styles for the entire application */
+
+.MuiMenu-paper,
+.MuiPopover-paper,
+.options-menu .MuiPaper-root {
+  background-color: #121111 !important;
+  color: var(--color-white) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  animation: menuFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  transform-origin: top right !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+
+}
+
+.MuiMenuItem-root {
+  font-size: 0.75rem !important;
+  /* padding: 10px 16px !important; */
+  transition: all 0.2s ease !important;
+  color: var(--color-white) !important;
+}
+
+.MuiMenuItem-root:hover {
+  background-color: rgba(255, 254, 254, 0.05) !important;
+}
+.menu-item{
+    display: flex !important;
+    align-items: center !important;
+    height: 30px;
+}
+.menu-title{
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    height: 30px !important;
+    padding: 0;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+}
+/* .MuiMenuItem-root:active {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--gradient-start-rgb), 0.1),
+    rgba(var(--gradient-middle-rgb), 0.1),
+    rgba(var(--gradient-end-rgb), 0.1)
+  ) !important;
+} */
+
+.menu-icon {
+  margin-right: 8px !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 1.2rem !important;
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

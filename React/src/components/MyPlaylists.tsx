@@ -4,20 +4,21 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 
-import { Button, IconButton, Menu, MenuItem } from "@mui/material"
+import { Button, IconButton, Menu, MenuItem, Typography } from "@mui/material"
 import QueueMusicIcon from "@mui/icons-material/QueueMusic"
 import DeleteIcon from "@mui/icons-material/Delete"
-import LibraryMusicIcon from "@mui/icons-material/LibraryMusic"
-import PeopleIcon from "@mui/icons-material/People"
 import type { User } from "../models/User"
 import type { Playlist } from "../models/Playlist"
-import { AddCircleOutline, MoreHoriz, MusicNote, MusicNoteOutlined, PeopleAltOutlined } from "@mui/icons-material"
-import { useSelector } from "react-redux"
-import type { StoreType } from "../store/store"
+import { MoreHoriz, MusicNote } from "@mui/icons-material"
+import { useDispatch, useSelector } from "react-redux"
+import type { Dispatch, StoreType } from "../store/store"
 import "./style/MyPlaylists.css"
-import { Music, Users } from "lucide-react";
+import { Music, Users, Lock, Globe, ListVideo, Trash2, ListMusic } from "lucide-react"
 import AddPlaylist from "./AddPlaylist"
 import { useNavigate } from "react-router"
+import DeletePlaylist from "./DeletePlaylist"
+import EditPlaylist from "./EditPlaylist"
+import { updateSongs } from "../store/songSlice"
 
 const MyPlaylist = () => {
     const user: User = useSelector((state: StoreType) => state.user.user)
@@ -30,10 +31,17 @@ const MyPlaylist = () => {
     const [menuAnchor, setMenuAnchor] = useState<{ [key: string]: HTMLElement | null }>({})
     const [activeTab, setActiveTab] = useState<"owned" | "shared">("owned")
     const [sortBy, setSortBy] = useState<string>("name")
-    const navigate=useNavigate()
+    const [selectedPlaylistId, setSelectedPlaylistId] = useState<number | null>(null); // פלייליסט שנבחר למחיקה
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [playlistToEdit, setPlaylistToEdit] = useState<Playlist>({} as Playlist)
+    const navigate = useNavigate()
+    const dispatch = useDispatch<Dispatch>()
+
     useEffect(() => {
         loadPlaylists()
     }, [user])
+    console.log("myplaylist", user.ownedPlaylists, user.sharedPlaylists);
 
     const loadPlaylists = async () => {
         setIsLoading(true)
@@ -64,6 +72,7 @@ const MyPlaylist = () => {
         setMenuAnchor((prev) => ({ ...prev, [playlistId]: null }))
     }
 
+
     const sortPlaylists = (playlists: Playlist[], sortBy: string) => {
         const sortedPlaylists = [...playlists]
         switch (sortBy) {
@@ -75,11 +84,10 @@ const MyPlaylist = () => {
         }
     }
 
-    const filteredPlaylists = sortPlaylists(
-        activeTab === "owned" ? ownedPlaylists : sharedPlaylists,
-        sortBy
-    ).filter((playlist) =>
-        playlist.name?.toLowerCase().includes(searchQuery.toLowerCase()) || playlist.description?.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredPlaylists = sortPlaylists(activeTab === "owned" ? ownedPlaylists : sharedPlaylists, sortBy).filter(
+        (playlist) =>
+            playlist.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            playlist.description?.toLowerCase().includes(searchQuery.toLowerCase()),
     )
 
     return (
@@ -102,7 +110,7 @@ const MyPlaylist = () => {
                 </div>
 
                 <div className="upload-button-container">
-                    <AddPlaylist/>
+                    <AddPlaylist setPlaylists={setOwnedPlaylists} />
                 </div>
             </div>
 
@@ -183,20 +191,17 @@ const MyPlaylist = () => {
             ) : (
                 <div className="songs-grid">
                     {filteredPlaylists.map((playlist) => (
-                        <div key={playlist.id} 
-                        className="song-card"
-                         onClick={() => navigate(`playlist/${playlist.id}`)}
-                         >
+                        // <div key={playlist.id} className="song-card" onClick={() => navigate(`playlist/${playlist.id}`)}>
+                        <div key={playlist.id} className="song-card" onClick={() => console.log("fcguv")}>
                             <div className="song-image-container">
                                 {/* Placeholder image if playlist doesn't have one */}
-                                <img
-                                    src={playlist.imageFilePath || ""}
-                                    alt={playlist.name || "Playlist"}
-                                    className="song-image"
-                                />
+                                <img src={playlist.imageFilePath || ""} alt={playlist.name || "Playlist"} className="song-image" />
                                 <div className="song-overlay">
-                                    <button className="play-button">
-                                        <QueueMusicIcon className="play-icon" />
+                                    <button
+                                        className="play-button"
+                                        // onClick={() => { dispatch(updateSongs(playlist.songs)) }}
+                                    >
+                                        <ListVideo className="play-icon" />
                                     </button>
                                 </div>
                                 <div className="song-options">
@@ -209,27 +214,33 @@ const MyPlaylist = () => {
                                         onClose={() => closeMenu(playlist.id)}
                                         className="options-menu"
                                     >
+                                        <MenuItem className="menu-title" disabled>
+                                            Options
+                                        </MenuItem>
                                         {activeTab === "owned" && (
                                             <MenuItem
+
                                                 onClick={() => {
                                                     closeMenu(playlist.id)
-                                                    // Handle edit
-                                                    setEditingPlaylist(playlist)
-                                                    setShowForm(true)
+                                                    setPlaylistToEdit(playlist);
+                                                    setOpenEditDialog(true);
                                                 }}
+                                                className="menu-item"
                                             >
-                                                <QueueMusicIcon className="menu-icon" />
+                                                <ListMusic size={17} className="menu-icon" />
                                                 Edit Playlist
                                             </MenuItem>
                                         )}
                                         <MenuItem
                                             onClick={() => {
-                                                closeMenu(playlist.id)
-                                                // Handle delete or remove
-                                                // This would need actual implementation
+                                                console.log("-----------");
+                                                closeMenu(playlist.id);
+                                                setSelectedPlaylistId(playlist.id);
+                                                setOpenDeleteDialog(true);
                                             }}
+                                            className="menu-item"
                                         >
-                                            <DeleteIcon className="menu-icon" />
+                                            <Trash2 size={17} className="menu-icon" />
                                             {activeTab === "owned" ? "Delete Playlist" : "Remove Sharing"}
                                         </MenuItem>
                                     </Menu>
@@ -242,6 +253,19 @@ const MyPlaylist = () => {
                                         ? `${playlist.songs?.length || 0} songs`
                                         : `Shared by: ${playlist?.owner?.userName || "User"}`}
                                 </p>
+                                <div className="playlist-visibility">
+                                    {playlist.isPublic ? (
+                                        <div className="visibility-badge public">
+                                            <Users size={14} />
+                                            <span>Shared</span>
+                                        </div>
+                                    ) : (
+                                        <div className="visibility-badge private">
+                                            <Lock size={14} />
+                                            <span>Personal</span>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -256,6 +280,26 @@ const MyPlaylist = () => {
                 //   existingPlaylist={editingPlaylist}
                 //   onSuccess={handleFormSuccess}
                 // />
+            )}
+            {openDeleteDialog && selectedPlaylistId && (
+                <DeletePlaylist
+                    playlistId={selectedPlaylistId}
+                    setPlaylists={setOwnedPlaylists}
+                    closeDeleteDialog={() => {
+                        setSelectedPlaylistId(null);
+                        setOpenDeleteDialog(false);
+                    }}
+                />
+            )}
+            {openEditDialog && playlistToEdit && (
+                <EditPlaylist
+                    playlist={playlistToEdit}
+                    setPlaylists={setOwnedPlaylists}
+                    closeEditDialog={() => {
+                        setSelectedPlaylistId(null);
+                        setOpenEditDialog(false);
+                    }}
+                />
             )}
         </div>
     )

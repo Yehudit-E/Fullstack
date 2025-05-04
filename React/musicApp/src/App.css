@@ -22,7 +22,7 @@ body {
   color: var(--color-white); 
   margin: 0;
   padding: 0;
-  direction: rtl;
+  direction: ltr; /* Set the text direction to left-to-right */
 }
 ::-webkit-scrollbar {
   display: none; 
