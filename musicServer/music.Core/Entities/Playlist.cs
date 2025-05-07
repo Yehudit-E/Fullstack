@@ -12,11 +12,9 @@ namespace music.Core.Entities
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        //public int NumOfSongs { get; set; }
         public string Description { get; set; }
         public int OwnerId { get; set; }
         public User Owner { get; set; }
-        public bool IsPublic { get; set; }
         public string ImageFilePath { get; set; }
         public List<Song> Songs { get; set; }
         public List<User> SharedUsers { get; set; }
@@ -27,7 +25,7 @@ namespace music.Core.Entities
             Songs = new List<Song>();
             SharedUsers = new List<User>();
             CreatedAt= DateTime.Now;
-            IsPublic = false;
+            
         }
 
     }

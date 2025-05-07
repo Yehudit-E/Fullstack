@@ -5,7 +5,7 @@ import type React from "react"
 
 import { useSelector } from "react-redux"
 import type { StoreType } from "../store/store"
-import type { User } from "../models/User"
+import type { User, UserDto } from "../models/User"
 import type { Playlist } from "../models/Playlist"
 import PlaylistService from "../services/PlaylistService"
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material"
@@ -26,7 +26,6 @@ const EditPlaylist = ({ playlist, setPlaylists, closeEditDialog }: EditPlaylistP
         description: "",
         imageFile: null as File | null,
         imagePreview: null as string | null,
-        isPublic: false,
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -36,7 +35,7 @@ console.log("edit");
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     // Redux State
-    const user: User = useSelector((state: StoreType) => state.user.user)
+    const user: UserDto = useSelector((state: StoreType) => state.user.user)
 
     // Load playlist data when component mounts or playlist changes
     useEffect(() => {
@@ -46,7 +45,6 @@ console.log("edit");
                 description: playlist.description || "",
                 imageFile: null,
                 imagePreview: playlist.imageFilePath || null,
-                isPublic: playlist.isPublic || false,
             })
         }
     }, [playlist])
@@ -88,7 +86,7 @@ console.log("edit");
                 description: playlist.description || "",
                 imageFile: null,
                 imagePreview: playlist.imageFilePath || null,
-                isPublic: playlist.isPublic || false,
+                
             })
         }
         setError(null)

@@ -42,11 +42,12 @@ namespace music.Service.Services
 
         public async Task<SongDto> AddAsync(SongDto songDto)
         {
-
             Song song = _mapper.Map<Song>(songDto);
             song = await _iManager._songRepository.AddAsync(song);
             if (song != null)
+            {
                 await _iManager.SaveAsync();
+            }
             songDto = _mapper.Map<SongDto>(song);
             return songDto;
         }

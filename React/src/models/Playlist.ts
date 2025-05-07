@@ -1,23 +1,21 @@
 import { Song } from "./Song"
-import { User } from "./User"
+import { User, UserDto } from "./User"
 
 export type Playlist ={
     id :number,
     name :string,
     description :string,
-    isPublic :boolean,
     imageFilePath :string,
     ownerId:number, 
-    owner :User,
+    owner :UserDto,
     songs :Song[],
-    sharedUsers:User[],
+    sharedUsers:UserDto[],
     createdAt :Date
 } 
 export type PlaylistDto ={
     id :number,
     name :string,
     description :string,
-    isPublic :boolean,
     imageFilePath :string,
     ownerId:number, 
     CreatedAt :Date

@@ -4,13 +4,13 @@ import { Song, SongDto } from '../models/Song';
 const emptySong: SongDto = {
   id: 0,
   name: '',
-  description: '',
   artist: '',
   genre: '',
   create_at: '',
   isPublic: false,
   likes: 0,
   audioFilePath: '',
+  imageFilePath: '',
   playlistId: 0,
 };
 

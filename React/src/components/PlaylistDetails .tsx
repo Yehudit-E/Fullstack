@@ -3,65 +3,144 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
-import { useSelector } from "react-redux"
-import type { StoreType } from "../store/store"
+import { useNavigate, useParams } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { setCurrentIndex, updateSongs } from "../store/songSlice"
+import type { Dispatch } from "../store/store"
+import PlaylistService from "../services/PlaylistService"
 import type { Playlist } from "../models/Playlist"
 import type { Song } from "../models/Song"
 import { IconButton, Menu, MenuItem } from "@mui/material"
-import PlayArrowIcon from "@mui/icons-material/PlayArrow"
-import PauseIcon from "@mui/icons-material/Pause"
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
-import DownloadIcon from "@mui/icons-material/Download"
-import DeleteIcon from "@mui/icons-material/Delete"
-import { useDispatch } from "react-redux"
-import type { Dispatch } from "../store/store"
-import { updateSongs } from "../store/songSlice"
+import { MoreHoriz, MusicNote } from "@mui/icons-material"
+import { Play, Clock, Music, Users, Calendar, ListMusic, User } from "lucide-react"
+import SharePlaylist from "./SharePlaylist"
+import EditPlaylist from "./EditPlaylist"
+import DeletePlaylist from "./DeletePlaylist"
+import AddToPlaylistModel from "./AddToPlaylist"
 import "./style/PlaylistDetails.css"
+import type { StoreType } from "../store/store"
+import { Edit, Trash2, Share2, Upload, Download, Plus, PlayCircle } from "lucide-react"
 
 const PlaylistDetails = () => {
-  const { id } = useParams()
-  const playlistId = Number(id)
+  const { id } = useParams<{ id: string }>()
+  const playlistId = Number.parseInt(id || "0")
   const dispatch = useDispatch<Dispatch>()
+  const navigate = useNavigate()
 
-  const user = useSelector((state: StoreType) => state.user.user)
   const [playlist, setPlaylist] = useState<Playlist | null>(null)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string>("")
-  const [menuAnchor, setMenuAnchor] = useState<{ [key: string]: HTMLElement | null }>({})
-  const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
+  const [songMenuAnchor, setSongMenuAnchor] = useState<{ [key: number]: HTMLElement | null }>({})
+  const [showShareDialog, setShowShareDialog] = useState(false)
+  const [showEditDialog, setShowEditDialog] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [currentSong, setCurrentSong] = useState<Song | null>(null)
+  const [showAddToPlaylist, setShowAddToPlaylist] = useState(false)
 
+  const currentUser = useSelector((state: StoreType) => state.user.user)
+  const navigator = useNavigate()
   useEffect(() => {
-    // Find the playlist in user's owned or shared playlists
-    const foundPlaylist = [...user.ownedPlaylists, ...user.sharedPlaylists].find((p) => p.id === playlistId)
-
-    if (foundPlaylist) {
-      setPlaylist(foundPlaylist)
-    } else {
-      setError("Playlist not found")
+    const fetchPlaylist = async () => {
+      try {
+        setLoading(true)
+        const data = await PlaylistService.getFullPlaylistById(playlistId)
+        setPlaylist(data)
+      } catch (err) {
+        console.error("Error fetching playlist:", err)
+        setError("Failed to load playlist details")
+      } finally {
+        setLoading(false)
+      }
     }
-    setLoading(false)
-  }, [playlistId, user])
 
-  const openMenu = (event: React.MouseEvent<HTMLButtonElement>, songId: number) => {
+    if (playlistId) {
+      fetchPlaylist()
+    }
+  }, [playlistId])
+
+  const handlePlayAll = () => {
+    if (playlist?.songs && playlist.songs.length > 0) {
+      dispatch(updateSongs(playlist.songs))
+    }
+  }
+
+  const handleEditPlaylist = () => {
+    setShowEditDialog(true)
+  }
+
+  const handleDeletePlaylist = () => {
+    setShowDeleteDialog(true)
+  }
+
+  const handleSharePlaylist = () => {
+    setShowShareDialog(true)
+  }
+
+
+
+  const handleDownloadAll = async () => {
+    if (!playlist?.songs || playlist.songs.length === 0) return
+
+    try {
+      // Add a prefix to each downloaded song with the playlist name
+      for (const song of playlist.songs) {
+        const fileName = `${playlist.name} - ${song.name}`
+        await downloadSong(song.audioFilePath, fileName)
+      }
+    } catch (error) {
+      console.error("Error downloading songs:", error)
+    }
+  }
+
+  const handlePlaySong = ( index: number) => {
+console.log(index);
+
+    dispatch(updateSongs(playlist?.songs || []))
+    dispatch(setCurrentIndex(index))
+  }
+
+  const formatDuration = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = seconds % 60
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`
+  }
+
+  const formatDate = (dateString: string | Date) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
+  }
+
+  const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setMenuAnchor(event.currentTarget)
+  }
+
+  const closeMenu = () => {
+    setMenuAnchor(null)
+  }
+
+  const openSongMenu = (event: React.MouseEvent<HTMLButtonElement>, songId: number) => {
     event.stopPropagation()
-    setMenuAnchor((prev) => ({ ...prev, [songId]: event.currentTarget }))
+    setSongMenuAnchor((prev) => ({ ...prev, [songId]: event.currentTarget }))
   }
 
-  const closeMenu = (songId: number) => {
-    setMenuAnchor((prev) => ({ ...prev, [songId]: null }))
+  const closeSongMenu = (songId: number) => {
+    setSongMenuAnchor((prev) => ({ ...prev, [songId]: null }))
   }
 
-  const handlePlaySong = (song: Song) => {
-    dispatch(updateSongs([song]))
-    setCurrentlyPlaying(song.id)
+  const handleAddToPlaylist = (song: Song) => {
+    setCurrentSong(song)
+    setShowAddToPlaylist(true)
   }
 
-  const downloadSong = async (event: React.MouseEvent, fileUrl: string, fileName: string) => {
-    event.stopPropagation()
+  const downloadSong = async (fileUrl: string, fileName: string) => {
     try {
       const response = await fetch(fileUrl)
-      if (!response.ok) throw new Error("שגיאה בהורדת הקובץ")
+      if (!response.ok) throw new Error("Error downloading file")
 
       const blob = await response.blob()
       const link = document.createElement("a")
@@ -74,134 +153,259 @@ const PlaylistDetails = () => {
       document.body.removeChild(link)
       URL.revokeObjectURL(link.href)
     } catch (error) {
-      console.error("שגיאה בהורדה:", error)
+      console.error("Download error:", error)
     }
   }
 
-  const removeSongFromPlaylist = (event: React.MouseEvent, songId: number) => {
-    event.stopPropagation()
-    // Implement the logic to remove a song from the playlist
-    // This would need to call your API or service
-    console.log("Remove song", songId, "from playlist", playlistId)
-    closeMenu(songId)
+  const isCurrentUser = (userId: number) => {
+    return currentUser.id === userId
   }
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p className="loading-text">Loading playlist...</p>
+      <div className="playlist-details-container">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">Loading playlist...</p>
+        </div>
       </div>
     )
   }
 
-  if (error) {
-    return <div className="error-message">{error}</div>
+  if (error || !playlist) {
+    return (
+      <div className="playlist-details-container">
+        <div className="error-container">
+          <MusicNote style={{ fontSize: "4rem", color: "#4a4a4a" }} />
+          <h3 className="error-title">Playlist not found</h3>
+          <p className="error-message">{error || "Unable to load playlist details"}</p>
+        </div>
+      </div>
+    )
   }
-
-  if (!playlist) {
-    return <div className="error-message">Playlist not found</div>
-  }
-
-  const isOwner = user.ownedPlaylists.some((p) => p.id === playlist.id)
 
   return (
     <div className="playlist-details-container">
-      {/* Playlist Header */}
-      <div className="playlist-header">
-        <div className="playlist-image-container">
-          <img
-            src={playlist.imageFilePath || "/placeholder.svg?height=200&width=200"}
-            alt={playlist.name}
-            className="playlist-image"
-          />
-        </div>
-        <div className="playlist-info">
-          <h1 className="playlist-title">{playlist.name}</h1>
-          <p className="playlist-meta">
-            {isOwner ? "Your playlist" : `Shared by: ${playlist.owner?.userName || "User"}`} •
-            {playlist.songs?.length || 0} songs
-          </p>
-          <div className="playlist-actions">
-            <button
-              className="play-all-button"
-              onClick={() => {
-                if (playlist.songs && playlist.songs.length > 0) {
-                  dispatch(updateSongs(playlist.songs))
-                  setCurrentlyPlaying(playlist.songs[0].id)
-                }
-              }}
-            >
-              Play All
-            </button>
+      <div className="playlist-layout">
+        {/* Left Side - Playlist Details */}
+        <div className="playlist-sidebar">
+          <div className="playlist-cover-container">
+            <img
+              src={playlist.imageFilePath || "/placeholder.svg?height=300&width=300"}
+              alt={playlist.name}
+              className="playlist-cover-image"
+            />
+            <div className="playlist-cover-overlay">
+              <button className="play-all-button" onClick={handlePlayAll}>
+                <PlayCircle size={48} />
+              </button>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Songs List */}
-      <div className="songs-list-container">
-        <h2 className="songs-list-title">Songs</h2>
+          <div className="playlist-info-container">
+            {/* <div className="playlist-type-badge">Playlist</div> */}
+            <h1 className="playlist-title">{playlist.name}</h1>
+            {playlist.description && <p className="playlist-description">{playlist.description}</p>}
 
-        {!playlist.songs || playlist.songs.length === 0 ? (
-          <div className="no-songs-message">
-            <p>This playlist doesn't have any songs yet.</p>
-          </div>
-        ) : (
-          <div className="songs-list">
-            {playlist.songs.map((song, index) => (
-              <div key={song.id} className="song-item" onClick={() => handlePlaySong(song)}>
-                <div className="song-number">{index + 1}</div>
-                <div className="song-image">
-                  <img src={song.imageFilePath || "/placeholder.svg"} alt={song.name} />
-                  <div className="song-play-overlay">
-                    {currentlyPlaying === song.id ? (
-                      <PauseIcon className="song-play-icon" />
-                    ) : (
-                      <PlayArrowIcon className="song-play-icon" />
-                    )}
+            <div className="playlist-stats">
+              <div className="stat-item">
+                <Music size={16} />
+                <span>{playlist.songs?.length || 0} songs</span>
+              </div>
+              <div className="stat-divider"></div>
+              <div className="stat-item">
+                <Calendar size={16} />
+                <span>Created {formatDate(playlist.createdAt)}</span>
+              </div>
+            </div>
+
+            <div className="playlist-people">
+              <div className="playlist-creator">
+                <User size={14} />
+                <span>
+                  Created by{" "}
+                  <strong>{isCurrentUser(playlist.owner?.id) ? "you" : playlist.owner?.userName || "Unknown"}</strong>
+                </span>
+              </div>
+
+              {playlist.sharedUsers && playlist.sharedUsers.length > 0 && (
+                <div className="playlist-shared">
+                  <Users size={14} />
+                  <span>Shared with </span>
+                  <div className="shared-names">
+                    {playlist.sharedUsers.map((user, index) => (
+                      <span key={user.id} className="shared-user-name">
+                        {isCurrentUser(user.id) ? "you" : user.userName || "User"}
+                        {index < playlist.sharedUsers.length - 1 ? ", " : ""}
+                      </span>
+                    ))}
                   </div>
                 </div>
-                <div className="song-details">
-                  <div className="song-name">{song.name}</div>
-                  <div className="song-artist">{song.artist}</div>
-                </div>
-                <div className="song-genre">{song.genre}</div>
-                <div className="song-actions">
-                  <IconButton className="song-menu-button" onClick={(e) => openMenu(e, song.id)}>
-                    <MoreHorizIcon />
-                  </IconButton>
-                  <Menu
-                    anchorEl={menuAnchor[song.id]}
-                    open={Boolean(menuAnchor[song.id])}
-                    onClose={() => closeMenu(song.id)}
-                    className="song-menu"
-                  >
-                    <MenuItem
-                      onClick={(e) => {
-                        closeMenu(song.id)
-                        downloadSong(e, song.audioFilePath, song.name)
-                      }}
-                    >
-                      <DownloadIcon className="menu-icon" />
-                      Download
-                    </MenuItem>
-                    {isOwner && (
-                      <MenuItem
-                        onClick={(e) => {
-                          removeSongFromPlaylist(e, song.id)
-                        }}
-                      >
-                        <DeleteIcon className="menu-icon" />
-                        Remove from Playlist
-                      </MenuItem>
-                    )}
-                  </Menu>
-                </div>
-              </div>
-            ))}
+              )}
+            </div>
+
+            <div className="playlist-actions-grid">
+              <button className="action-playlist-button primary" onClick={handlePlayAll}>
+                <PlayCircle size={18} />
+                <span>Play All</span>
+              </button>
+
+              <button className="action-playlist-button" onClick={handleEditPlaylist}>
+                <Edit size={18} />
+                <span>Edit</span>
+              </button>
+
+              <button className="action-playlist-button" onClick={handleSharePlaylist}>
+                <Share2 size={18} />
+                <span>Share</span>
+              </button>
+
+              <button className="action-playlist-button" onClick={()=>{navigator("upload-song");}}>
+                <Upload size={18} />
+                <span>Upload</span>
+              </button>
+
+              <button className="action-playlist-button" onClick={handleDownloadAll}>
+                <Download size={18} />
+                <span>Download</span>
+              </button>
+
+              <button className="action-playlist-button danger" onClick={handleDeletePlaylist}>
+                <Trash2 size={18} />
+                <span>Delete</span>
+              </button>
+            </div>
           </div>
-        )}
+        </div>
+
+        {/* Right Side - Songs List */}
+        <div className="songs-content">
+          <h3 className="section-title">
+            <ListMusic size={18} className="section-icon" />
+            Songs
+            <button className="action-playlist-button primary" onClick={handlePlayAll}>
+                <PlayCircle size={18} />
+                <span>Play All</span>
+              </button>
+          </h3>
+
+          {playlist.songs && playlist.songs.length > 0 ? (
+            <div className="songs-table-container">
+              <table className="songs-table">
+                <thead>
+                  <tr>
+                    <th className="song-number">#</th>
+                    <th className="song-info-header">Title</th>
+                    <th className="song-artist">Artist</th>
+                    <th className="song-genre">Genre</th>
+                    <th className="song-duration">
+                      <Clock size={16} />
+                    </th>
+                    <th className="song-list-actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {playlist.songs.map((song, index) => (
+                    <tr key={song.id} className="song-row" >
+                      <td className="song-number">{index + 1}</td>
+                      <td className="song-list-info">
+                        <div className="song-list-image-container">
+                          <img
+                            src={song.imageFilePath || "/placeholder.svg?height=40&width=40"}
+                            alt={song.name}
+                            className="song-image"
+                          />
+                          <div className="play-overlay"                             onClick={() => handlePlaySong(index)}
+ >
+                            <Play size={12} />
+                          </div>
+                        </div>
+                        <span className="song-title">{song.name}</span>
+                      </td>
+                      <td className="song-artist">{song.artist}</td>
+                      <td className="song-genre">{song.genre}</td>
+                      <td className="song-duration">{formatDuration(150)}</td>
+                      <td className="song-actions">
+                        <IconButton className="song-menu-button" onClick={(e) => openSongMenu(e, song.id)}>
+                          <MoreHoriz fontSize="small" />
+                        </IconButton>
+                        <Menu
+                          anchorEl={songMenuAnchor[song.id]}
+                          open={Boolean(songMenuAnchor[song.id])}
+                          onClose={() => closeSongMenu(song.id)}
+                          className="options-menu"
+                        >
+                          <MenuItem className="menu-title" disabled>
+                            Song Options
+                          </MenuItem>
+                          <MenuItem
+                            className="menu-item"
+                            onClick={() => {
+                              closeSongMenu(song.id)
+                              downloadSong(song.audioFilePath, song.name)
+                            }}
+                          >
+                            <Download size={17} className="menu-icon" />
+                            Download
+                          </MenuItem>
+                          <MenuItem
+                            className="menu-item"
+                            onClick={() => {
+                              closeSongMenu(song.id)
+                              handleAddToPlaylist(song)
+                            }}
+                          >
+                            <Plus size={17} className="menu-icon" />
+                            Add to Another Playlist
+                          </MenuItem>
+                        </Menu>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="no-songs-message">
+              <ListMusic size={40} />
+              <p>This playlist doesn't have any songs yet</p>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Modals */}
+      {showShareDialog && <SharePlaylist playlistId={playlistId} closeShareDialog={() => setShowShareDialog(false)} />}
+
+      {showEditDialog && (
+        <EditPlaylist
+          playlist={playlist}
+          setPlaylists={() => {}} // We'll refresh the playlist after edit
+          closeEditDialog={() => {
+            setShowEditDialog(false)
+            // Refresh playlist data
+            PlaylistService.getFullPlaylistById(playlistId).then(setPlaylist)
+          }}
+        />
+      )}
+
+      {showDeleteDialog && (
+        <DeletePlaylist
+          playlistId={playlistId}
+          setPlaylists={() => {}} // Navigate away after delete
+          closeOnDeleteDialog={() => {
+            setShowDeleteDialog(false)
+            navigate("/myplaylists")
+          }}
+          closeOnCancleDialog={() => {
+            setShowDeleteDialog(false)
+          }}
+        />
+      )}
+
+      {showAddToPlaylist && currentSong && (
+        <AddToPlaylistModel song={currentSong} onClose={() => setShowAddToPlaylist(false)} />
+      )}
     </div>
   )
 }

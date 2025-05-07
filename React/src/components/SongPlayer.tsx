@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { VolumeUp, VolumeOff, Close } from "@mui/icons-material";
-import { Box, IconButton, Slider, Typography } from "@mui/material";
+import { Box, CardMedia, IconButton, Slider, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch, StoreType } from "../store/store";
 import { useNavigate } from "react-router";
@@ -92,9 +92,10 @@ const SongPlayer = () => {
         }
     };
     return (
-        <>{songsList[0].id !== 0 && (
+    <div>
+        {songsList[0].id !== 0 && (
             <Box sx={{
-                zIndex: 1200, position: "fixed", bottom: 0, width: "100%", height: "130px", background: "linear-gradient(to top, rgba(0,0,0,1) 62%, rgba(0,0,0,0))",
+                zIndex: 1200, position: "fixed", bottom: 0, width: "100%", height: "140px", background: "linear-gradient(to top, rgba(0,0,0,1) 62%, rgba(0,0,0,0))",
                 color: "white",
                 direction: "rtl",
             }}>
@@ -194,7 +195,7 @@ const SongPlayer = () => {
                                     : 'rgba(240, 240, 240, 0.8)'  // צבע רגיל כשהוא פעיל
                             }}
                             onClick={() => { dispatch(nextSong()); }}
-                            disabled={currentSongIndex === songsList.length - 1}
+                            // disabled={currentSongIndex === songsList.length - 1}
                             style={{ pointerEvents: currentSongIndex === songsList.length - 1 ? 'none' : 'auto' }}  // מוודא שהכפתור יוצג תמיד
 
                         >
@@ -242,7 +243,7 @@ const SongPlayer = () => {
                         <IconButton
                             sx={{ color: 'rgba(240, 240, 240, 0.8)' }}
                             onClick={() => { dispatch(prevSong()); }}
-                            disabled={currentSongIndex === 0}
+                            // disabled={currentSongIndex === 0}
                         >
                             <SkipPreviousRounded sx={{ fontSize: 20 }} />
                         </IconButton>
@@ -254,7 +255,7 @@ const SongPlayer = () => {
                             marginLeft: "45px",
                             display: "flex",
                             alignItems: "center",
-                            marginBottom: 1,
+                            padding:0,
                             marginTop: 1,
                             position: "relative",
                             '&::before': songsList[currentSongIndex].isPublic ? {
@@ -263,6 +264,7 @@ const SongPlayer = () => {
                                 top: '-10px',
                                 left: '-10px',
                                 right: '-10px',
+                                padding:0,
                                 bottom: '-10px',
                                 borderRadius: 1,
                                 backgroundColor: 'rgba(200, 200, 200, 0.1)',
@@ -273,6 +275,7 @@ const SongPlayer = () => {
                             '&:hover::before': songsList[currentSongIndex].isPublic ? {
                                 transform: 'scale(1)',
                                 opacity: 1,
+                                padding:0,
                             } : {},
                         }}
                         onClick={() => { if (songsList[currentSongIndex].isPublic) navigate('songComments/' + songsList[currentSongIndex].id) }} // כאן תוכל להוסיף ניווט
@@ -282,11 +285,18 @@ const SongPlayer = () => {
                             <Typography sx={{ fontSize: 15 }}>{songPlayer.artist}</Typography> */}
                             <Typography sx={{ fontSize: 15 }}>{songsList[currentSongIndex].name}</Typography>
                         </Box>
+                        <CardMedia
+                            component="img"
+                            image={songsList[currentSongIndex].imageFilePath}
+                            alt={songsList[currentSongIndex].name}
+                            sx={{ width: 40, height: 40, borderRadius: 1, mr: 2 }}
+                        />
 
                     </Box>
                 </Box>
             </Box>
-        )}</>
+        )}
+        </div>
     );
 };
 

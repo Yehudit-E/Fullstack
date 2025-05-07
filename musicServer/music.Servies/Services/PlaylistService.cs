@@ -87,10 +87,18 @@ namespace music.Service.Services
             if (song == null)
                 return false;
             playlist.Songs.Remove(song);
-            if (!song.IsPublic)
-            {
-                await _iManager._songRepository.DeleteByIdAsync(songId);
-            }
+            await _iManager.SaveAsync();
+            return true;
+        }
+        public async Task<bool> RemoveUserFromPlaylistAsync(int playlistId, int songId)
+        {
+            Playlist playlist = await _iManager._playlistRepository.GetFullByIdAsync(playlistId);
+            if (playlist == null)
+                return false;
+            User user = playlist.SharedUsers.FirstOrDefault(x => x.Id == songId);
+            if (user == null)
+                return false;
+            playlist.SharedUsers.Remove(user);
             await _iManager.SaveAsync();
             return true;
         }

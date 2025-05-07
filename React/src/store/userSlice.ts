@@ -1,15 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { User } from "../models/User";
+import { User, UserDto } from "../models/User";
 import { UserLogin, UserRegister } from "../models/UserAuth";
 import api from "../interceptor/api";
-let userEmpty: User={
+let userEmpty: UserDto={
     id:0,
+    userName:"",
     email:"",
     password: "",
     create_at:"",
-    ownedPlaylists:[],
-    sharedPlaylists:[],
 }
 let baseUrl="https://localhost:7044";
 

@@ -24,13 +24,13 @@ namespace music.Data.repositories
         }
         public async Task<List<Playlist>> GetUserSharedPlaylistsAsync(int userId)
         {
-            return await _dataSet.Where(x => x.SharedUsers.Any(x => x.Id == userId)).Include(x => x.Songs).ToListAsync();
+            return await _dataSet.Where(x => x.SharedUsers.Any(x => x.Id == userId)).Include(x => x.Songs).Include(x=>x.SharedUsers).Include(x=>x.Owner).ToListAsync();
 
         }
         public async Task<List<Playlist>> GetUserPlaylistsAsync(int userId)
         {
-            return await _dataSet.Where(x => x.OwnerId == userId).Include(x => x.Songs).ToListAsync();
+            return await _dataSet.Where(x => x.OwnerId == userId).Include(x => x.Songs).Include(x => x.SharedUsers).ToListAsync();
         }
-
+        
     }
 }

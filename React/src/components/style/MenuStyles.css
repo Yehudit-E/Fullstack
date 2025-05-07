@@ -27,7 +27,7 @@
 .menu-item{
     display: flex !important;
     align-items: center !important;
-    height: 30px;
+    height: 30px !important;
 }
 .menu-title{
     width: 100% !important;

@@ -151,6 +151,16 @@ namespace music.API.Controllers
                 return Forbid();
              return await _iService.RemoveSongFromPlaylistAsync(playlistId, songId);
         }
+        [HttpDelete("{playlistId}/user/{userId}")]
+        public async Task<ActionResult<bool>> RemoveUserFromPlaylistAsync(int playlistId, int userId)
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
+            var tokenId = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
+            var playlist = await _iService.GetByIdAsync(playlistId);
+            if (tokenId != playlist.OwnerId &&tokenId!=userId)
+                return Forbid();
+            return await _iService.RemoveUserFromPlaylistAsync(playlistId, userId);
+        }
 
     }
     public class EmailType

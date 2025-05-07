@@ -17,6 +17,7 @@ import { resetSongs } from "../store/songSlice";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "../store/store";
 import { Song, SongDto } from "../models/Song";
+import { ArrowLeft, Download, Gauge } from "lucide-react";
 
 type Props = {
   song: SongDto | Song;
@@ -35,9 +36,9 @@ const PlayerOptionsMenu = ({ song, playbackRate, onRateChange }: Props) => {
 
   const handleClose = () => {
     dispatch(resetSongs());
-    sessionStorage.removeItem('songsList');
-    sessionStorage.removeItem('currentSongIndex');
-  }
+    sessionStorage.removeItem("songsList");
+    sessionStorage.removeItem("currentSongIndex");
+  };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -48,10 +49,11 @@ const PlayerOptionsMenu = ({ song, playbackRate, onRateChange }: Props) => {
     onRateChange(speed);
     handleMenuClose();
   };
+
   const handleDownload = async (fileUrl: string, fileName: string) => {
     try {
       const response = await fetch(fileUrl);
-      if (!response.ok) throw new Error("שגיאה בהורדת הקובץ");
+      if (!response.ok) throw new Error("Error downloading the file");
 
       const blob = await response.blob();
       const link = document.createElement("a");
@@ -62,12 +64,12 @@ const PlayerOptionsMenu = ({ song, playbackRate, onRateChange }: Props) => {
       link.click();
 
       document.body.removeChild(link);
-      URL.revokeObjectURL(link.href); // משחרר את הזיכרון
+      URL.revokeObjectURL(link.href);
     } catch (error) {
-      console.error("שגיאה בהורדה:", error);
+      console.error("Download error:", error);
     }
-
   };
+
   return (
     <>
       <IconButton
@@ -85,113 +87,96 @@ const PlayerOptionsMenu = ({ song, playbackRate, onRateChange }: Props) => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
+        className="options-menu"
         PaperProps={{
           sx: {
             backgroundColor: "var(--color-gray)",
             borderRadius: "12px",
             color: "var(--color-white)",
-            minWidth: "80",
-            minHeight: "80px",
             boxShadow: "0 4px 16px rgba(0, 0, 0, 0.5)",
-            zIndex:99999,
+            zIndex: 99999,
             "& .MuiMenuItem-root": {
               "&:hover": { backgroundColor: "#222" },
             },
           },
         }}
       >
-        {!showSpeedOptions ? [
-          <MenuItem
-            key="download"
-            onClick={() => {
-              handleDownload(song.audioFilePath, song.name);
-              handleMenuClose();
-            }}
-          >
-            <ListItemIcon sx={{ color: "var(--color-white)" }}>
-              <DownloadIcon sx={{ fontSize: "16px" }} />
-            </ListItemIcon>
-            <ListItemText primary="הורדה" />
-          </MenuItem>,
+        {!showSpeedOptions
+  ? [
+      <MenuItem key="title" className="menu-title" disabled>
+        Options
+      </MenuItem>,
+      <MenuItem
+        key="download"
+        className="menu-item"
+        onClick={() => {
+          handleDownload((song as Song).audioFilePath, (song as Song).name);
+          handleMenuClose();
+        }}
+      >
+        <Download size={17} className="menu-icon" />
+        Download
+      </MenuItem>,
+      <MenuItem
+        key="speed"
+        className="menu-item"
+        onClick={() => setShowSpeedOptions(true)}
+      >
+        <SpeedIcon fontSize="small" className="menu-icon" />
+        Speed
+      </MenuItem>,
+      <MenuItem
+        key="close"
+        className="menu-item"
+        onClick={() => {
+          handleClose();
+          handleMenuClose();
+        }}
+      >
+        <ExitToAppIcon fontSize="small" className="menu-icon" />
+        Close player
+      </MenuItem>,
+    ]
+  : [
+      <MenuItem key="speed-title" className="menu-title" disabled>
+        Select speed
+      </MenuItem>,
+      ...[0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2].map((val) => (
+        <MenuItem
+          key={val}
+          className="menu-item"
+          onClick={() => handleSpeedChange(val)}
+          sx={{
+            position: "relative",
+            paddingRight: "30px",
+            "&:before": {
+              content: '""',
+              position: "absolute",
+              right: "12px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              width: val === playbackRate ? "5px" : "0",
+              height: "20px",
+              background: val === playbackRate ? "var(--gradient-end)" : "#888",
+              borderRadius: "5px",
+              transition: "width 0.3s",
+            },
+          }}
+        >
+          {val}x
+        </MenuItem>
+      )),
+      <MenuItem
+        key="back"
+        className="menu-item"
+        onClick={() => setShowSpeedOptions(false)}
+      >
+        <ArrowLeft size={17} className="menu-icon" />
+        Back
+      </MenuItem>,
+    ]}
 
-          <MenuItem key="speed" onClick={() => setShowSpeedOptions(true)}>
-            <ListItemIcon sx={{ color: "var(--color-white)" }}>
-              <SpeedIcon sx={{ fontSize: "16px" }} />
-            </ListItemIcon>
-            <ListItemText primary="מהירות" />
-          </MenuItem>,
 
-          <Divider key="divider1" sx={{ backgroundColor: "#555" }} />,
-
-          <MenuItem
-            key="exit"
-            onClick={() => {
-              handleClose();
-              handleMenuClose();
-            }}
-          >
-            <ListItemIcon sx={{ color: "var(--color-white)" }}>
-              <ExitToAppIcon sx={{ fontSize: "16px" }} />
-            </ListItemIcon>
-            <ListItemText primary="יציאה" />
-          </MenuItem>
-        ] : [
-          <Typography
-            key="title"
-            sx={{
-              px: 2,
-              py: 1,
-              color: "var(--color-white)",
-              fontSize: "14px",
-              fontWeight: 200,
-            }}
-          >
-            בחר מהירות:
-          </Typography>,
-
-          ...[0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2].map((val) => (
-            <MenuItem
-              key={val}
-              onClick={() => handleSpeedChange(val)}
-              sx={{
-                "&:hover": { backgroundColor: "#222" },
-                position: "relative",
-                paddingRight: "30px",
-                "&:before": {
-                  content: '""',
-                  position: "absolute",
-                  right: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)", // Center the bar vertically
-                  width: val === playbackRate ? "5px" : "0", // Wider bar, only visible for selected speed
-                  height: "20px", // Shorter height
-                  background: val === playbackRate ? "var(--gradient-end)" : "#888", // Background for selected speed
-                  borderRadius: "5px", // Rounded corners for the bar
-                  transition: "width 0.3s",
-                },
-              }}
-            >
-              <ListItemText primary={`${val}x`} />
-            </MenuItem>
-          )),
-
-          <Divider key="divider2" sx={{ backgroundColor: "#555" }} />,
-
-          <MenuItem key="back" onClick={() => setShowSpeedOptions(false)}>
-            <ListItemIcon sx={{ color: "var(--color-white)" }}>
-              <ArrowBackIcon sx={{ fontSize: "16px" }} />
-            </ListItemIcon>
-            <ListItemText primary="חזרה" />
-          </MenuItem>
-        ]}
       </Menu>
     </>
   );

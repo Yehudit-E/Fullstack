@@ -18,7 +18,6 @@ namespace music.Core.DTOs
         public int Likes { get; set; }
         public string AudioFilePath { get; set; }
         public string ImageFilePath { get; set; }
-        public bool IsDelited { get; set; }
         public int playlistId { get; set; }
     }
 }

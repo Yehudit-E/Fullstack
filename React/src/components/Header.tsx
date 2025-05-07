@@ -1,161 +1,117 @@
-import { useSelector } from "react-redux";
-import { StoreType } from "../store/store";
-import { Link, useLocation } from "react-router";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import UserDetails from "./userDetails";
-import { useState, useEffect } from "react";
+"use client"
+
+import { useSelector } from "react-redux"
+import type { StoreType } from "../store/store"
+import { Link, useLocation } from "react-router"
+import { useState, useEffect, useRef } from "react"
+import { Music, Home, ListMusic, LogIn, Menu, X } from "lucide-react"
+import UserDetails from "./userDetails"
+import "./style/Header.css"
 
 const Header = () => {
-  const authState = useSelector((store: StoreType) => store.user.authState);
-  const location = useLocation();
+  const authState = useSelector((store: StoreType) => store.user.authState)
+  const location = useLocation()
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const headerRef = useRef<HTMLDivElement>(null)
 
-  const [imageHeight, setImageHeight] = useState<number>(64); // גובה ברירת מחדל
-
-  const isActive = (path: string) => location.pathname === path;
-
-  const updateImageHeight = () => {
-    const image = document.querySelector("img.header-background") as HTMLImageElement;
-    if (image) {
-      setImageHeight(image.height);
-    }
-  };
-
+  const isActive = (path: string) => location.pathname.startsWith(path)
   useEffect(() => {
-    updateImageHeight();
-    window.addEventListener("resize", updateImageHeight);
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
     return () => {
-      window.removeEventListener("resize", updateImageHeight);
-    };
-  }, []);
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setMobileMenuOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [location])
 
   return (
-    <>
-      {/* מרווח לגובה ההדר כדי שהתוכן לא ייכנס מתחת */}
-      <Box sx={{ height: `${imageHeight}px` }} />
+    <header
+      ref={headerRef}
+      className={`app-header ${isScrolled ? "scrolled" : ""} ${mobileMenuOpen ? "menu-open" : ""}`}
+    >
+      <div className="header-container">
+        <div className="header-logo">
+          <Link to="/home" className="logo-link">
+            <img src="/images/musical-notes.png" alt="Logo" className="logo-image" />
+            <span className="logo-text">MusicApp</span>
+          </Link>
+        </div>
 
-      {/* HEADER קבוע למעלה */}
-      <Box
-        sx={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          zIndex: 1100, // מודלים יהיו עם zIndex גבוה יותר
-        }}
-      >
-        
-
-        {/* תוכן ההדר */}
-        <AppBar
-          position="static"
-          sx={{
-            backgroundColor: "transparent",
-            boxShadow: "none",
-            height: `${imageHeight}px`,
-            paddingBottom: "50 0px",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
-          }}
+        <button
+          className="mobile-menu-toggle"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
         >
-          <Toolbar
-            sx={{
-              marginTop: "20px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              height: "100%",
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <img src="/images/musical-notes.png" alt="Logo" style={{ height: "44px", width: "44px",margin:"0px 15px 10px 30px"}}></img>
-              {["/home", "/music"].map((path) => (
-                <Button
-                  key={path}
-                  color="inherit"
-                  component={Link}
-                  to={path}
-                  sx={{
-                    fontSize: "16px",
-                    height: "23px",
-                    borderRadius: "32px",
-                    padding: "6px",
-                    minWidth: "unset",
-                    position: "relative",
-                    marginLeft: "10px",
-                    "&::before": isActive(path)
-                      ? {
-                          content: '""',
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          width: "100%",
-                          height: "100%",
-                          borderRadius: "32px",
-                          padding: "0.5px",
-                          background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
-                          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                          WebkitMaskComposite: "destination-out",
-                          maskComposite: "exclude",
-                        }
-                      : {},
-                  }}
-                >
-                  {path === "/home" ? "בית" : "מוזיקה"}
-                </Button>
-              ))}
-              {authState && (
-                <Button
-                  key="/playlists"
-                  color="inherit"
-                  component={Link}
-                  to="/myplaylists"
-                  sx={{
-                    fontSize: "16px",
-                    height: "23px",
-                    borderRadius: "32px",
-                    padding: "6px",
-                    minWidth: "unset",
-                    position: "relative",
-                    marginLeft: "10px",
-                    "&::before": isActive("/playlists")
-                      ? {
-                          content: '""',
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          width: "100%",
-                          height: "100%",
-                          borderRadius: "32px",
-                          padding: "0.5px",
-                          background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
-                          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                          WebkitMaskComposite: "destination-out",
-                          maskComposite: "exclude",
-                        }
-                      : {},
-                  }}
-                >
-                  הפלייליסטים שלי
-                </Button>
-              )}
-            </Box>
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
 
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              {!authState && (
-                <Button color="inherit" component={Link} to="/auth">
-                  התחברות
-                </Button>
-              )}
-              {authState && <UserDetails />}
-            </Box>
-          </Toolbar>
-        </AppBar>
-      </Box>
-    </>
-  );
-};
+        <nav className={`header-nav ${mobileMenuOpen ? "open" : ""}`}>
+          <ul className="nav-list">
+            <li className="nav-item">
+              <Link to="/home" className={`nav-link ${isActive("/home") ? "active" : ""}`}>
+                {/* <Home size={18} /> */}
+                <span>Home</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/music" className={`nav-link ${isActive("/music") ? "active" : ""}`}>
+                {/* <Music size={18} /> */}
+                <span>Music</span>
+              </Link>
+            </li>
+            {authState && (
+              <li className="nav-item">
+                <Link to="/myplaylists" className={`nav-link ${isActive("/myplaylists")? "active" : ""}`}>
+                  {/* <ListMusic size={18} /> */}
+                  <span>My Playlists</span>
+                </Link>
+              </li>
+            )}
+          </ul>
+        </nav>
 
-export default Header;
+        <div className="header-actions">
+          {!authState ? (
+            <Link to="/auth" className="auth-button">
+              <LogIn size={18} />
+              <span>Login</span>
+            </Link>
+          ) : (
+            <UserDetails />
+          )}
+        </div>
+      </div>
+
+      {/* Gradient line at bottom */}
+      <div className="header-gradient-line"></div>
+    </header>
+  )
+}
+
+export default Header

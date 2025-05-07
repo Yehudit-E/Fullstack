@@ -55,6 +55,7 @@ const AppLayout = () => {
       const songId=songsList[currentSongIndex].id;
     return (<>
         <Header />
+        <div style={{marginTop:"60px"}}> </div>
          <Outlet />
         {songsList[0].id!=0 &&
         <div style={{marginBottom:"100px"}}> </div>
@@ -65,3 +66,82 @@ const AppLayout = () => {
 }
 
 export default AppLayout
+
+
+// "use client"
+
+// import { Outlet } from "react-router"
+// import { useDispatch, useSelector } from "react-redux"
+// import { useEffect, useState } from "react"
+// import { load } from "../store/userSlice"
+// import type { Dispatch, StoreType } from "../store/store"
+// import SongPlayer from "./SongPlayer"
+// import { loadSongs } from "../store/songSlice"
+// import Sidebar from "./Sidebar"
+// import "./style/AppLayout.css"
+
+// const AppLayout = () => {
+//   const dispatch = useDispatch<Dispatch>()
+//   const songsList = useSelector((state: StoreType) => state.songPlayer.songs)
+//   const currentSongIndex = useSelector((state: StoreType) => state.songPlayer.currentIndex)
+//   const authState = useSelector((state: StoreType) => state.user.authState)
+//   const [sidebarExpanded, setSidebarExpanded] = useState(false)
+
+//   function getUserIdFromToken(token: string): string | null {
+//     if (!token) {
+//       return null
+//     }
+//     try {
+//       const payload = JSON.parse(atob(token.split(".")[1]))
+//       return payload.id || null
+//     } catch (e) {
+//       console.error("Invalid token:", e)
+//       return null
+//     }
+//   }
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       const token = localStorage.getItem("authToken")
+//       const songsList = sessionStorage.getItem("songsList") ? JSON.parse(sessionStorage.getItem("songsList")!) : []
+//       const currentSongIndex = sessionStorage.getItem("currentSongIndex")
+//         ? JSON.parse(sessionStorage.getItem("currentSongIndex")!)
+//         : 0
+
+//       if (token) {
+//         const id = getUserIdFromToken(token)
+//         if (id) {
+//           await dispatch(load(id))
+//         }
+//       }
+
+//       if (songsList.length > 0) {
+//         dispatch(loadSongs(songsList))
+//       }
+//     }
+
+//     fetchData()
+//   }, [authState, dispatch])
+
+//   const songId = songsList[currentSongIndex]?.id || 0
+
+//   const handleSidebarToggle = (expanded: boolean) => {
+//     setSidebarExpanded(expanded)
+//   }
+
+//   return (
+//     <div className="app-container">
+//       <Sidebar onToggle={handleSidebarToggle} />
+
+//       <main className={`main-content ${sidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"}`}>
+//         <Outlet />
+
+//         {songsList[0]?.id !== 0 && <div style={{ marginBottom: "100px" }}></div>}
+
+//         {songId !== 0 && <SongPlayer />}
+//       </main>
+//     </div>
+//   )
+// }
+
+// export default AppLayout

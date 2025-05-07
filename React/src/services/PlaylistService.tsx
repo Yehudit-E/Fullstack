@@ -72,6 +72,15 @@ const PlaylistService = {
             throw error;
         }
     },
+    removeUserFromPlaylist: async (playlistId: number, userId: number) => {
+        try {
+            const response = await api.delete(`${API_URL}/${playlistId}/user/${userId}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error removing user from playlist:", error);
+            throw error;
+        }
+    },
 
     // 7. שליפת הפלייליסטים של המשתמש (פלייליסטים אישיים)
     getUserPlaylists: async (userId: number) => {

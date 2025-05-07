@@ -1,0 +1,69 @@
+/* AppLayout.css */
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+  }
+  
+  .main-content {
+    flex: 1;
+    transition: all var(--transition-speed, 0.3s) ease;
+    min-width: 0; /* Prevents content from overflowing */
+    padding: 20px;
+  }
+  
+  .sidebar-collapsed {
+    margin-left: 0;
+  }
+  
+  .sidebar-expanded {
+    margin-left: 0;
+  }
+  
+  .app-layout {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+  }
+  
+  .app-content {
+    flex: 1;
+    transition: margin-left 0.3s ease;
+    width: calc(100% - var(--sidebar-width-collapsed));
+    margin-left: var(--sidebar-width-collapsed);
+  }
+  
+  /* When sidebar is expanded */
+  .sidebar.expanded + .app-content {
+    margin-left: var(--sidebar-width-expanded);
+    width: calc(100% - var(--sidebar-width-expanded));
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width: 767px) {
+    .app-content {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+  
+  /* Add this to your global CSS or import it in Layout.tsx */
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-background, #121212);
+    color: var(--color-white, #ffffff);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+      "Helvetica Neue", sans-serif;
+    overflow-x: hidden;
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width: 767px) {
+    .main-content {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+  

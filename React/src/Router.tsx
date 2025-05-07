@@ -6,6 +6,8 @@ import PublicSongs from "./components/PublicSongs";
 import AuthPage from "./components/AuthPage";
 import PlaylistDetails from "./components/PlaylistDetails ";
 import MyPlaylists from "./components/MyPlaylists";
+import UploadMusic from "./components/UploadMusic";
+import UploadSongToPlaylist from "./components/UploadSongToPlaylist";
 
 
 export const router = createBrowserRouter([
@@ -27,6 +29,14 @@ export const router = createBrowserRouter([
         {
             path: "myPlaylists/playlist/:id",
             element: <PlaylistDetails/>,
+          },
+          {
+            path: "music/upload",
+            element: <UploadMusic/>,
+          },
+          {
+            path: "myplaylists/playlist/:playlistId/upload-song",
+            element: <UploadSongToPlaylist/>,
           },
 
         ]

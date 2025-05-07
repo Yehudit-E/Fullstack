@@ -5,7 +5,7 @@ import type React from "react"
 
 import { useSelector } from "react-redux"
 import type { StoreType } from "../store/store"
-import type { User } from "../models/User"
+import type { User, UserDto } from "../models/User"
 import type { Playlist, PlaylistPostModel } from "../models/Playlist"
 import PlaylistService from "../services/PlaylistService"
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material"
@@ -35,7 +35,7 @@ const AddPlaylist = ({ setPlaylists }: AddPlaylistProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Redux State
-  const user: User = useSelector((state: StoreType) => state.user.user)
+  const user: UserDto = useSelector((state: StoreType) => state.user.user)
 
   // Effect to handle animation
   useEffect(() => {

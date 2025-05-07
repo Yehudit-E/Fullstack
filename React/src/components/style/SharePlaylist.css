@@ -1,0 +1,136 @@
+/* SharePlaylist.css */
+
+.share-playlist-modal .MuiDialog-paper {
+    animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    background-color: #121111 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: var(--color-white, #ffffff);
+    border-radius: 8px;
+    overflow: hidden;
+    transform-origin: center;
+  }
+  
+  .share-playlist-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .share-playlist-modal .modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  .share-playlist-modal .close-button {
+    color: var(--color-white, #ffffff) !important;
+  }
+  
+  .share-playlist-modal .modal-content {
+    padding: 16px 24px !important;
+  }
+  
+  .share-icon-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 24px;
+  }
+  
+  .share-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(
+      90deg,
+      rgba(var(--gradient-start-rgb), 0.2),
+      rgba(var(--gradient-middle-rgb), 0.2),
+      rgba(var(--gradient-end-rgb), 0.2)
+    );
+    color: var(--color-white);
+  }
+  
+  .share-message {
+    font-size: 15px;
+    margin: 0 0 20px 0;
+    color: var(--color-white);
+    text-align: center;
+  }
+  
+  .form-group {
+    /* margin-bottom: 16px; */
+    padding-right: 30px;
+  }
+  
+  .custom-input {
+    padding: 12px 16px;
+    background-color: rgba(30, 30, 30, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: var(--color-white);
+    font-size: 14px;
+    transition: border-color 0.3s;
+  }
+  
+  .custom-input:focus {
+    border-color: rgba(255, 255, 255, 0.3);
+    outline: none;
+  }
+  
+  .error-message {
+    color: #ff4d4f;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: rgba(255, 77, 79, 0.1);
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+  }
+  
+  .share-playlist-modal .modal-actions {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 12px;
+  }
+  
+  .cancel-button {
+    color: rgba(255, 255, 255, 0.7) !important;
+    text-transform: none !important;
+  }
+  
+  .share-button {
+    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end)) !important;
+    border-radius: 4px !important;
+    text-transform: none !important;
+    padding: 6px 16px !important;
+  }
+  
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.98) translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  
+  @keyframes modalBackdropFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .MuiBackdrop-root {
+    animation: modalBackdropFadeIn 0.25s ease-out forwards;
+  }
+  
