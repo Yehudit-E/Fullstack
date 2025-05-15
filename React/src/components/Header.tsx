@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import type { StoreType } from "../store/store"
 import { Link, useLocation } from "react-router"
 import { useState, useEffect, useRef } from "react"
-import { Music, Home, ListMusic, LogIn, Menu, X } from "lucide-react"
+import { LogIn, Menu, X } from "lucide-react"
 import UserDetails from "./userDetails"
 import "./style/Header.css"
 
@@ -87,7 +87,7 @@ const Header = () => {
             </li>
             {authState && (
               <li className="nav-item">
-                <Link to="/myplaylists" className={`nav-link ${isActive("/myplaylists")? "active" : ""}`}>
+                <Link to="/myplaylists" className={`nav-link ${isActive("/myplaylists") ? "active" : ""}`}>
                   {/* <ListMusic size={18} /> */}
                   <span>My Playlists</span>
                 </Link>

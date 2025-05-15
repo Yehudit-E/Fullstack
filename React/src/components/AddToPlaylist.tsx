@@ -18,7 +18,7 @@ interface AddToPlaylistModalProps {
   onClose: () => void
 }
 
-const AddToPlaylistModal = ({ song, onClose }: AddToPlaylistModalProps) => {
+const AddToPlaylist = ({ song, onClose }: AddToPlaylistModalProps) => {
   const user: UserDto = useSelector((state: StoreType) => state.user.user)
   const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [searchTerm, setSearchTerm] = useState<string>("")
@@ -246,4 +246,4 @@ const AddToPlaylistModal = ({ song, onClose }: AddToPlaylistModalProps) => {
   )
 }
 
-export default AddToPlaylistModal
+export default AddToPlaylist

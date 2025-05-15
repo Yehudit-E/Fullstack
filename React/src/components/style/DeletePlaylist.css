@@ -1,104 +1,103 @@
 /* DeletePlaylist.css */
 
 .delete-playlist-modal .MuiDialog-paper {
-    animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    background-color: #121111 !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: var(--color-white, #ffffff);
-    border-radius: 8px;
-    overflow: hidden;
-    transform-origin: center;
+  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  background-color: #121111 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: var(--color-white, #ffffff);
+  border-radius: 8px;
+  overflow: hidden;
+  transform-origin: center;
+}
+
+.delete-playlist-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.delete-playlist-modal .modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
+  -webkit-background-clip: text;
+  color: transparent;
+  justify-content: flex-start;
+}
+
+.delete-playlist-modal .close-button {
+  color: var(--color-white, #ffffff) !important;
+  position: absolute;
+  right: 8px; /* מוודם שה-X יהיה בצד ימין */
+  justify-content: flex-end;
+}
+
+.delete-playlist-modal .modal-content {
+  padding: 16px 24px !important;
+  text-align: center;
+}
+
+.delete-icon-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+}
+
+.delete-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 24px;
+}
+
+.delete-message {
+  font-size: 15px;
+  margin: 0;
+  color: var(--color-white);
+}
+
+.delete-playlist-modal .modal-actions {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 20px;
+  justify-content: flex-end;
+}
+
+.cancel-button,
+.delete-button {
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end)) !important;
+  border-radius: 4px !important;
+  text-transform: none !important;
+  padding: 6px 16px !important;
+}
+
+.button-inner {
+  color: white;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(10px);
   }
-  
-  .delete-playlist-modal .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    position: relative;
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
-  
-  .delete-playlist-modal .modal-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
-    -webkit-background-clip: text;
-    color: transparent;
-    justify-content: flex-start;
+}
+
+@keyframes modalBackdropFadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .delete-playlist-modal .close-button {
-    color: var(--color-white, #ffffff) !important;
-    position: absolute;
-    right: 8px; /* מוודא שה-X יהיה בצד ימין */
-    justify-content: flex-end;
+  to {
+    opacity: 1;
   }
-  
-  .delete-playlist-modal .modal-content {
-    padding: 16px 24px !important;
-    text-align: center;
-  }
-  
-  .delete-icon-container {
-    display: flex;
-    justify-content: center;
-    padding-top: 24px;
-  }
-  
-  .delete-icon {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 24px;
-  }
-  
-  .delete-message {
-    font-size: 15px;
-    margin: 0;
-    color: var(--color-white);
-  }
-  
-  .delete-playlist-modal .modal-actions {
-    padding: 16px 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    gap: 20px;
-    justify-content: flex-end;
-  }
-  
-  .cancel-button,
-  .delete-button {
-    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end)) !important;
-    border-radius: 4px !important;
-    text-transform: none !important;
-    padding: 6px 16px !important;
-  }
-  
-  .button-inner {
-    color: white;
-  }
-  
-  @keyframes modalFadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.98) translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-  }
-  
-  @keyframes modalBackdropFadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  .MuiBackdrop-root {
-    animation: modalBackdropFadeIn 0.25s ease-out forwards;
-  }
-  
+}
+
+.MuiBackdrop-root {
+  animation: modalBackdropFadeIn 0.25s ease-out forwards;
+}

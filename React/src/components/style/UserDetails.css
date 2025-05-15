@@ -1,0 +1,42 @@
+/* UserDetails.css */
+.user-menu .MuiPaper-root {
+    background-color:  #121111 !important;
+    color: var(--color-white) !important;
+  }
+  
+  .user-name-item {
+    font-weight: 600 !important;
+    opacity: 1 !important;
+    color: var(--color-white) !important;
+    font-size: 0.95rem !important;
+    padding: 8px 16px !important;
+    display: flex !important;
+    justify-content: center !important; 
+    text-align: center !important; 
+    align-items: center;
+      
+  }
+  
+  .user-email-item {
+    font-size: 0.85rem !important;
+    opacity: 0.8 !important;
+    color: var(--color-white) !important;
+    padding: 8px 16px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    display: flex !important;
+    justify-content: center !important; 
+    text-align: center !important;    
+    align-items: center;
+
+  }
+  
+  .logout-item {
+    color: var(--color-white) !important;
+    font-size: 0.9rem !important;
+    padding: 8px 16px !important;
+  }
+  
+  .logout-item:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+  

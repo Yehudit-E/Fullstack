@@ -17,9 +17,11 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote"
 import { MenuItem, IconButton, Menu, Select } from "@mui/material"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import { Download, ListMusic, Plus } from "lucide-react"
+import { Add as AddIcon } from "@mui/icons-material";
 
 import "./style/PublicSongs.css"
 import "./style/MenuStyles.css" // Import the shared menu styles
+import { useNavigate } from "react-router"
 
 const PublicSongs = () => {
   const [songs, setSongs] = useState<Song[]>([])
@@ -34,7 +36,7 @@ const PublicSongs = () => {
   const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(null)
   const dispatch = useDispatch<Dispatch>()
   const [downloadingSong, setDownloadingSong] = useState<number | null>(null)
-
+const navigator = useNavigate()
   const authState: boolean = useSelector((store: StoreType) => store.user.authState)
 
   useEffect(() => {
@@ -69,9 +71,12 @@ const PublicSongs = () => {
   }
 
   const filteredSongs = sortSongs(songs, sortBy)
-    .filter((song) => genre === "all" || song.genre === genre)
-    .filter((song) => song.name.toLowerCase().includes(search.toLowerCase()))
-
+  .filter((song) => genre === "all" || song.genre === genre)
+  .filter(
+    (song) =>
+      song.name.toLowerCase().includes(search.toLowerCase()) ||
+      song.artist.toLowerCase().includes(search.toLowerCase()),
+  )
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>, songId: number) => {
     event.stopPropagation()
     setMenuAnchor((prev) => ({ ...prev, [songId]: event.currentTarget }))
@@ -174,7 +179,23 @@ const PublicSongs = () => {
 
         {authState && (
           <div className="upload-button-container">
-            <UploadSongRequestDialog />
+            <button 
+                  onClick={() =>{navigator("upload")}} 
+                  style={{ 
+                    background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
+                    color: "var(--color-white)",
+                    borderRadius: "3px", // פינות מעוגלות
+                    padding: "4px 8px", // ריווח פנימי
+                    display: "flex", // מאפשר למרכז את התוכן
+                    alignItems: "center", // מרכז אנכית
+                    justifyContent: "center", // מרכז אופקית
+                    fontSize: "13px", // גודל הטקסט (אפשר לשנות אם צריך)
+                    border: "none", // לבטל את הגבול אם יש
+                    cursor: "pointer" // להפוך את הכפתור ללחיץ
+                  }}
+                  >
+                    <AddIcon/> Upload Music
+                  </button>
           </div>
         )}
       </div>

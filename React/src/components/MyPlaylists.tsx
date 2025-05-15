@@ -190,8 +190,7 @@ const MyPlaylist = () => {
           </Select>
         </div>
 
-      </div>
-      
+      </div>    
 
       {/* Playlists Grid */}
       {isLoading ? (

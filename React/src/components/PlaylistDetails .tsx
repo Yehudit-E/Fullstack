@@ -20,6 +20,10 @@ import AddToPlaylistModel from "./AddToPlaylist"
 import "./style/PlaylistDetails.css"
 import type { StoreType } from "../store/store"
 import { Edit, Trash2, Share2, Upload, Download, Plus, PlayCircle } from "lucide-react"
+import EditSong from "./EditSong"
+import DeleteSong from "./DeleteSong"
+import JSZip from "jszip"
+import { saveAs } from "file-saver"
 
 const PlaylistDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -37,6 +41,9 @@ const PlaylistDetails = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [currentSong, setCurrentSong] = useState<Song | null>(null)
   const [showAddToPlaylist, setShowAddToPlaylist] = useState(false)
+  const [showEditSongDialog, setShowEditSongDialog] = useState(false)
+  const [showDeleteSongDialog, setShowDeleteSongDialog] = useState(false)
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null)
 
   const currentUser = useSelector((state: StoreType) => state.user.user)
   const navigator = useNavigate()
@@ -77,24 +84,31 @@ const PlaylistDetails = () => {
     setShowShareDialog(true)
   }
 
-
-
   const handleDownloadAll = async () => {
     if (!playlist?.songs || playlist.songs.length === 0) return
-
+  console.log("Downloading all songs...");
+  
+    const zip = new JSZip()
+    const folder = zip.folder(playlist.name || "playlist") // יצירת תיקייה בשם הפלייליסט
+  console.log("Creating zip folder:", folder);
     try {
-      // Add a prefix to each downloaded song with the playlist name
       for (const song of playlist.songs) {
-        const fileName = `${playlist.name} - ${song.name}`
-        await downloadSong(song.audioFilePath, fileName)
+        const response = await fetch(song.audioFilePath)
+        const blob = await response.blob()
+        const fileName = `${song.name}.mp3` // שימי לב לסיומת אם זה לא mp3 תשני בהתאם
+        folder?.file(fileName, blob)
       }
+  console.log("Adding songs to zip folder:", playlist.songs);
+  
+      const zipBlob = await zip.generateAsync({ type: "blob" })
+      saveAs(zipBlob, `${playlist.name || "playlist"}.zip`)
     } catch (error) {
       console.error("Error downloading songs:", error)
     }
   }
 
-  const handlePlaySong = ( index: number) => {
-console.log(index);
+  const handlePlaySong = (index: number) => {
+    console.log(index)
 
     dispatch(updateSongs(playlist?.songs || []))
     dispatch(setCurrentIndex(index))
@@ -212,13 +226,12 @@ console.log(index);
                 <Music size={16} />
                 <span>{playlist.songs?.length || 0} songs</span>
               </div>
-              <div className="stat-divider"></div>
-              <div className="stat-item">
-                <Calendar size={16} />
-                <span>Created {formatDate(playlist.createdAt)}</span>
-              </div>
+              {/* <div className="stat-divider"></div> */}
             </div>
-
+            <div className="stat-item">
+              <Calendar size={16} />
+              <span>Created {formatDate(playlist.createdAt)}</span>
+            </div>
             <div className="playlist-people">
               <div className="playlist-creator">
                 <User size={14} />
@@ -242,37 +255,9 @@ console.log(index);
                   </div>
                 </div>
               )}
-            </div>
-
-            <div className="playlist-actions-grid">
               <button className="action-playlist-button primary" onClick={handlePlayAll}>
-                <PlayCircle size={18} />
+                <PlayCircle size={18} style={{ marginRight: "0.5rem" }}/>
                 <span>Play All</span>
-              </button>
-
-              <button className="action-playlist-button" onClick={handleEditPlaylist}>
-                <Edit size={18} />
-                <span>Edit</span>
-              </button>
-
-              <button className="action-playlist-button" onClick={handleSharePlaylist}>
-                <Share2 size={18} />
-                <span>Share</span>
-              </button>
-
-              <button className="action-playlist-button" onClick={()=>{navigator("upload-song");}}>
-                <Upload size={18} />
-                <span>Upload</span>
-              </button>
-
-              <button className="action-playlist-button" onClick={handleDownloadAll}>
-                <Download size={18} />
-                <span>Download</span>
-              </button>
-
-              <button className="action-playlist-button danger" onClick={handleDeletePlaylist}>
-                <Trash2 size={18} />
-                <span>Delete</span>
               </button>
             </div>
           </div>
@@ -281,12 +266,29 @@ console.log(index);
         {/* Right Side - Songs List */}
         <div className="songs-content">
           <h3 className="section-title">
-            <ListMusic size={18} className="section-icon" />
             Songs
-            <button className="action-playlist-button primary" onClick={handlePlayAll}>
-                <PlayCircle size={18} />
-                <span>Play All</span>
-              </button>
+            <div className="action-buttons-row">
+              <IconButton className="action-icon-button" onClick={handlePlayAll} title="Play All">
+                <PlayCircle size={20} />
+              </IconButton>
+              {isCurrentUser(playlist.owner?.id)&&(<>
+              <IconButton className="action-icon-button" onClick={handleEditPlaylist} title="Edit">
+                <Edit size={20} />
+              </IconButton>
+              <IconButton className="action-icon-button" onClick={handleSharePlaylist} title="Share">
+                <Share2 size={20} />
+              </IconButton>
+              </>)}  
+              <IconButton className="action-icon-button" onClick={() => navigator("upload-song")} title="Upload">
+                <Upload size={20} />
+              </IconButton>
+              <IconButton className="action-icon-button" onClick={handleDownloadAll} title="Download All">
+                <Download size={20} />
+              </IconButton>
+              <IconButton className="action-icon-button danger" onClick={handleDeletePlaylist} title="Delete">
+                <Trash2 size={20} />
+              </IconButton>
+            </div>
           </h3>
 
           {playlist.songs && playlist.songs.length > 0 ? (
@@ -306,7 +308,7 @@ console.log(index);
                 </thead>
                 <tbody>
                   {playlist.songs.map((song, index) => (
-                    <tr key={song.id} className="song-row" >
+                    <tr key={song.id} className="song-row">
                       <td className="song-number">{index + 1}</td>
                       <td className="song-list-info">
                         <div className="song-list-image-container">
@@ -315,8 +317,7 @@ console.log(index);
                             alt={song.name}
                             className="song-image"
                           />
-                          <div className="play-overlay"                             onClick={() => handlePlaySong(index)}
- >
+                          <div className="play-overlay" onClick={() => handlePlaySong(index)}>
                             <Play size={12} />
                           </div>
                         </div>
@@ -342,6 +343,16 @@ console.log(index);
                             className="menu-item"
                             onClick={() => {
                               closeSongMenu(song.id)
+                              handlePlaySong(index)
+                            }}
+                          >
+                            <Play size={17} className="menu-icon" />
+                            Play
+                          </MenuItem>
+                          <MenuItem
+                            className="menu-item"
+                            onClick={() => {
+                              closeSongMenu(song.id)
                               downloadSong(song.audioFilePath, song.name)
                             }}
                           >
@@ -357,6 +368,28 @@ console.log(index);
                           >
                             <Plus size={17} className="menu-icon" />
                             Add to Another Playlist
+                          </MenuItem>
+                          <MenuItem
+                            className="menu-item"
+                            onClick={() => {
+                              closeSongMenu(song.id)
+                              setSelectedSong(song)
+                              setShowEditSongDialog(true)
+                            }}
+                          >
+                            <Edit size={17} className="menu-icon" />
+                            Edit Song
+                          </MenuItem>
+                          <MenuItem
+                            className="menu-item"
+                            onClick={() => {
+                              closeSongMenu(song.id)
+                              setSelectedSong(song)
+                              setShowDeleteSongDialog(true)
+                            }}
+                          >
+                            <Trash2 size={17} className="menu-icon" />
+                            Remove from Playlist
                           </MenuItem>
                         </Menu>
                       </td>
@@ -405,6 +438,31 @@ console.log(index);
 
       {showAddToPlaylist && currentSong && (
         <AddToPlaylistModel song={currentSong} onClose={() => setShowAddToPlaylist(false)} />
+      )}
+      {showEditSongDialog && selectedSong && (
+        <EditSong
+          song={selectedSong}
+          playlistId={playlistId}
+          closeEditDialog={() => {
+            setShowEditSongDialog(false)
+            setSelectedSong(null)
+            // Refresh playlist data
+            PlaylistService.getFullPlaylistById(playlistId).then(setPlaylist)
+          }}
+        />
+      )}
+
+      {showDeleteSongDialog && selectedSong && (
+        <DeleteSong
+          song={selectedSong}
+          playlistId={playlistId}
+          closeDeleteDialog={() => {
+            setShowDeleteSongDialog(false)
+            setSelectedSong(null)
+            // Refresh playlist data
+            PlaylistService.getFullPlaylistById(playlistId).then(setPlaylist)
+          }}
+        />
       )}
     </div>
   )

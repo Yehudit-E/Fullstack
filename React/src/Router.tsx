@@ -8,6 +8,9 @@ import PlaylistDetails from "./components/PlaylistDetails ";
 import MyPlaylists from "./components/MyPlaylists";
 import UploadMusic from "./components/UploadMusic";
 import UploadSongToPlaylist from "./components/UploadSongToPlaylist";
+import About from "./components/About";
+import Terms from "./components/Terms";
+import Contact from "./components/Contact";
 
 
 export const router = createBrowserRouter([
@@ -38,6 +41,18 @@ export const router = createBrowserRouter([
             path: "myplaylists/playlist/:playlistId/upload-song",
             element: <UploadSongToPlaylist/>,
           },
+          {
+            path: "/about",
+            element: <About/>,
+          },
+          {
+            path: "/terms",
+            element: <Terms/>,
+          },
+          {
+            path: "/contact",
+            element: <Contact/>,
+          }
 
         ]
     }

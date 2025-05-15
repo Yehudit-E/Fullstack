@@ -352,27 +352,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="home-footer">
-        <div className="footer-content">
-          <div className="footer-logo">
-            <img src="/images/musical-notes.png" alt="Logo" className="footer-logo-image" />
-            <span className="footer-logo-text">MusicApp</span>
-          </div>
-          <p className="footer-copyright">© {new Date().getFullYear()} MusicApp. All rights reserved.</p>
-          <div className="footer-links">
-            <a href="#" className="footer-link">
-              Privacy Policy
-            </a>
-            <a href="#" className="footer-link">
-              Terms of Service
-            </a>
-            <a href="#" className="footer-link">
-              Contact Us
-            </a>
-          </div>
-        </div>
-      </footer>
+      
     </div>
   )
 }

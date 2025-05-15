@@ -38,7 +38,7 @@ const SongService = {
     },
 
     // 5. עדכון שיר
-    updateSong: async (id:number, song:SongDto) => {
+    updateSong: async (id:number, song:SongPostModel) => {
         
         try {
             const response = await api.put(`/song/${id}`, song);

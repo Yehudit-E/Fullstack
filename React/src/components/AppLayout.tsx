@@ -6,11 +6,14 @@ import {  load } from "../store/userSlice";
 import { Dispatch, StoreType } from "../store/store";
 import SongPlayer from "./SongPlayer";
 import { loadSongs } from "../store/songSlice";
+import Footer from "./Footer";
+
 const AppLayout = () => {
     const dispatch = useDispatch<Dispatch>();
-    const songsList=useSelector((state:StoreType)=>state.songPlayer.songs)
-    const currentSongIndex=useSelector((state:StoreType)=>state.songPlayer.currentIndex)
-    const authState = useSelector((state:StoreType)=>state.user.authState)
+    const songsList = useSelector((state:StoreType) => state.songPlayer.songs)
+    const currentSongIndex = useSelector((state:StoreType) => state.songPlayer.currentIndex)
+    const authState = useSelector((state:StoreType) => state.user.authState)
+    
     function getUserIdFromToken(token:string): string | null {
         if (!token) {
             return null;
@@ -50,22 +53,32 @@ const AppLayout = () => {
         };  
         fetchData();
       }, [authState]);
+      
       console.log("songId"+songsList[currentSongIndex].id);
       console.log("song"+songsList[currentSongIndex]);
-      const songId=songsList[currentSongIndex].id;
-    return (<>
+      const songId = songsList[currentSongIndex].id;
+      const hasSongPlayer = songsList[0].id !== 0;
+      
+    return (
+      <div className={`app-layout ${hasSongPlayer ? 'song-player-active' : ''}`}>
         <Header />
         <div style={{marginTop:"60px"}}> </div>
-         <Outlet />
-        {songsList[0].id!=0 &&
-        <div style={{marginBottom:"100px"}}> </div>
-        }
-        {songId !=0 && 
-        <SongPlayer/>}
-    </>)
+        <main className="app-main">
+          <Outlet />
+        </main>
+        <Footer />
+        {hasSongPlayer && (
+          <>
+            <div style={{marginBottom:"100px"}}> </div>
+            {songId !== 0 && <SongPlayer/>}
+          </>
+        )}
+      </div>
+    )
 }
 
 export default AppLayout
+
 
 
 // "use client"
