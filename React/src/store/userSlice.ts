@@ -10,7 +10,7 @@ let userEmpty: UserDto = {
     password: "",
     create_at: "",
 }
-let baseUrl = "https://localhost:7044";
+let baseUrl = "https://music-server-im05.onrender.com";
 let userWithNewName;
 export const load = createAsyncThunk('user/load',
     async (id: string, thunkAPI) => {

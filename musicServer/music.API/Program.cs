@@ -56,7 +56,13 @@ builder.Configuration["AWS:Region"] = Env.GetString("AWS_REGION");
 builder.Configuration["AWS:AccessKey"] = Env.GetString("AWS_ACCESS_KEY");
 builder.Configuration["AWS:SecretKey"] = Env.GetString("AWS_SECRET_KEY");
 
+builder.Configuration["SMTP:SMTP_SERVER"] = Env.GetString("SMTP_SERVER");
+builder.Configuration["SMTP:PORT"] = Env.GetString("SMTP_PORT");
+builder.Configuration["SMTP:GOOGLE_USER_EMAIL"] = Env.GetString("GOOGLE_USER_EMAIL");
+builder.Configuration["SMTP:PASSWORD"] = Env.GetString("PASSWORD");
+
 string connectionString = Env.GetString("DATABASE_CONNECTION_STRING");
+
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
     options => options.CommandTimeout(60)));
