@@ -38,7 +38,7 @@ builder.Services.AddCors(options =>
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<DataContext>();
+//builder.Services.AddDbContext<DataContext>();
 
 
 builder.Services.AddDependencyInjectoions();
@@ -55,6 +55,11 @@ builder.Configuration["AWS:BucketName"] = Env.GetString("AWS_BUCKET_NAME");
 builder.Configuration["AWS:Region"] = Env.GetString("AWS_REGION");
 builder.Configuration["AWS:AccessKey"] = Env.GetString("AWS_ACCESS_KEY");
 builder.Configuration["AWS:SecretKey"] = Env.GetString("AWS_SECRET_KEY");
+
+string connectionString = Env.GetString("DATABASE_CONNECTION_STRING");
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+    options => options.CommandTimeout(60)));
 
 var app = builder.Build();
 

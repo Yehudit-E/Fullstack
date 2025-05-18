@@ -13,7 +13,7 @@ namespace music.Core.DTOs
         public string Name { get; set; }
         public string Artist { get; set; }
         public string Genre { get; set; }
-        public string Lyrics { get; set; }
+        //public string Lyrics { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public bool IsPublic { get; set; }

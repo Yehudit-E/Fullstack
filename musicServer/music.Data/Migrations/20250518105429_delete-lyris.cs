@@ -5,13 +5,13 @@
 namespace music.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class deletedescription : Migration
+    public partial class deletelyris : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Description",
+                name: "Lyrics",
                 table: "dbSong");
         }
 
@@ -19,11 +19,11 @@ namespace music.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Description",
+                name: "Lyrics",
                 table: "dbSong",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+                type: "longtext",
+                nullable: false)
+                .Annotation("MySql:CharSet", "utf8mb4");
         }
     }
 }

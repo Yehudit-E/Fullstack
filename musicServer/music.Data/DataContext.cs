@@ -15,38 +15,21 @@ namespace music.Data
         public DbSet<User> dbUser { get; set; }
         public DbSet<Playlist> dbPlaylist { get; set; }
         public DbSet<Request> dbRequest { get; set; }
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        {
 
-        //public DataContext(DbContextOptions<DataContext> options) : base(options)
-        //{
-        //}
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=musicDB;");
-        //}
-
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Data Source =DESKTOP-8ED3CL9; Initial Catalog = music2_db; Integrated Security = true;TrustServerCertificate=True;");
-            }
+            base.OnConfiguring(optionsBuilder);
         }
 
-
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
-        //    // קשר One-to-Many – המשתמש שהוא הבעלים של רשימת ההשמעה
-        //    modelBuilder.Entity<Playlist>()
-        //        .HasOne(p => p.Owner)
-        //        .WithMany(u => u.OwnedPlaylists)
-        //        .HasForeignKey(p => p.OwnerId)
-        //        .OnDelete(DeleteBehavior.Restrict); // לא מוחקים פלייליסט אם מוחקים יוזר
-
-        //    // קשר Many-to-Many – ללא צורך בטבלת ביניים!
-        //    modelBuilder.Entity<Playlist>()
-        //        .HasMany(p => p.SharedUsers)
-        //        .WithMany(u => u.SharedPlaylists);
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseSqlServer("Data Source =DESKTOP-8ED3CL9; Initial Catalog = music2_db; Integrated Security = true;TrustServerCertificate=True;");
+        //    }
         //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
