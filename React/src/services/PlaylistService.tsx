@@ -21,6 +21,7 @@ const PlaylistService = {
     createPlaylist: async (playlistData: PlaylistPostModel) => {
         try {
             const response = await api.post(API_URL, playlistData);
+            console.log(response.data);       
             return response.data;
         } catch (error) {
             console.error("Error creating playlist:", error);

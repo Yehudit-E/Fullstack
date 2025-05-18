@@ -477,9 +477,11 @@
   font-size: 1rem;
   font-weight: 600;
   margin: 0 0 4px 0;
-  white-space: nowrap;
+   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 150px; 
+  display: block;
 }
 
 .playlist-description {
@@ -489,9 +491,13 @@
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
   line-height: 1.3;
   max-height: 2.6em;
+    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; 
+  display: block;
 }
 
 .playlist-meta {

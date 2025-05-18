@@ -1,88 +1,45 @@
-import { useState } from "react";
-import Login from "./Login";
-import Register from "./Register";
+"use client"
+
+import { useState } from "react"
+import Login from "./Login"
+import Register from "./Register"
+import "./style/Auth.css"
 
 const AuthPage = () => {
-    const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(true)
 
-    return (
-        <div style={styles.container}>
-            {/* Toggle Button */}
-            <div style={styles.switchContainer}>
-                <div
-                    style={{
-                        ...styles.switchOption,
-                        color: "var(--color-white)", 
-                        zIndex: isLogin ? 1 : 2 
-                    }}
-                    onClick={() => setIsLogin(true)}  
-                >
-                    Login
-                </div>
-
-                <div
-                    style={{
-                        ...styles.switchOption,
-                        color: "var(--color-white)",
-                        zIndex: isLogin ? 2 : 1 // The selected section will be above
-                    }}
-                    onClick={() => setIsLogin(false)} // Clicking "Login" to switch
-                >
-                    Register
-                </div>
-
-                {/* Sliding section */}
-                <div
-                    style={{
-                        ...styles.slider,
-                        left: isLogin ? "5px" : "calc(50% - 5px)", // Reverse movement!
-                    }}
-                ></div>
-            </div>
-
-            {isLogin ? <Login /> : <Register />}
+  return (
+    <div className="auth-container">
+      <div className="auth-card">
+        {/* Header with gradient title */}
+        <div className="auth-header">
+          <h1 className="auth-title">
+            Welcome to <span className="gradient-text">MusicApp</span>
+          </h1>
+          <p className="auth-subtitle">Sign in to continue to your account</p>
         </div>
-    );
-};
 
-// **Styles**
-const styles: any = {
-    container: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start", // Notice this changes vertical alignment
-        alignItems: "center", // Center horizontally
-        height: "100vh",
-        background: "var(--color-black)",
-    },
-    switchContainer: {
-        display: "flex",
-        justifyContent: "center",
-        width: "350px",
-        background: "var(--color-gray)",
-        borderRadius: "25px",
-        marginTop: "80px",
-        marginBottom: "20px",
-        position: "relative",
-    },
-    switchOption: {
-        flex: 1,
-        padding: "10px 20px",
-        textAlign: "center",
-        fontSize: "16px",
-        cursor: "pointer",
-        position: "relative",
-    },
-    slider: {
-        position: "absolute",
-        top: "5px",
-        width: "50%",
-        height: "calc(100% - 10px)",
-        background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
-        borderRadius: "25px",
-        transition: "left 0.3s ease-in-out",
-        zIndex: 0, // To ensure the buttons are above it
-    }
-};
+        {/* Toggle Switch */}
+        <div className="auth-switch-container">
+          <button className={`auth-switch-option ${isLogin ? "active" : ""}`} onClick={() => setIsLogin(true)}>
+            Login
+          </button>
+          <button className={`auth-switch-option ${!isLogin ? "active" : ""}`} onClick={() => setIsLogin(false)}>
+            Register
+          </button>
+          <div
+            className="auth-switch-underline"
+            style={{
+              left: isLogin ? "0" : "50%",
+            }}
+          ></div>
+        </div>
 
-export default AuthPage;
+        {/* Form Container */}
+        <div className="auth-form-container">{isLogin ? <Login /> : <Register />}</div>
+      </div>
+    </div>
+  )
+}
+
+export default AuthPage

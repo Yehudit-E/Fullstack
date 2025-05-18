@@ -5,12 +5,11 @@ import type React from "react"
 
 import { useSelector } from "react-redux"
 import type { StoreType } from "../store/store"
-import type { User, UserDto } from "../models/User"
+import type { UserDto } from "../models/User"
 import type { Playlist, PlaylistPostModel } from "../models/Playlist"
 import PlaylistService from "../services/PlaylistService"
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material"
-import { CloudUpload, Close, Add as AddIcon, Lock } from "@mui/icons-material"
-import { Users } from "lucide-react"
+import { CloudUpload, Close, Add as AddIcon } from "@mui/icons-material"
 import "./style/AddPlaylist.css"
 
 interface AddPlaylistProps {
@@ -135,7 +134,12 @@ const AddPlaylist = ({ setPlaylists }: AddPlaylistProps) => {
           imageFilePath: imageUrl,
         })
       } else {
-        response = await PlaylistService.createPlaylist(newPlaylist)
+        // Use default image when no image is selected
+        const defaultImagePath = "https://yehuditmusic.s3.us-east-1.amazonaws.com/default-image.png" // Path to your default image
+        response = await PlaylistService.createPlaylist({
+          ...newPlaylist,
+          imageFilePath: defaultImagePath,
+        })
       }
 
       // Update playlists in state
@@ -232,6 +236,7 @@ const AddPlaylist = ({ setPlaylists }: AddPlaylistProps) => {
                       <div className="upload-placeholder">
                         <CloudUpload className="upload-icon" />
                         <span>Upload Cover Image</span>
+                        <small style={{ display: "block", marginTop: "4px", opacity: "0.7" }}>(Optional)</small>
                       </div>
                     )}
                   </div>
@@ -250,7 +255,7 @@ const AddPlaylist = ({ setPlaylists }: AddPlaylistProps) => {
                       htmlFor="name"
                       style={{ color: "var(--color-white)", fontSize: "0.875rem", fontWeight: "500" }}
                     >
-                      Playlist Name
+                      Playlist Name <span style={{ opacity: "0.7", fontWeight: "normal" }}>(Required)</span>
                     </label>
                     <input
                       id="name"
@@ -276,7 +281,7 @@ const AddPlaylist = ({ setPlaylists }: AddPlaylistProps) => {
                       htmlFor="description"
                       style={{ color: "var(--color-white)", fontSize: "0.875rem", fontWeight: "500" }}
                     >
-                      Description
+                      Description <span style={{ opacity: "0.7", fontWeight: "normal" }}>(Optional)</span>
                     </label>
                     <textarea
                       id="description"
@@ -297,7 +302,6 @@ const AddPlaylist = ({ setPlaylists }: AddPlaylistProps) => {
                       }}
                     />
                   </div>
-                  
                 </div>
               </div>
 

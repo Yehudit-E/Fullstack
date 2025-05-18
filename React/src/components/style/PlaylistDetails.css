@@ -49,6 +49,11 @@
   min-height: 80vh;
 }
 
+.back-button {
+  color: var(--color-white, #ffffff) !important;
+  position: absolute !important;
+}
+
 .playlist-sidebar {
   margin-left: 35px;
   /* margin-top: 2px; */
@@ -200,7 +205,8 @@
   padding: 0.35rem;
   border-radius: 8px;
   border: none;
-  background: rgba(255, 255, 255, 0.08);
+  /* background: rgba(255, 255, 255, 0.08); */
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
   color: var(--color-white);
   font-size: 0.85rem;
   font-weight: 400;
@@ -362,12 +368,24 @@
 .song-title {
   font-weight: 500;
   color: var(--color-white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  /* Adjust this value based on your layout needs */
+  display: block;
 }
 
 .song-artist,
 .song-genre {
   color: #a0a0a0;
   font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  /* Adjust this value based on your layout needs */
+  /* display: block; */
 }
 
 .song-duration {

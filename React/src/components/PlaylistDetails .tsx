@@ -11,8 +11,8 @@ import PlaylistService from "../services/PlaylistService"
 import type { Playlist } from "../models/Playlist"
 import type { Song } from "../models/Song"
 import { IconButton, Menu, MenuItem } from "@mui/material"
-import { MoreHoriz, MusicNote } from "@mui/icons-material"
-import { Play, Clock, Music, Users, Calendar, ListMusic, User } from "lucide-react"
+import { Close, MoreHoriz, MusicNote } from "@mui/icons-material"
+import { Play, Clock, Music, Users, Calendar, ListMusic, User, ArrowLeft } from "lucide-react"
 import SharePlaylist from "./SharePlaylist"
 import EditPlaylist from "./EditPlaylist"
 import DeletePlaylist from "./DeletePlaylist"
@@ -24,6 +24,7 @@ import EditSong from "./EditSong"
 import DeleteSong from "./DeleteSong"
 import JSZip from "jszip"
 import { saveAs } from "file-saver"
+import RemoveSharingInPlaylist from "./RemoveSharingInPlaylist"
 
 const PlaylistDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -44,7 +45,7 @@ const PlaylistDetails = () => {
   const [showEditSongDialog, setShowEditSongDialog] = useState(false)
   const [showDeleteSongDialog, setShowDeleteSongDialog] = useState(false)
   const [selectedSong, setSelectedSong] = useState<Song | null>(null)
-
+  const [showRemoveSharingDialog, setShowRemoveSharingDialog] = useState(false)
   const currentUser = useSelector((state: StoreType) => state.user.user)
   const navigator = useNavigate()
   useEffect(() => {
@@ -79,6 +80,9 @@ const PlaylistDetails = () => {
   const handleDeletePlaylist = () => {
     setShowDeleteDialog(true)
   }
+  const handleRemoveSharingInPlaylist = () => {
+    setShowRemoveSharingDialog(true)
+  }
 
   const handleSharePlaylist = () => {
     setShowShareDialog(true)
@@ -86,11 +90,11 @@ const PlaylistDetails = () => {
 
   const handleDownloadAll = async () => {
     if (!playlist?.songs || playlist.songs.length === 0) return
-  console.log("Downloading all songs...");
-  
+    console.log("Downloading all songs...");
+
     const zip = new JSZip()
     const folder = zip.folder(playlist.name || "playlist") // יצירת תיקייה בשם הפלייליסט
-  console.log("Creating zip folder:", folder);
+    console.log("Creating zip folder:", folder);
     try {
       for (const song of playlist.songs) {
         const response = await fetch(song.audioFilePath)
@@ -98,8 +102,8 @@ const PlaylistDetails = () => {
         const fileName = `${song.name}.mp3` // שימי לב לסיומת אם זה לא mp3 תשני בהתאם
         folder?.file(fileName, blob)
       }
-  console.log("Adding songs to zip folder:", playlist.songs);
-  
+      console.log("Adding songs to zip folder:", playlist.songs);
+
       const zipBlob = await zip.generateAsync({ type: "blob" })
       saveAs(zipBlob, `${playlist.name || "playlist"}.zip`)
     } catch (error) {
@@ -200,10 +204,16 @@ const PlaylistDetails = () => {
 
   return (
     <div className="playlist-details-container">
+                        <IconButton onClick={()=>{navigate("/myplaylists")}} className="back-button">
+                    <ArrowLeft />
+              </IconButton>
       <div className="playlist-layout">
         {/* Left Side - Playlist Details */}
+
         <div className="playlist-sidebar">
+   
           <div className="playlist-cover-container">
+            
             <img
               src={playlist.imageFilePath || "/placeholder.svg?height=300&width=300"}
               alt={playlist.name}
@@ -256,7 +266,7 @@ const PlaylistDetails = () => {
                 </div>
               )}
               <button className="action-playlist-button primary" onClick={handlePlayAll}>
-                <PlayCircle size={18} style={{ marginRight: "0.5rem" }}/>
+                <PlayCircle size={18} style={{ marginRight: "0.5rem" }} />
                 <span>Play All</span>
               </button>
             </div>
@@ -271,21 +281,24 @@ const PlaylistDetails = () => {
               <IconButton className="action-icon-button" onClick={handlePlayAll} title="Play All">
                 <PlayCircle size={20} />
               </IconButton>
-              {isCurrentUser(playlist.owner?.id)&&(<>
-              <IconButton className="action-icon-button" onClick={handleEditPlaylist} title="Edit">
-                <Edit size={20} />
-              </IconButton>
-              <IconButton className="action-icon-button" onClick={handleSharePlaylist} title="Share">
-                <Share2 size={20} />
-              </IconButton>
-              </>)}  
+              {isCurrentUser(playlist.owner?.id) && (<>
+                <IconButton className="action-icon-button" onClick={handleEditPlaylist} title="Edit">
+                  <Edit size={20} />
+                </IconButton>
+                <IconButton className="action-icon-button" onClick={handleSharePlaylist} title="Share">
+                  <Share2 size={20} />
+                </IconButton>
+              </>)}
               <IconButton className="action-icon-button" onClick={() => navigator("upload-song")} title="Upload">
                 <Upload size={20} />
               </IconButton>
               <IconButton className="action-icon-button" onClick={handleDownloadAll} title="Download All">
                 <Download size={20} />
               </IconButton>
-              <IconButton className="action-icon-button danger" onClick={handleDeletePlaylist} title="Delete">
+              {/* <IconButton className="action-icon-button danger" onClick={handleDeletePlaylist} title="Delete">
+                <Trash2 size={20} />
+              </IconButton> */}
+              <IconButton className="action-icon-button danger" onClick={() => handleRemoveSharingInPlaylist()} title="Remove Sharing">
                 <Trash2 size={20} />
               </IconButton>
             </div>
@@ -413,7 +426,7 @@ const PlaylistDetails = () => {
       {showEditDialog && (
         <EditPlaylist
           playlist={playlist}
-          setPlaylists={() => {}} // We'll refresh the playlist after edit
+          setPlaylists={() => { }} // We'll refresh the playlist after edit
           closeEditDialog={() => {
             setShowEditDialog(false)
             // Refresh playlist data
@@ -425,13 +438,26 @@ const PlaylistDetails = () => {
       {showDeleteDialog && (
         <DeletePlaylist
           playlistId={playlistId}
-          setPlaylists={() => {}} // Navigate away after delete
+          setPlaylists={() => { }}
           closeOnDeleteDialog={() => {
             setShowDeleteDialog(false)
             navigate("/myplaylists")
           }}
           closeOnCancleDialog={() => {
             setShowDeleteDialog(false)
+          }}
+        />
+      )}
+      {showRemoveSharingDialog && (
+        <RemoveSharingInPlaylist
+          playlistId={playlistId}
+          setPlaylists={() => { }}
+          closeOnRemoveDialog={() => {
+            setShowDeleteDialog(false)
+            navigate("/myplaylists")
+          }}
+          closeOnCancleDialog={() => {
+            setShowRemoveSharingDialog(false)
           }}
         />
       )}
@@ -464,6 +490,8 @@ const PlaylistDetails = () => {
           }}
         />
       )}
+
+
     </div>
   )
 }

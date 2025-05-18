@@ -216,7 +216,16 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
                     width: "100%",
                   }}
                 >
-                  <option value="">Select genre</option>
+                  {!songData.genre && <option value="">Select genre</option>}
+                  {songData.genre &&
+                    ![
+                      "Pop", "Rock", "Hip Hop", "Electronic", "R&B", "Jazz",
+                      "Classical", "Country", "Folk", "Alternative", "Metal",
+                      "Blues", "Reggae", "Other"
+                    ].includes(songData.genre) && (
+                      <option value={songData.genre}>{songData.genre}</option>
+                    )}
+
                   <option value="Pop">Pop</option>
                   <option value="Rock">Rock</option>
                   <option value="Hip Hop">Hip Hop</option>
@@ -232,6 +241,7 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
                   <option value="Reggae">Reggae</option>
                   <option value="Other">Other</option>
                 </select>
+
               </div>
             </div>
           </div>
@@ -241,7 +251,7 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
       </DialogContent>
 
       <DialogActions className="modal-actions">
- 
+
         <Button
           onClick={handleSubmit}
           disabled={isSubmitting}

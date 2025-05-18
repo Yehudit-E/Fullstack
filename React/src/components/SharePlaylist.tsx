@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect } from "react"
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material"
 import { Close } from "@mui/icons-material"
@@ -27,14 +29,29 @@ const SharePlaylist = ({ playlistId, closeShareDialog }: SharePlaylistProps) => 
     return () => clearTimeout(timer)
   }, [])
 
+  // Email validation function
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    return emailRegex.test(email)
+  }
+
   const handleSharePlaylist = async () => {
+    // Clear previous errors
+    setError(null)
+
+    // Check if email is empty
     if (!userEmail.trim()) {
+      setError("Please enter an email address")
+      return
+    }
+
+    // Validate email format
+    if (!isValidEmail(userEmail)) {
       setError("Please enter a valid email address")
       return
     }
 
     setIsSubmitting(true)
-    setError(null)
 
     try {
       await PlaylistService.addUserToPlaylist(playlistId, userEmail)
@@ -53,6 +70,17 @@ const SharePlaylist = ({ playlistId, closeShareDialog }: SharePlaylistProps) => 
     setTimeout(() => {
       closeShareDialog()
     }, 300) // Match transition duration
+  }
+
+  // Real-time validation as user types
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const email = e.target.value
+    setUserEmail(email)
+
+    // Clear error when user starts typing again
+    if (error) {
+      setError(null)
+    }
   }
 
   return (
@@ -103,9 +131,10 @@ const SharePlaylist = ({ playlistId, closeShareDialog }: SharePlaylistProps) => 
           <input
             type="email"
             value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}
+            onChange={handleEmailChange}
             placeholder="Email address"
             className="custom-input"
+            aria-invalid={error ? "true" : "false"}
           />
         </div>
 
@@ -113,7 +142,6 @@ const SharePlaylist = ({ playlistId, closeShareDialog }: SharePlaylistProps) => 
       </DialogContent>
 
       <DialogActions className="modal-actions">
-      
         <Button
           onClick={handleSharePlaylist}
           disabled={isSubmitting}

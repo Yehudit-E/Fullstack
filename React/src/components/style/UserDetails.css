@@ -1,42 +1,111 @@
 /* UserDetails.css */
-.user-menu .MuiPaper-root {
-    background-color:  #121111 !important;
-    color: var(--color-white) !important;
-  }
-  
-  .user-name-item {
-    font-weight: 600 !important;
-    opacity: 1 !important;
-    color: var(--color-white) !important;
-    font-size: 0.95rem !important;
-    padding: 8px 16px !important;
-    display: flex !important;
-    justify-content: center !important; 
-    text-align: center !important; 
-    align-items: center;
-      
-  }
-  
-  .user-email-item {
-    font-size: 0.85rem !important;
-    opacity: 0.8 !important;
-    color: var(--color-white) !important;
-    padding: 8px 16px !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-    display: flex !important;
-    justify-content: center !important; 
-    text-align: center !important;    
-    align-items: center;
 
-  }
-  
-  .logout-item {
-    color: var(--color-white) !important;
-    font-size: 0.9rem !important;
-    padding: 8px 16px !important;
-  }
-  
-  .logout-item:hover {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-  }
-  
+
+.user-name-item {
+  font-weight: 600 !important;
+  opacity: 1 !important;
+  color: var(--color-white) !important;
+  font-size: 0.89rem !important;
+  /* padding: 8px 16px !important; */
+
+}
+
+.user-email-item {
+  font-size: 0.85rem !important;
+  opacity: 0.8 !important;
+  color: var(--color-white) !important;
+  /* padding: 8px 16px !important; */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+
+}
+
+.logout-item {
+  color: var(--color-white) !important;
+  font-size: 0.9rem !important;
+  padding: 8px 16px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.logout-item:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Username editing styles */
+.username-display {
+  margin-left: 14px;
+  width: 87%;
+  position: relative;
+   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-username-button {
+  padding: 4px !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.edit-username-button:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.username-edit-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.username-edit-input {
+  margin-left: 14px !important;
+  width: 80%;
+}
+
+.username-input-field {
+  color: var(--color-white) !important;
+  font-size: 0.95rem !important;
+  text-align: center;
+}
+
+.username-edit-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  gap: 8px;
+}
+
+ .edit-action-button {
+  color: var(--color-white) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  padding: 4px !important;
+}
+.save-name-button{
+    margin-left: 108px !important;
+
+}
+
+
+
+/* Error message styling */
+.MuiFormHelperText-root {
+  color: #ff4d4f !important;
+  margin-top: 4px !important;
+  text-align: center !important;
+  font-size: 0.75rem !important;
+}
+
+/* TextField styling */
+.MuiInput-underline:before {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.MuiInput-underline:hover:not(.Mui-disabled):before {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+.MuiInput-underline:after {
+  border-bottom: 2px solid linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end)) !important;
+}

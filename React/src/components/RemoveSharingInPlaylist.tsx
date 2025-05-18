@@ -14,10 +14,11 @@ import { StoreType } from "../store/store"
 interface RemoveSharingInPlaylistProps {
   playlistId: number
   setPlaylists: React.Dispatch<React.SetStateAction<Playlist[]>>
-  closeDeleteDialog: () => void
+  closeOnRemoveDialog: () => void
+  closeOnCancleDialog: () => void
 }
 
-const RemoveSharingInPlaylist = ({ playlistId, setPlaylists, closeDeleteDialog }: RemoveSharingInPlaylistProps) => {
+const RemoveSharingInPlaylist = ({ playlistId, setPlaylists,closeOnRemoveDialog, closeOnCancleDialog }: RemoveSharingInPlaylistProps) => {
   const [open, setOpen] = useState(false)
  const user=useSelector((state: StoreType) => state.user.user) 
   useEffect(() => {
@@ -27,7 +28,7 @@ const RemoveSharingInPlaylist = ({ playlistId, setPlaylists, closeDeleteDialog }
   const handleClose = () => {
     setOpen(false)
     setTimeout(() => {
-      closeDeleteDialog()
+      closeOnCancleDialog()
     }, 300) // Match transition duration
   }
 
@@ -35,7 +36,7 @@ const RemoveSharingInPlaylist = ({ playlistId, setPlaylists, closeDeleteDialog }
     try {
       await PlaylistService.removeUserFromPlaylist(playlistId, user.id) // Assuming 0 is the ID of the user to be removed
       setPlaylists((prevPlaylists) => prevPlaylists.filter((item) => item.id !== playlistId))
-      handleClose()
+      closeOnRemoveDialog()
     } catch (error) {
       console.error("Error deleting playlist:", error)
     }
@@ -87,9 +88,7 @@ const RemoveSharingInPlaylist = ({ playlistId, setPlaylists, closeDeleteDialog }
         <Button onClick={handleDeletePlaylist} className="delete-button">
           <span className="button-inner delete">Confirm and Remuve</span>
         </Button>
-        {/* <Button onClick={handleClose} className="cancel-button">
-          <span className="button-inner cancel">Cancel</span>
-        </Button> */}
+
       </DialogActions>
     </Dialog>
   )

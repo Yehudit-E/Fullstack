@@ -11,7 +11,7 @@ import { MoreHoriz, MusicNote } from "@mui/icons-material"
 import { useDispatch, useSelector } from "react-redux"
 import type { Dispatch, StoreType } from "../store/store"
 import "./style/MyPlaylists.css"
-import { Music, Users, Lock, ListVideo, Trash2, ListMusic, Share2 } from "lucide-react"
+import { Music, Users, Lock, Trash2, ListMusic, Share2 } from "lucide-react"
 import AddPlaylist from "./AddPlaylist"
 import { useNavigate } from "react-router"
 import DeletePlaylist from "./DeletePlaylist"
@@ -86,6 +86,9 @@ const MyPlaylist = () => {
       case "date":
         return sortedPlaylists.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       case "name":
+        return sortedPlaylists.sort((a, b) => (a.name || "").localeCompare(b.name || ""))
+      case "songs":
+        return sortedPlaylists.sort((a, b) => (b.songs?.length || 0) - (a.songs?.length || 0))
       default:
         return sortedPlaylists.sort((a, b) => (a.name || "").localeCompare(b.name || ""))
     }
@@ -123,14 +126,16 @@ const MyPlaylist = () => {
 
       {/* Tabs with Icons */}
       <div className="playlist-tabs">
-        <button style={{borderRadius: "6px 0 0 6px" }}
+        <button
+          style={{ borderRadius: "6px 0 0 6px" }}
           className={`playlist-tab ${activeTab === "owned" ? "active" : ""}`}
           onClick={() => setActiveTab("owned")}
         >
           <Music className="tab-icon" />
           <span>My Playlists</span>
         </button>
-        <button style={{borderRadius: "0 6px 6px 0" }}
+        <button
+          style={{ borderRadius: "0 6px 6px 0" }}
           className={`playlist-tab ${activeTab === "shared" ? "active" : ""}`}
           onClick={() => setActiveTab("shared")}
         >
@@ -155,7 +160,16 @@ const MyPlaylist = () => {
           <Select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as string)}
-            renderValue={() => `Sort by: ${sortBy === "date" ? "Newest" : sortBy === "name" ? "Title" : "Artist"}`}
+            renderValue={() =>
+              `Sort by: ${sortBy === "date"
+                ? "Newest"
+                : sortBy === "name"
+                  ? "Title"
+                  : sortBy === "songs"
+                    ? "Songs Count"
+                    : "Artist"
+              }`
+            }
             sx={{
               backgroundColor: "rgba(30, 30, 30, 0.5)",
               color: "var(--color-white)",
@@ -186,11 +200,10 @@ const MyPlaylist = () => {
           >
             <MenuItem value="date">Newest</MenuItem>
             <MenuItem value="name">Title</MenuItem>
-            <MenuItem value="artist">Artist</MenuItem>
+            <MenuItem value="songs">Songs Count</MenuItem>
           </Select>
         </div>
-
-      </div>    
+      </div>
 
       {/* Playlists Grid */}
       {isLoading ? (
@@ -260,7 +273,7 @@ const MyPlaylist = () => {
                     </p>
 
                     <div className="playlist-visibility">
-                      {playlist.sharedUsers.length > 0 ? (
+                      {playlist.sharedUsers?.length > 0 ? (
                         <div className="visibility-badge public">
                           <Users size={14} />
                           <span>Shared</span>
@@ -374,7 +387,11 @@ const MyPlaylist = () => {
         <RemoveSharingInPlaylist
           playlistId={selectedPlaylistId}
           setPlaylists={setSharedPlaylists}
-          closeDeleteDialog={() => {
+          closeOnRemoveDialog={() => {
+            setSelectedPlaylistId(null)
+            setOpenRemoveSharingDialog(false)
+          }}
+          closeOnCancleDialog={() => {
             setSelectedPlaylistId(null)
             setOpenRemoveSharingDialog(false)
           }}

@@ -71,23 +71,7 @@ const UpdateSong: React.FC<UpdateSongProps> = ({ song, onUpdate, onClose }) => {
           }}
         />
         {errors.name && <div style={{ color: "red", fontSize: "14px" }}>{errors.name}</div>}
-        <input
-          type="text"
-          value={formData.description || ""}
-          onChange={(e) => handleChange("description", e.target.value)}
-          placeholder="תיאור"
-          style={{
-            width: "100%",
-            padding: "10px",
-            fontSize: "16px",
-            backgroundColor: "#333",
-            color: "#fff",
-            border: "1px solid #555",
-            borderRadius: "8px",
-            marginBottom: "10px",
-            outline: "none",
-          }}
-        />
+        
         <input
           type="text"
           value={formData.artist}
@@ -109,7 +93,7 @@ const UpdateSong: React.FC<UpdateSongProps> = ({ song, onUpdate, onClose }) => {
           type="text"
           value={formData.genre || ""}
           onChange={(e) => handleChange("genre", e.target.value)}
-          placeholder="ז'אנר"
+          placeholder="genre"
           style={{
             width: "100%",
             padding: "10px",

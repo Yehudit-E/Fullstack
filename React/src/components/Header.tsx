@@ -5,8 +5,8 @@ import type { StoreType } from "../store/store"
 import { Link, useLocation } from "react-router"
 import { useState, useEffect, useRef } from "react"
 import { LogIn, Menu, X } from "lucide-react"
-import UserDetails from "./userDetails"
 import "./style/Header.css"
+import UserDetails from "./userDetails"
 
 const Header = () => {
   const authState = useSelector((store: StoreType) => store.user.authState)
@@ -98,7 +98,7 @@ const Header = () => {
 
         <div className="header-actions">
           {!authState ? (
-            <Link to="/auth" className="auth-button">
+            <Link to="/auth" className="auth-button-header">
               <LogIn size={18} />
               <span>Login</span>
             </Link>
