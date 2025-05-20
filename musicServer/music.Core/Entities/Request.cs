@@ -13,13 +13,9 @@ namespace music.Core.Entities
         public int Id { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
-        //public int SongId  { get; set; }
-        //public Song Song { get; set; }
 
-        public string SongAudioFilePath { get; set; }
-        public string SongName { get; set; }
-        public string SongArtist { get; set; }
-        public string SongGenre { get; set; }
+        public int SongId { get; set; }
+        public Song Song { get; set;}
         public bool IsAnswered { get; set; }
         public bool IsApproved { get; set; }
         public DateTime RequestedAt { get; set; }

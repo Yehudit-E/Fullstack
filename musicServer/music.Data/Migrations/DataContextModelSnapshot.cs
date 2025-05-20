@@ -134,26 +134,15 @@ namespace music.Data.Migrations
                     b.Property<DateTime>("RequestedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("SongArtist")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SongAudioFilePath")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SongGenre")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SongName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("SongId")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SongId");
 
                     b.HasIndex("UserId");
 
@@ -311,11 +300,19 @@ namespace music.Data.Migrations
 
             modelBuilder.Entity("music.Core.Entities.Request", b =>
                 {
+                    b.HasOne("music.Core.Entities.Song", "Song")
+                        .WithMany()
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("music.Core.Entities.User", "User")
                         .WithMany("Requests")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Song");
 
                     b.Navigation("User");
                 });

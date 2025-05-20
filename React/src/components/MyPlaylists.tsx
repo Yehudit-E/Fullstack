@@ -230,14 +230,14 @@ const MyPlaylist = () => {
                   ? "Create your first playlist to get started"
                   : "No one has shared playlists with you yet"}
               </p>
-              {activeTab === "owned" && (
+              {/* {activeTab === "owned" && (
                 <Button
                   onClick={handleCreatePlaylist}
                   className="bg-gradient-to-r from-fuchsia-600 to-pink-600 hover:from-fuchsia-700 hover:to-pink-700"
                 >
                   Create Playlist
                 </Button>
-              )}
+              )} */}
             </>
           )}
         </div>

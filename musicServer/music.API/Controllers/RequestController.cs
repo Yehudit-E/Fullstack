@@ -53,17 +53,15 @@ namespace music.API.Controllers
 
         // POST api/<requestControllers>
         [HttpPost]
-        public async Task<ActionResult<RequestDto>> Post([FromBody] RequestPostModel requestPostModel)
+        public async Task<ActionResult<bool>> Post([FromBody] RequestDto requestDto)
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
             var tokenId = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
-            if (tokenId != requestPostModel.UserId) 
+            if (tokenId != requestDto.UserId) 
                 return Forbid();
-            RequestDto requestDto = _mapper.Map<RequestDto>(requestPostModel);
-            requestDto = await _iService.AddAsync(requestDto);
-            if (requestDto == null)
-                return NotFound();
-            return requestDto;
+            //RequestDto requestDto = _mapper.Map<RequestDto>(requestPostModel);
+            bool res = await _iService.AddAsync(requestDto);
+            return res;
         }
 
         // PUT api/<requestControllers>/5

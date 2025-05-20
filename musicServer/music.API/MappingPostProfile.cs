@@ -11,8 +11,6 @@ namespace music.API
             CreateMap<SongPostModel, SongDto>();
             CreateMap<UserPostModel, UserDto>();
             CreateMap<PlaylistPostModel, PlaylistDto>();
-            CreateMap<RequestPostModel,RequestDto>();
-
         }
     }
 }

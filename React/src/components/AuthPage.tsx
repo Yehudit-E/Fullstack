@@ -14,7 +14,7 @@ const AuthPage = () => {
         {/* Header with gradient title */}
         <div className="auth-header">
           <h1 className="auth-title">
-            Welcome to <span className="gradient-text">MusicApp</span>
+            Welcome to <span className="gradient-text">MusiX</span>
           </h1>
           <p className="auth-subtitle">Sign in to continue to your account</p>
         </div>

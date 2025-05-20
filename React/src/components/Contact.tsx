@@ -103,8 +103,8 @@ const Contact = () => {
             </div>
             <h3>Email Us</h3>
             <p>Our support team is here to help</p>
-            <a href="mailto:support@musicapp.com" className="contact-link">
-              support@musicapp.com
+            <a href="mailto:musix.system@gmail.com" className="contact-link">
+              musix.system@gmail.com
             </a>
           </div>
 
@@ -134,14 +134,14 @@ const Contact = () => {
             </address>
           </div>
 
-          <div className="contact-card">
+          {/* <div className="contact-card">
             <div className="contact-icon">
               <MessageSquare size={24} />
             </div>
             <h3>Live Chat</h3>
             <p>Chat with our support team</p>
             <button className="chat-button">Start Chat</button>
-          </div>
+          </div> */}
         </div>
 
         <div className="contact-form-container">

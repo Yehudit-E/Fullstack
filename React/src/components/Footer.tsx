@@ -12,8 +12,8 @@ const Footer = () => {
     <footer className="app-footer">
       <div className="footer-container">
         <div className="footer-logo" >
-          <img src="/images/musical-notes.png" alt="Logo" className="footer-logo-image" />
-          <span className="footer-logo-text">MusicApp</span>
+          {/* <img src="/images/musical-notes.png" alt="Logo" className="footer-logo-image" /> */}
+          <span className="footer-logo-text">MusiX</span>
         </div>
 
         <div className="footer-links">
@@ -47,9 +47,9 @@ const Footer = () => {
         </div>
 
         <div className="footer-copyright">
-          <span>© {currentYear} MusicApp. All rights reserved.</span>
+          <span>© {currentYear} MusiX. All rights reserved.</span>
           <span className="made-with">
-            Made with <Heart size={12} className="heart-icon" /> by MusicApp Team
+            Made with <Heart size={12} className="heart-icon" /> by MusiX Team
           </span>
         </div>
       </div>

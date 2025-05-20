@@ -9,7 +9,7 @@ let userEmpty: User={
     password: "",
     create_at:"",
 }
-let baseUrl="https://music-server-im05.onrender.com";
+let baseUrl="https://music-server-im05.onrender.com/api";
 // const token = localStorage.getItem("authToken");
 // function getUserIdFromToken(token: string): string | null {
 //     try {

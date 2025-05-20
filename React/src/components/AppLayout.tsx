@@ -63,7 +63,7 @@ const AppLayout = () => {
     <div className={`app-layout ${hasSongPlayer ? 'song-player-active' : ''}`}>
       <Header />
       <div style={{ marginTop: "60px" }}> </div>
-      <main className="app-main">
+      <main className="app-main" style={{ minHeight:"85vh"}}>
         <Outlet />
       </main>
       {!hasSongPlayer && (

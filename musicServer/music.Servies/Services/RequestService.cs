@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace music.Service.Services
 {
-    public class RequestService:IRequestService
+    public class RequestService : IRequestService
     {
         private readonly IRepositoryManager _iManager;
         private readonly IMapper _mapper;
@@ -38,14 +38,32 @@ namespace music.Service.Services
             return requestDto;
         }
 
-        public async Task<RequestDto> AddAsync(RequestDto requestDto)
+        public async Task<bool> AddAsync(RequestDto requestDto)
         {
-            Request request = _mapper.Map<Request>(requestDto);
+            Song song = new Song()
+            {
+                AudioFilePath = requestDto.SongAudioFilePath,
+                ImageFilePath = requestDto.SongAudioFilePath,
+                Name = requestDto.SongName,
+                Artist = requestDto.SongArtist,
+                Genre = requestDto.SongGenre,
+                CreatedAt = requestDto.SongCreatedAt,
+                Likes = 0,
+                IsPublic = false,
+                PlaylistId = 1,
+            };
+            Request request = new Request()
+            {
+                UserId = requestDto.UserId,
+                SongId = song.Id,
+                Song = song
+            };
+                            
             request = await _iManager._requestRepository.AddAsync(request);
-            if (request != null)
-                await _iManager.SaveAsync();
-            requestDto = _mapper.Map<RequestDto>(request);
-            return requestDto;
+            if (request == null)
+                return false;
+            await _iManager.SaveAsync();
+            return true;
         }
         public async Task<RequestDto> UpdateStatusAsync(int id, bool IsApproved)
         {
@@ -68,5 +86,7 @@ namespace music.Service.Services
             IEnumerable<Request> requests = await _iManager._requestRepository.GetFullNotAnsweredAsync();
             return requests;
         }
+
+
     }
 }

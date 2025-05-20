@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router"
 import { useState, useEffect, useRef } from "react"
 import { LogIn, Menu, X } from "lucide-react"
 import "./style/Header.css"
-import UserDetails from "./userDetails"
+import UserDetails from "./UserDetails"
 
 const Header = () => {
   const authState = useSelector((store: StoreType) => store.user.authState)
@@ -59,7 +59,7 @@ const Header = () => {
         <div className="header-logo">
           <Link to="/home" className="logo-link">
             <img src="/images/musical-notes.png" alt="Logo" className="logo-image" />
-            <span className="logo-text">MusicApp</span>
+            <span className="logo-text">MusiX</span>
           </Link>
         </div>
 

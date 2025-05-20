@@ -23,12 +23,12 @@
 .footer-logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem !important;
 }
 
 .footer-logo-image {
-  height: 24px;
-  width: 24px;
+  height: 20px !important;
+  width: 20px !important;
   object-fit: contain;
 }
 

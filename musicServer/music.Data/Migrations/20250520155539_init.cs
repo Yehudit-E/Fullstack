@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace music.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class mySql : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -95,37 +95,6 @@ namespace music.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "dbRequest",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    SongAudioFilePath = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    SongName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    SongArtist = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    SongGenre = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsAnswered = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsApproved = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    RequestedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dbRequest", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_dbRequest_dbUser_UserId",
-                        column: x => x.UserId,
-                        principalTable: "dbUser",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "PermissionRole",
                 columns: table => new
                 {
@@ -189,8 +158,6 @@ namespace music.Data.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Genre = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Lyrics = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     IsPublic = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Likes = table.Column<int>(type: "int", nullable: false),
@@ -237,10 +204,45 @@ namespace music.Data.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "dbRequest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    SongId = table.Column<int>(type: "int", nullable: false),
+                    IsAnswered = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsApproved = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    RequestedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_dbRequest", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_dbRequest_dbSong_SongId",
+                        column: x => x.SongId,
+                        principalTable: "dbSong",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_dbRequest_dbUser_UserId",
+                        column: x => x.UserId,
+                        principalTable: "dbUser",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_dbPlaylist_OwnerId",
                 table: "dbPlaylist",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_dbRequest_SongId",
+                table: "dbRequest",
+                column: "SongId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_dbRequest_UserId",
@@ -275,9 +277,6 @@ namespace music.Data.Migrations
                 name: "dbRequest");
 
             migrationBuilder.DropTable(
-                name: "dbSong");
-
-            migrationBuilder.DropTable(
                 name: "PermissionRole");
 
             migrationBuilder.DropTable(
@@ -287,13 +286,16 @@ namespace music.Data.Migrations
                 name: "RoleUser");
 
             migrationBuilder.DropTable(
+                name: "dbSong");
+
+            migrationBuilder.DropTable(
                 name: "Permission");
 
             migrationBuilder.DropTable(
-                name: "dbPlaylist");
+                name: "Role");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "dbPlaylist");
 
             migrationBuilder.DropTable(
                 name: "dbUser");
