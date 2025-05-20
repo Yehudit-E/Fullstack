@@ -6,7 +6,8 @@ export type Request={
   songName: string,
   songArtist: string,
   songGenre: string,
-  songCreatedAt: string,
+  songYear: number,
+  songAlbum: string,
   songAudioFilePath: string,
   songImageFilePath: string
 }

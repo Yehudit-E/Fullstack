@@ -55,7 +55,7 @@ const PublicSongs = () => {
     const sortedSongs = [...songs]
     switch (sortBy) {
       case "date":
-        return sortedSongs.sort((a, b) => new Date(b.create_at).getTime() - new Date(a.create_at).getTime())
+        return sortedSongs.sort((a, b) => new Date(b.year).getTime() - new Date(a.year).getTime())
       case "artist":
         return sortedSongs.sort((a, b) => a.artist.localeCompare(b.artist))
       case "name":

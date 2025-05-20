@@ -28,6 +28,7 @@ namespace music.Core.Entities
 
         public Song()
         {
+            CreatedAt = DateTime.Now;
             Likes = 0;
         }
     }
