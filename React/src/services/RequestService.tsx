@@ -7,7 +7,8 @@ const RequestService = {
     //  הוספת בקשה
     createRequest: async (request: Request) => {
         try {
-            debugger
+            console.log(request);
+            
             const response = await api.post(`${API_URL}`, request);
             return response.data;
         } catch (error) {

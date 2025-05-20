@@ -225,7 +225,7 @@ const UploadMusic = () => {
       } else {
         imageUrl = "https://yehuditmusic.s3.us-east-1.amazonaws.com/default-image.png" // Default cover image URL
       }
-
+        console.log(metaData.year);
       // Create request
       const request: Request = {
         userId: userId,
@@ -234,7 +234,7 @@ const UploadMusic = () => {
         songGenre: metaData.genre,
         songAudioFilePath: uploadUrl.split("?")[0],
         songImageFilePath: imageUrl,
-        songYear: parseInt(metaData.year),
+        songYear: Number.parseInt(metaData.year),
         songAlbum: metaData.album
         }
 
@@ -255,7 +255,7 @@ const UploadMusic = () => {
             album: "",
             year: new Date().getFullYear().toString(),
           })
-          setStep(1)
+          // setStep(1)
           setSuccess(false)
         }, 3000)
       } catch (err) {
@@ -285,9 +285,17 @@ const UploadMusic = () => {
       <div className="upload-music-container">
         <div className="upload-music-header">
           <h1 className="upload-music-title">Upload Music</h1>
-          <p className="upload-music-subtitle">
+          {/* <p className="upload-music-subtitle">
             Share your music with the community. After submission, your song will be reviewed before being added to the
             public library.
+          </p> */}
+            <p className="upload-music-subtitle">
+  <p className="upload-music-subtitle">
+           You’re welcome to upload a song from your computer to the public song library.<br></br>
+            Your submission will be reviewed by the system administrator, who will approve or reject the request based on content quality and site policy.<br></br>
+            You will receive a notification once your request has been processed.<br></br>
+            Thank you for contributing and being part of our community!
+          </p>
           </p>
         </div>
 

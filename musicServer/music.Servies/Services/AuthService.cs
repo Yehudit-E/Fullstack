@@ -25,12 +25,14 @@ namespace music.Service
         private readonly IRepositoryManager _repositoryManager ;
         private readonly IMapper _mapper ;
         private readonly IUserService _userService;
-        public AuthService(IConfiguration configuration, IRepositoryManager repositoryManager, IMapper mapper,IUserService userService)
+        private readonly IEmailService _emailService ;
+        public AuthService(IConfiguration configuration, IRepositoryManager repositoryManager, IMapper mapper,IUserService userService, IEmailService emailService)
         {
             _configuration = configuration;
             _repositoryManager = repositoryManager;
             _mapper = mapper;
-            _userService =userService;
+            _userService = userService;
+            _emailService = emailService;
         }
         public string GenerateJwtToken(User user)
         {
@@ -105,6 +107,13 @@ namespace music.Service
                     User = user,
                     Token = token
                 };
+                EmailRequest emailRequest = new EmailRequest()
+                {
+                    To = user.Email,
+                    Subject = "Welcome To MusiX!",
+                    Body = ""
+                };
+                _emailService.SendEmailAsync(emailRequest);
                 return Result<LoginResponseDto>.Success(response);
             }
 

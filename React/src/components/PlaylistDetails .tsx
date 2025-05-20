@@ -204,16 +204,16 @@ const PlaylistDetails = () => {
 
   return (
     <div className="playlist-details-container">
-                        <IconButton onClick={()=>{navigate("/myplaylists")}} className="back-button">
-                    <ArrowLeft />
-              </IconButton>
+      {/* <IconButton onClick={() => { navigate("/myplaylists") }} className="back-button">
+        <ArrowLeft />
+      </IconButton> */}
       <div className="playlist-layout">
         {/* Left Side - Playlist Details */}
 
         <div className="playlist-sidebar">
-   
+
           <div className="playlist-cover-container">
-            
+
             <img
               src={playlist.imageFilePath || "/placeholder.svg?height=300&width=300"}
               alt={playlist.name}
