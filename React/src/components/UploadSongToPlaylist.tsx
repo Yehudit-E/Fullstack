@@ -253,6 +253,8 @@ const UploadSongToPlaylist = () => {
         name: metaData.title,
         artist: metaData.artist,
         genre: metaData.genre,
+        year: Number.parseInt(metaData.year),
+        album: metaData.album,
         audioFilePath: audioUrl,
         imageFilePath: imageUrl,
         playlistId: Number.parseInt(playlistId),
