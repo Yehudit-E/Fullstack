@@ -233,8 +233,10 @@ const UploadMusic = () => {
         songArtist: metaData.artist,
         songGenre: metaData.genre,
         songAudioFilePath: uploadUrl.split("?")[0],
-        songImageFilePath: "",
-        songCreatedAt: ""}
+        songImageFilePath: imageUrl,
+        songYear: parseInt(metaData.year),
+        songAlbum: metaData.album
+        }
 
      await RequestService.createRequest(request)
 
