@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import type { StoreType } from "../store/store"
-import { Music, PlayCircle, ListMusic, Download, Share2, Headphones, Radio, Star, ChevronRight } from "lucide-react"
+import { Music, PlayCircle, ListMusic, Download, Share2, Headphones, Radio, Star, ChevronRight, Zap, Heart, Users } from "lucide-react"
 import "./style/Home.css"
 import ColorSplashBackground from "./color-splash-background"
+import { motion } from "framer-motion"
 
 const Home = () => {
   const authState = useSelector((state: StoreType) => state.user.authState)
@@ -17,6 +18,7 @@ const Home = () => {
     testimonials: false,
     cta: false,
   })
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,46 +50,99 @@ const Home = () => {
   return (
     <div className="home-page">
       {/* Color Splash Background */}
-      <ColorSplashBackground />
+      {/* <ColorSplashBackground /> */}
 
       {/* Content Container - adds a subtle glass effect to improve readability */}
       <div className="content-container">
         {/* Hero Section */}
-        <section className="hero-section">
-          <div className="hero-content">
-            <h1 className="hero-title">
-              Your Music, <span className="gradient-text">Your Way</span>
-            </h1>
-            <p className="hero-subtitle">
-              Discover, create, and share your favorite music with friends. The ultimate music experience starts here.
-            </p>
-            <div className="hero-buttons">
-              {!authState ? (
-                <Link to="/auth" className="primary-button">
-                  <PlayCircle size={20} />
-                  Get Started
-                </Link>
-              ) : (
-                <Link to="/music" className="primary-button">
-                  <Music size={20} />
-                  Explore Music
-                </Link>
-              )}
-              <Link to="/music" className="secondary-button">
-                <Headphones size={20} />
-                Browse Library
-              </Link>
-            </div>
-          </div>
+         <section className="hero-section">
+        {/* <ColorSplashBackground /> */}
+        <div className="hero-content">
+          <motion.h1
+            className="hero-title"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            Your Music, <span className="gradient-text">Your Way</span>
+          </motion.h1>
+          <motion.p
+            className="hero-subtitle"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            Discover, create, and share music like never before. Join our community of music lovers and artists.
+          </motion.p>
+          <motion.div
+            className="hero-buttons"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            {!authState ? (
+              <button className="primary-button" onClick={() => navigate("/auth")}>
+                Get Started
+              </button>
+            ) : (
+              <button className="primary-button" onClick={() => navigate("/discover")}>
+                Explore Music
+              </button>
+            )}
+            <button
+              className="secondary-button"
+              onClick={() => {
+                const featuresSection = document.getElementById("features-section")
+                if (featuresSection) {
+                  featuresSection.scrollIntoView({ behavior: "smooth" })
+                }
+              }}
+            >
+              Learn More
+            </button>
+          </motion.div>
+        </div>
+        <div className="hero-visual">
+          <motion.div
+            className="floating-album"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.8 }}
+          >
+            <img src="/images/musical-notes.png" alt="Album cover" className="album-cover" />
+            <div className="album-reflection"></div>
+          </motion.div>
+          <motion.div
+            className="floating-waves"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.7 }}
+            transition={{ duration: 1, delay: 1 }}
+          >
+            <svg width="200" height="100" viewBox="0 0 200 100">
+              <path
+                d="M0,50 C20,30 40,70 60,50 C80,30 100,70 120,50 C140,30 160,70 180,50 C200,30 220,70 240,50"
+                stroke="url(#gradient)"
+                strokeWidth="2"
+                fill="none"
+              />
+              <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="var(--gradient-start)" />
+                  <stop offset="50%" stopColor="var(--gradient-middle)" />
+                  <stop offset="100%" stopColor="var(--gradient-end)" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </motion.div>
+        </div>
           <div className="hero-image-container">
             <div className="hero-image-wrapper">
-              <img src="/placeholder.svg?height=500&width=500" alt="Music Experience" className="hero-image" />
               <div className="floating-music-note note-1">♪</div>
               <div className="floating-music-note note-2">♫</div>
               <div className="floating-music-note note-3">♩</div>
             </div>
           </div>
-        </section>
+      </section>
 
         {/* Stats Section */}
         <section className="stats-section">
@@ -164,45 +219,53 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Discover Section */}
-        <section id="discover" className={`discover-section ${isVisible.discover ? "visible" : ""}`}>
-          <div className="discover-content">
-            <h2 className="discover-title">Discover New Music Every Day</h2>
-            <p className="discover-description">
-              Our platform is constantly updated with the latest tracks from various genres. Expand your musical
-              horizons and discover your next favorite song.
+        {/* Experience Section */}
+        <section className="app-preview-section">
+        <div className="app-preview-content">
+          <motion.div
+            className="app-preview-text"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="section-title">Experience the Future of Music</h2>
+            <p className="section-description">
+              Our platform is designed to give you the best music experience possible. With intuitive controls,
+              high-quality streaming, and a beautiful interface, you'll never want to listen to music any other way.
             </p>
-            <ul className="discover-features">
-              <li className="discover-feature-item">
-                <span className="discover-feature-icon">✓</span>
-                Personalized recommendations based on your taste
+            <ul className="feature-list">
+              <li>
+                <Zap size={16} /> High-quality audio streaming
               </li>
-              <li className="discover-feature-item">
-                <span className="discover-feature-icon">✓</span>
-                New releases from your favorite artists
+              <li>
+                <Heart size={16} /> Personalized recommendations
               </li>
-              <li className="discover-feature-item">
-                <span className="discover-feature-icon">✓</span>
-                Curated playlists for every mood and occasion
+              <li>
+                <Users size={16} /> Collaborative playlists
               </li>
-              <li className="discover-feature-item">
-                <span className="discover-feature-icon">✓</span>
-                Trending charts updated weekly
+              <li>
+                <PlayCircle size={16} /> Seamless playback across devices
               </li>
             </ul>
-            <Link to="/music" className="discover-button">
-              Start Discovering
-              <ChevronRight size={16} />
-            </Link>
-          </div>
-          <div className="discover-image-container">
-            <div className="discover-image-wrapper">
-              <img src="/placeholder.svg?height=400&width=400" alt="Discover Music" className="discover-image" />
-              <div className="discover-image-overlay"></div>
+            <button className="primary-button" onClick={() => navigate(authState ? "/discover" : "/auth")}>
+              {authState ? "Explore Now" : "Get Started"}
+            </button>
+          </motion.div>
+          <motion.div
+            className="app-preview-visual"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="app-screenshot">
+              <img src="/placeholder.svg?height=600&width=300" alt="App screenshot" />
+              <div className="app-screenshot-reflection"></div>
             </div>
-          </div>
-        </section>
-
+          </motion.div>
+        </div>
+      </section>
         {/* How It Works Section */}
         <section id="howItWorks" className={`how-it-works-section ${isVisible.howItWorks ? "visible" : ""}`}>
           <div className="section-header">
