@@ -25,6 +25,7 @@ namespace music.API.Controllers
         [HttpPost("login")]
         public ActionResult<LoginResponseDto> Login([FromBody] LoginModel model)
         {
+            Console.WriteLine("------------------------------------------");
             Console.WriteLine(model);
             var result =  _authService.Login(model.Email, model.Password);
             if (!result.IsSuccess)
