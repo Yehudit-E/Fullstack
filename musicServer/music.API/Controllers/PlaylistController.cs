@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using music.API.PostModels;
+using music.Core;
 using music.Core.DTOs;
 using music.Core.Entities;
 using music.Core.Intefaces.IServices;
+using System.Text;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -161,7 +163,45 @@ namespace music.API.Controllers
                 return Forbid();
             return await _iService.RemoveUserFromPlaylistAsync(playlistId, userId);
         }
+        [HttpPost("{playlistId}/share")]
+        public async Task<ActionResult<bool>> SharePlaylist(int playlistId, [FromBody] EmailType emailRequest)
+        {
+            var tokenId = int.Parse(User.Claims.First(claim => claim.Type == "id").Value);
+            var playlist = await _iService.GetByIdAsync(playlistId);
+            if (playlist == null || playlist.OwnerId != tokenId)
+                return Forbid();
 
+            var success = await _iService.SharePlaylistAsync(playlist, emailRequest.Email);
+            if (!success)
+                return BadRequest();
+            return Ok();
+        }
+
+        [HttpGet("accept-share")]
+        public async Task<ActionResult<bool>> AcceptShare([FromQuery] string token)
+        {
+            var parsed = PlaylistTokenHelper.ParseToken(token);
+            if (parsed == null)
+                return Forbid();
+
+            var (playlistId, email, signature) = parsed.Value;
+            var secret = Environment.GetEnvironmentVariable("SECRET");
+
+            if (!PlaylistTokenHelper.IsValidSignature(playlistId, email, signature, secret))
+                return Forbid();
+
+            var userId = int.Parse(User.Claims.First(claim => claim.Type == "id").Value);
+            var playlist = await _iService.GetFullByIdAsync(playlistId);
+            if (userId != playlist.OwnerId && userId != userId)
+                return Forbid();
+
+            playlist = await _iService.AddUserAsync(playlist, email);
+
+            if (playlist == null)
+                return NotFound();
+
+            return Ok();
+        }
     }
     public class EmailType
     {

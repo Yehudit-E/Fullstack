@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using music.Core;
 using music.Core.DTOs;
 using music.Core.Entities;
 using music.Core.Intefaces.IRepositories;
@@ -17,6 +18,7 @@ namespace music.Service.Services
     {
         private readonly IRepositoryManager _iManager;
         private readonly IMapper _mapper;
+        private readonly EmailService emailService;
         public PlaylistService(IRepositoryManager iManager, IMapper mapper)
         {
             _iManager = iManager;
@@ -102,9 +104,9 @@ namespace music.Service.Services
             await _iManager.SaveAsync();
             return true;
         }
-        public  async Task<Playlist> AddUserAsync(Playlist playlist, string userEmail)
+        public async Task<Playlist> AddUserAsync(Playlist playlist, string userEmail)
         {
-            var u =await  _iManager._userRepository.GetByEmailAsync(userEmail);
+            var u = await _iManager._userRepository.GetByEmailAsync(userEmail);
             var userId = u.Id;
             if (playlist.SharedUsers.Any(x => x.Id == userId))
                 return null;
@@ -115,5 +117,26 @@ namespace music.Service.Services
             await _iManager.SaveAsync();
             return playlist;
         }
+        public async Task<bool> SharePlaylistAsync(PlaylistDto playlist, string email)
+        {
+            var baseUrl = Environment.GetEnvironmentVariable("BASEURL");
+            var secretKey = Environment.GetEnvironmentVariable("SECRET");
+
+            if (string.IsNullOrEmpty(baseUrl) || string.IsNullOrEmpty(secretKey))
+                throw new InvalidOperationException("Base URL or Secret Key not defined in environment variables.");
+
+            var link = PlaylistTokenHelper.GenerateSecureLink(playlist.Id, email, baseUrl, secretKey);
+
+            var body = $"<p>You have been invited to view the playlist <b>{playlist.Name}</b></p>" +
+                       $"<p><a href='{link}'>Click here to view</a></p>";
+
+            return await emailService.SendEmailAsync(new EmailRequest
+            {
+                To = email,
+                Subject = "Someone shared a playlist with you on MusiX",
+                Body = body
+            });
+        }
+
     }
 }
