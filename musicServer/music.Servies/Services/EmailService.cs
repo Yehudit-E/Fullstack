@@ -22,8 +22,8 @@ namespace music.Service.Services
 
         public async Task<bool> SendEmailAsync(EmailRequest request)
         {
-            var emailMessage = new MimeMessage();///////////
-            emailMessage.From.Add(new MailboxAddress("music", _configuration["SMTP:GOOGLE_USER_EMAIL"]));
+            var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress("MusiX", _configuration["SMTP:GOOGLE_USER_EMAIL"]));
             emailMessage.To.Add(new MailboxAddress(request.To, request.To));
             emailMessage.Subject = request.Subject;
 

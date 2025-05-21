@@ -109,6 +109,8 @@ namespace music.Service.Services
             if (playlist.SharedUsers.Any(x => x.Id == userId))
                 return null;
             var user = await _iManager._userRepository.GetByIdAsync(userId);
+            if (user == null)
+                return null;
             playlist.SharedUsers.Add(user);
             await _iManager.SaveAsync();
             return playlist;
