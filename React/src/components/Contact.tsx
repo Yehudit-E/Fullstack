@@ -5,6 +5,8 @@ import type React from "react"
 import { useState } from "react"
 import { Mail, Phone, MapPin, Send, MessageSquare, AlertCircle, CheckCircle } from "lucide-react"
 import "./style/StaticPages.css"
+import EmailService from "../services/EmailService"
+import { EmailRequest } from "../models/EmailRequest"
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -61,32 +63,94 @@ const Contact = () => {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
 
-    if (validateForm()) {
-      setIsSubmitting(true)
+  if (!validateForm()) return
 
-      // Simulate API call
-      setTimeout(() => {
-        setIsSubmitting(false)
-        setSubmitStatus("success")
-
-        // Reset form after success
-        setFormData({
-          name: "",
-          email: "",
-          subject: "",
-          message: "",
-        })
-
-        // Reset status after 5 seconds
-        setTimeout(() => {
-          setSubmitStatus("idle")
-        }, 5000)
-      }, 1500)
+  setIsSubmitting(true)
+    
+  try {
+    const emailRequest: EmailRequest = {
+      to: "musix.app.team@gmail.com",
+      subject: `New message from ${formData.name}`,
+      body: `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        padding: 20px;
+        color: #333;
+      }
+      .container {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        max-width: 600px;
+        margin: auto;
+      }
+      h2 {
+        color: #444;
+        margin-bottom: 20px;
+      }
+      .row {
+        margin-bottom: 10px;
+      }
+      .label {
+        font-weight: bold;
+        color: #555;
+      }
+      .value {
+        margin-left: 10px;
+        white-space: pre-line;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>New Contact Form Submission</h2>
+      <div class="row">
+        <span class="label">Name:</span>
+        <span class="value">${formData.name}</span>
+      </div>
+      <div class="row">
+        <span class="label">Email:</span>
+        <span class="value">${formData.email}</span>
+      </div>
+      <div class="row">
+        <span class="label">Subject:</span>
+        <span class="value">${formData.subject}</span>
+      </div>
+      <div class="row">
+        <span class="label">Message:</span>
+        <span class="value">${formData.message}</span>
+      </div>
+    </div>
+  </body>
+</html>`,
+      
     }
+    await EmailService.sendEmail(emailRequest) // שליחה לסרוויס בפועל
+    setSubmitStatus("success")
+    setFormData({
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    })
+  } catch (error) {
+    setSubmitStatus("error")
+  } finally {
+    setIsSubmitting(false)
+    setTimeout(() => {
+      setSubmitStatus("idle")
+    }, 5000)
   }
+}
 
   return (
     <div className="static-page-container">
@@ -103,8 +167,8 @@ const Contact = () => {
             </div>
             <h3>Email Us</h3>
             <p>Our support team is here to help</p>
-            <a href="mailto:musix.system@gmail.com" className="contact-link">
-              musix.system@gmail.com
+            <a href="mailto:musix.app.team@gmail.com" className="contact-link">
+              musix.app.team@gmail.com
             </a>
           </div>
 
