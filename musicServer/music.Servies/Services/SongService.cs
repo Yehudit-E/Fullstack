@@ -89,5 +89,15 @@ namespace music.Service.Services
                 return true;
             return playlist.SharedUsers.Any(x => x.Id == userId);
         }
+        public async Task<SongDto> AddLyricsAsync(int id, string lyrics)
+        {
+            Song song = await _iManager._songRepository.AddLyricsAsync(id, lyrics);
+            if (song != null)
+            {
+                await _iManager.SaveAsync();
+            }
+            SongDto songDto = _mapper.Map<SongDto>(song);
+            return songDto;
+        }
     }
 }

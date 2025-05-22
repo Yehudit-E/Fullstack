@@ -19,5 +19,7 @@ namespace music.Core.Intefaces.IServices
         Task<bool> DeleteAsync(int id);
         Task<bool> IsOwnerOfSong(int songId, int userId);
         Task<bool> IsOwnerOfPlaylist(int playlistId, int userId);
+        Task<SongDto> AddLyricsAsync(int id, string lyrics);
+
     }
 }

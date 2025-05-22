@@ -23,6 +23,7 @@ namespace music.Core.Intefaces.IServices
          Task<bool> RemoveUserFromPlaylistAsync(int playlistId, int songId);
         Task<Playlist> AddUserAsync(Playlist playlist, string userEmail);
         Task<bool> SharePlaylistAsync(PlaylistDto playlist, string email);
+        Task<int> GetUserIdByEmailAsync(string email);
 
     }
 }

@@ -98,7 +98,18 @@ namespace music.API.Controllers
                 return NotFound();
             return songDto;
         }
-
+        [HttpPut("{id}/Lyrics")]
+        [AllowAnonymous]
+        public async Task<ActionResult<SongDto>> AddLyrics(int id, [FromBody] string lyrics)
+        {
+            var song = await _iService.GetByIdAsync(id);
+            if (song == null)
+                return NotFound();
+            SongDto songDto = await _iService.AddLyricsAsync(id, lyrics);
+            if (songDto == null)
+                return NotFound();
+            return songDto;
+        }
         // DELETE api/<SongControllers>/5
         //[HttpDelete("{id}")]
         //[Authorize(Policy = "Admin")]

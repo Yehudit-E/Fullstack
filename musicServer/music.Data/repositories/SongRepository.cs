@@ -52,5 +52,15 @@ namespace music.Data.repositories
             }
             return existingEntity;
         }
+        public async Task<Song> AddLyricsAsync(int id, string lyrics)
+        {
+            var existingEntity = await _dataSet.FindAsync(id);
+            if (existingEntity == null)
+            {
+                return null;
+            }
+            existingEntity.Lyrics = lyrics;
+            return existingEntity;
+        }
     }
 }

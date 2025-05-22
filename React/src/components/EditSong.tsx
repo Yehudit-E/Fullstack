@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Button } from "@mui/material"
-import { Close } from "@mui/icons-material"
+import { Close, Lyrics } from "@mui/icons-material"
 import { Music } from "lucide-react"
 import type { Song, SongDto, SongPostModel } from "../models/Song"
 import SongService from "../services/SongService"
@@ -80,7 +80,8 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
         imageFilePath: song.imageFilePath,
         playlistId: playlistId,
         year: song.year,
-        album: song.album
+        album: song.album,
+        lyrics: song.lyrics
       }
 
       await SongService.updateSong(song.id, updatedSong)

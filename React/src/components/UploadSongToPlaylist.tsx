@@ -264,6 +264,7 @@ console.log("----------------------------------------------",playlist,playlistId
         audioFilePath: audioUrl,
         imageFilePath: imageUrl,
         playlistId: playlistId,
+        lyrics: ""
       }
 
       // Add song to playlist

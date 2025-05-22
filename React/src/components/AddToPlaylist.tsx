@@ -92,6 +92,7 @@ const AddToPlaylist = ({ song, onClose }: AddToPlaylistModalProps) => {
         playlistId: selectedPlaylistId,
         year: song.year,
         album: song.album,
+        lyrics: song.lyrics,
       })
       alert("Song added successfully!")
       handleClose()

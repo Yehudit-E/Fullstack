@@ -360,6 +360,7 @@ const PublicSongs = () => {
                   <p className="song-artist">{song.artist}</p>
 
                   <div className="song-actions">
+                    {/* <Transcription song={song} /> */}
                     <button
                       className="action-button"
                       onClick={() => handleDownload(song)}

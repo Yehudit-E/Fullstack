@@ -29,9 +29,6 @@ const AppLayout = () => {
 
   useEffect(() => {
     console.log(authState);
-
-    // if(!authState)
-    //   return;
     const fetchData = async () => {
       const token = localStorage.getItem("authToken");
       const songsList = sessionStorage.getItem('songsList') ? JSON.parse(sessionStorage.getItem('songsList')!) : []; // מערך שירים
@@ -53,9 +50,6 @@ const AppLayout = () => {
     };
     fetchData();
   }, [authState]);
-
-  console.log("songId" + songsList[currentSongIndex].id);
-  console.log("song" + songsList[currentSongIndex]);
   const songId = songsList[currentSongIndex].id;
   const hasSongPlayer = songsList[0].id !== 0;
 

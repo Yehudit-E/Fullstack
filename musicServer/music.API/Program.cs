@@ -61,7 +61,7 @@ builder.Configuration["SMTP:PASSWORD"] = Env.GetString("PASSWORD");
 string connectionString = Env.GetString("DATABASE_CONNECTION_STRING");
 
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
     options => options.CommandTimeout(60)));
 
 var app = builder.Build();

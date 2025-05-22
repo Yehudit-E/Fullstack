@@ -14,6 +14,7 @@ const emptySong: SongDto = {
   audioFilePath: '',
   imageFilePath: '',
   playlistId: 0,
+  lyrics: '',
 };
 
 // Slice Redux עבור נגן שירים

@@ -16,13 +16,12 @@ namespace music.Core.Entities
         public string Album { get; set; }
         public int Year { get; set; }
         public string Genre { get; set; }
-        //public string Lyrics { get; set; }
+        public string Lyrics { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsPublic { get; set; }
         public int  Likes { get; set; }
         public string AudioFilePath { get; set; }
         public string ImageFilePath { get; set; }
-        //public List<Playlist> Playlists { get; set; }
         public int PlaylistId { get; set; }
         public Playlist playlist { get; set; }
 

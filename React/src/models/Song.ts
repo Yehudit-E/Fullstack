@@ -1,42 +1,45 @@
 import { Playlist } from "./Playlist"
 
-export type Song ={
-    id:number,
-    name:string,
+export type Song = {
+    id: number,
+    name: string,
     artist: string,
     genre: string,
-    year:number,
-    album:string,
-    create_at:string,
+    year: number,
+    album: string,
+    create_at: string,
     isPublic: boolean,
-    likes:number,
-    audioFilePath:string,
-    imageFilePath:string,
-    playlistId:number,
-    playlist:Playlist
-} 
-export type SongDto ={
-    id:number,
-    name:string,
+    likes: number,
+    lyrics: string,
+    audioFilePath: string,
+    imageFilePath: string,
+    playlistId: number,
+    playlist: Playlist
+}
+export type SongDto = {
+    id: number,
+    name: string,
     artist: string,
     genre: string,
-    year:number,
-    album:string,
-    create_at:string,
+    year: number,
+    album: string,
+    create_at: string,
     isPublic: boolean,
-    likes:number,
-    audioFilePath:string,
-    imageFilePath:string,
-    playlistId:number,
-} 
-export type SongPostModel ={
-    name:string,
-    description?:string,
+    likes: number,
+    lyrics: string,
+    audioFilePath: string,
+    imageFilePath: string,
+    playlistId: number,
+}
+export type SongPostModel = {
+    name: string,
+    description?: string,
     artist: string,
     genre: string,
-    year:number,
-    album:string,
-    audioFilePath:string,
-    imageFilePath:string,
-    playlistId:number,
+    year: number,
+    album: string,
+    lyrics: string,
+    audioFilePath: string,
+    imageFilePath: string,
+    playlistId: number,
 } 

@@ -15,8 +15,7 @@ namespace music.Core.DTOs
         public string Album { get; set; }
         public int Year { get; set; }
         public string Genre { get; set; }
-        //public string Lyrics { get; set; }
-
+        public string Lyrics { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsPublic { get; set; }
         public int Likes { get; set; }

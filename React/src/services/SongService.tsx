@@ -76,7 +76,20 @@ const SongService = {
         }
     },
 
-
+ // 8. הוספת מילות שיר
+    addLyrics: async (id: number, lyrics: string) => {
+        try {
+            const response = await api.put(`/song/${id}/Lyrics`, lyrics, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error adding lyrics:", error);
+            throw error;
+        }
+    },
 };
 
 export default SongService;
