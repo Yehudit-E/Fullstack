@@ -7,6 +7,7 @@ using music.Core;
 using music.Core.DTOs;
 using music.Core.Entities;
 using music.Core.Intefaces.IServices;
+using music.Service.Services;
 using System.Text;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,11 +20,13 @@ namespace music.API.Controllers
     public class PlaylistController : ControllerBase
     {
         readonly IPlaylistService _iService;
+        readonly IUserService _userService;
         readonly IMapper _mapper;
-        public PlaylistController(IPlaylistService iservice, IMapper mapper)
+        public PlaylistController(IPlaylistService iservice, IMapper mapper, IUserService userService)
         {
             _iService = iservice;
             _mapper = mapper;
+            _userService = userService;
         }
         //// GET: api/<PlaylistController>
         //[HttpGet]
@@ -153,16 +156,16 @@ namespace music.API.Controllers
                 return Forbid();
             return await _iService.RemoveSongFromPlaylistAsync(playlistId, songId);
         }
-        //[HttpDelete("{playlistId}/user/{userId}")]
-        //public async Task<ActionResult<bool>> RemoveUserFromPlaylistAsync(int playlistId, int userId)
-        //{
-        //    var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
-        //    var tokenId = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
-        //    var playlist = await _iService.GetByIdAsync(playlistId);
-        //    if (tokenId != playlist.OwnerId &&tokenId!=userId)
-        //        return Forbid();
-        //    return await _iService.RemoveUserFromPlaylistAsync(playlistId, userId);
-        //}
+        [HttpDelete("{playlistId}/user/{userId}")]
+        public async Task<ActionResult<bool>> RemoveUserFromPlaylistAsync(int playlistId, int userId)
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
+            var tokenId = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
+            var playlist = await _iService.GetByIdAsync(playlistId);
+            if (tokenId != playlist.OwnerId && tokenId != userId)
+                return Forbid();
+            return await _iService.RemoveUserFromPlaylistAsync(playlistId, userId);
+        }
         [HttpPost("{playlistId}/share")]
         public async Task<ActionResult<bool>> SharePlaylist(int playlistId, [FromBody] EmailType emailRequest)
         {
@@ -191,9 +194,11 @@ namespace music.API.Controllers
                 return Forbid();
 
             var userId = int.Parse(User.Claims.First(claim => claim.Type == "id").Value);
-            var playlist = await _iService.GetFullByIdAsync(playlistId);
-            if (userId != playlist.OwnerId && userId != userId) // נראה כמו טעות לוגית כאן, כנראה התכוונת לבדוק שלא הוזמנת
+            var userIdFromEmail = await _iService.GetUserIdByEmailAsync(email);
+            if (userId != userIdFromEmail)
                 return Forbid();
+            var playlist = await _iService.GetFullByIdAsync(playlistId);
+
 
             playlist = await _iService.AddUserAsync(playlist, email);
             if (playlist == null)

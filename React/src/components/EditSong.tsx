@@ -79,6 +79,8 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
         audioFilePath: song.audioFilePath,
         imageFilePath: song.imageFilePath,
         playlistId: playlistId,
+        year: song.year,
+        album: song.album
       }
 
       await SongService.updateSong(song.id, updatedSong)

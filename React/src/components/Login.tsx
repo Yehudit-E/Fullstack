@@ -237,7 +237,13 @@ const Login = () => {
       const resultAction = await dispatch(loginUser(userLog))
 
       if (loginUser.fulfilled.match(resultAction)) {
-        navigate("/")
+        const redirect = sessionStorage.getItem("redirectAfterLogin")
+        if (redirect) {
+          sessionStorage.removeItem("redirectAfterLogin")
+          navigate(redirect)
+        } else {
+          navigate("/") 
+        }
       } else if (loginUser.rejected.match(resultAction)) {
         const errorMessage = resultAction.error.message || "Login failed. Please check your credentials."
         setErrors((prev) => ({ ...prev, general: errorMessage }))
@@ -254,7 +260,7 @@ const Login = () => {
       <div className="form-group">
         <div className="input-container">
           <Mail className="input-icon" size={18} />
-          <input 
+          <input
             type="text"
             placeholder="Email"
             ref={emailRef}

@@ -6,6 +6,8 @@ const emptySong: SongDto = {
   name: '',
   artist: '',
   genre: '',
+  year: 0,
+  album: '',
   create_at: '',
   isPublic: false,
   likes: 0,

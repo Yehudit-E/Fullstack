@@ -90,6 +90,8 @@ const AddToPlaylist = ({ song, onClose }: AddToPlaylistModalProps) => {
         genre: song.genre,
         audioFilePath: song.audioFilePath,
         playlistId: selectedPlaylistId,
+        year: song.year,
+        album: song.album,
       })
       alert("Song added successfully!")
       handleClose()

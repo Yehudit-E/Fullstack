@@ -84,7 +84,7 @@
 //     return (
 //         <form onSubmit={handleSubmit} style={styles.form}>
 //             <input type="text" placeholder="Username" ref={nameRef} style={styles.input} />
-            
+
 //             <input type="text" placeholder="Email" ref={emailRef} style={styles.input} />
 //             {emailError && <span style={styles.error}>{emailError}</span>}
 
@@ -311,7 +311,13 @@ const Register = () => {
       const resultAction = await dispatch(registerUser(userReg))
 
       if (registerUser.fulfilled.match(resultAction)) {
-        navigate("/")
+        const redirect = sessionStorage.getItem("redirectAfterLogin")
+        if (redirect) {
+          sessionStorage.removeItem("redirectAfterLogin")
+          navigate(redirect)
+        } else {
+          navigate("/") // דף ברירת מחדל
+        }
       } else if (registerUser.rejected.match(resultAction)) {
         const errorMessage = resultAction.error.message || "Registration failed. Please try again."
 

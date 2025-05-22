@@ -109,6 +109,7 @@ const PlaylistService = {
 
     // 🔹 10. שיתוף פלייליסט במייל
     sharePlaylist: async (playlistId: number, email: string) => {
+        console.log(email);
         try {
             const response = await api.post(`${API_URL}/${playlistId}/share`, {
                 email,
