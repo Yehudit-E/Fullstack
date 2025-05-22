@@ -54,7 +54,7 @@ const SharePlaylist = ({ playlistId, closeShareDialog }: SharePlaylistProps) => 
     setIsSubmitting(true)
 
     try {
-      await PlaylistService.addUserToPlaylist(playlistId, userEmail)
+      await PlaylistService.sharePlaylist(playlistId, userEmail)
       await PlaylistService.getFullPlaylistById(playlistId)
       handleClose()
     } catch (error) {

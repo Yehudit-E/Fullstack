@@ -27,8 +27,12 @@ import { saveAs } from "file-saver"
 import RemoveSharingInPlaylist from "./RemoveSharingInPlaylist"
 
 const PlaylistDetails = () => {
-  const { id } = useParams<{ id: string }>()
-  const playlistId = Number.parseInt(id || "0")
+  const { id } = useParams<{ id: string }>();
+  const decodeId=id?atob(id):"";
+  const realId = decodeId.split("-")[1]; 
+  const playlistId = Number.parseInt(decodeId || "0")
+    console.log(playlistId,typeof playlistId);
+    
   const dispatch = useDispatch<Dispatch>()
   const navigate = useNavigate()
 

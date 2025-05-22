@@ -19,7 +19,12 @@ import "./style/UploadMusic.css"
   ; (window as any).Buffer = Buffer
 
 const UploadSongToPlaylist = () => {
-  const { playlistId } = useParams<{ playlistId: string }>()
+  const { id } = useParams<{ id: string }>();
+  const decodeId=id?atob(id):"";
+  const realId = decodeId.split("-")[1]; 
+  const playlistId = Number.parseInt(decodeId || "0")
+  console.log(playlistId,typeof playlistId);
+
   const navigate = useNavigate()
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
@@ -45,7 +50,7 @@ const UploadSongToPlaylist = () => {
       if (!playlistId) return
 
       try {
-        const data = await PlaylistService.getFullPlaylistById(Number.parseInt(playlistId))
+        const data = await PlaylistService.getFullPlaylistById(playlistId)
         setPlaylist(data)
       } catch (err) {
         console.error("Error fetching playlist:", err)
@@ -216,6 +221,7 @@ const UploadSongToPlaylist = () => {
 
   const handleSubmitSong = async () => {
     if (!file || !playlistId) return
+console.log("----------------------------------------------",playlist,playlistId);
 
     if (!metaData.title || !metaData.artist) {
       setError("Title and artist are required")
@@ -257,10 +263,12 @@ const UploadSongToPlaylist = () => {
         album: metaData.album,
         audioFilePath: audioUrl,
         imageFilePath: imageUrl,
-        playlistId: Number.parseInt(playlistId),
+        playlistId: playlistId,
       }
 
       // Add song to playlist
+      console.log(songPostModel);
+      
       await SongService.addSong(songPostModel)
 
       setSuccess(true)
@@ -393,7 +401,7 @@ const UploadSongToPlaylist = () => {
               )}
 
               <div className="upload-actions">
-                <button className="upload-button secondary" onClick={() => navigate(`/myplaylists/playlist/${playlistId}`)}>
+                <button className="upload-button secondary" onClick={() => navigate(`/myplaylists/playlist/${id}`)}>
                   <ChevronLeft size={16} />
                   <span>Back to Playlist</span>
                 </button>
@@ -548,7 +556,7 @@ const UploadSongToPlaylist = () => {
 
                 <button
                   className="upload-button primary"
-                  onClick={() => navigate(`/myplaylists/playlist/${playlistId}`)}
+                  onClick={() => navigate(`/myplaylists/playlist/${id}`)}
                 >
                   <span>Go to Playlist</span>
                 </button>

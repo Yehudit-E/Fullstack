@@ -1,7 +1,8 @@
 import axios from "axios";
+import { BASE_URL } from "../Global";
 
 const api = axios.create({
-    baseURL: "https://music-server-im05.onrender.com/api",
+    baseURL: BASE_URL+"/api",
 });
 
 api.interceptors.request.use((config) => {

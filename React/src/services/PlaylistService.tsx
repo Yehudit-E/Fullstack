@@ -1,5 +1,5 @@
 import api from "../interceptor/api";
-import {  PlaylistPostModel } from "../models/Playlist";
+import { PlaylistPostModel } from "../models/Playlist";
 
 const API_URL = "/Playlist";
 
@@ -9,7 +9,6 @@ const PlaylistService = {
         try {
             const response = await api.get(`${API_URL}/full/${id}`);
             console.log(response.data);
-            
             return response.data;
         } catch (error) {
             console.error("Error fetching full playlist by ID:", error);
@@ -21,7 +20,7 @@ const PlaylistService = {
     createPlaylist: async (playlistData: PlaylistPostModel) => {
         try {
             const response = await api.post(API_URL, playlistData);
-            console.log(response.data);       
+            console.log(response.data);
             return response.data;
         } catch (error) {
             console.error("Error creating playlist:", error);
@@ -37,18 +36,6 @@ const PlaylistService = {
         } catch (error) {
             console.error("Error updating playlist:", error);
             throw error;
-        }
-    },
-
-    // 4. הוספת משתמש לפלייליסט
-    addUserToPlaylist: async (id: number, userEmail: string) => {
-        try {
-            console.log(id,userEmail);
-            
-            const response = await api.put(`${API_URL}/${id}/user`, {email:userEmail});
-            return response.data;
-        } catch (error) {
-            console.error("Error adding user to playlist:", error);
         }
     },
 
@@ -73,6 +60,8 @@ const PlaylistService = {
             throw error;
         }
     },
+
+    // 6א. הסרת משתמש מפלייליסט
     removeUserFromPlaylist: async (playlistId: number, userId: number) => {
         try {
             const response = await api.delete(`${API_URL}/${playlistId}/user/${userId}`);
@@ -83,7 +72,7 @@ const PlaylistService = {
         }
     },
 
-    // 7. שליפת הפלייליסטים של המשתמש (פלייליסטים אישיים)
+    // 7. שליפת הפלייליסטים של המשתמש (אישיים)
     getUserPlaylists: async (userId: number) => {
         try {
             const response = await api.get(`${API_URL}/user/${userId}`);
@@ -94,7 +83,7 @@ const PlaylistService = {
         }
     },
 
-    // 8. שליפת הפלייליסטים ששיתפו עם המשתמש
+    // 8. שליפת פלייליסטים ששיתפו איתו
     getUserSharedPlaylists: async (userId: number) => {
         try {
             const response = await api.get(`${API_URL}/shared/${userId}`);
@@ -104,17 +93,42 @@ const PlaylistService = {
             throw error;
         }
     },
-    getUploadUrl: async (fileName:string, contentType:string) => {
+
+    // 9. קבלת URL להעלאת קובץ שיר ל-S3
+    getUploadUrl: async (fileName: string, contentType: string) => {
         try {
-            console.log("filename"+fileName);
-            console.log("contentType"+contentType);
-            
             const response = await api.get("/song/upload-url", {
-                params: { fileName, contentType},
+                params: { fileName, contentType },
             });
             return response.data.url;
         } catch (error) {
             console.error("Error getting upload URL:", error);
+            throw error;
+        }
+    },
+
+    // 🔹 10. שיתוף פלייליסט במייל
+    sharePlaylist: async (playlistId: number, email: string) => {
+        try {
+            const response = await api.post(`${API_URL}/${playlistId}/share`, {
+                email,
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error sharing playlist:", error);
+            throw error;
+        }
+    },
+
+    // 🔹 11. קבלת שיתוף לפי טוקן מהקישור
+    acceptPlaylistShare: async (token: string) => {
+        try {
+            const response = await api.get(`${API_URL}/accept-share`, {
+                params: { token },
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error accepting shared playlist:", error);
             throw error;
         }
     },

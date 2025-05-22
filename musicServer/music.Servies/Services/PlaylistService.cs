@@ -18,11 +18,12 @@ namespace music.Service.Services
     {
         private readonly IRepositoryManager _iManager;
         private readonly IMapper _mapper;
-        private readonly EmailService emailService;
-        public PlaylistService(IRepositoryManager iManager, IMapper mapper)
+        private readonly IEmailService _emailService;
+        public PlaylistService(IRepositoryManager iManager, IMapper mapper, IEmailService emailService)
         {
             _iManager = iManager;
             _mapper = mapper;
+            _emailService = emailService;
         }
         public async Task<IEnumerable<PlaylistDto>> GetAsync()
         {
@@ -120,22 +121,25 @@ namespace music.Service.Services
         public async Task<bool> SharePlaylistAsync(PlaylistDto playlist, string email)
         {
             var baseUrl = Environment.GetEnvironmentVariable("BASEURL");
-            var secretKey = Environment.GetEnvironmentVariable("SECRET");
+            var secret = Environment.GetEnvironmentVariable("SECRET");
 
-            if (string.IsNullOrEmpty(baseUrl) || string.IsNullOrEmpty(secretKey))
+            if (string.IsNullOrEmpty(baseUrl) || string.IsNullOrEmpty(secret))
                 throw new InvalidOperationException("Base URL or Secret Key not defined in environment variables.");
 
-            var link = PlaylistTokenHelper.GenerateSecureLink(playlist.Id, email, baseUrl, secretKey);
+            var link = PlaylistTokenHelper.GenerateSecureLink(playlist.Id, email, baseUrl, secret);
 
+            Console.WriteLine(link);
             var body = $"<p>You have been invited to view the playlist <b>{playlist.Name}</b></p>" +
                        $"<p><a href='{link}'>Click here to view</a></p>";
 
-            return await emailService.SendEmailAsync(new EmailRequest
+            var res = await _emailService.SendEmailAsync(new EmailRequest()
             {
                 To = email,
                 Subject = "Someone shared a playlist with you on MusiX",
                 Body = body
             });
+
+            return res;
         }
 
     }

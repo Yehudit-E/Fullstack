@@ -12,12 +12,12 @@ namespace music.Core
     {
         public static string GenerateSecureLink(int playlistId, string email, string baseUrl, string secretKey)
         {
-            var encodedEmail = WebUtility.UrlEncode(email.ToLower());
-            var dataToSign = $"{playlistId}:{encodedEmail}";
+            var normalizedEmail = email.ToLower();
+            var dataToSign = $"{playlistId}:{normalizedEmail}";
             var signature = GenerateSignature(dataToSign, secretKey);
 
-            var token = $"{playlistId}:{encodedEmail}:{signature}";
-            var base64Token = Convert.ToBase64String(Encoding.UTF8.GetBytes(token));
+            var token = $"{playlistId}:{normalizedEmail}:{signature}";
+            var base64Token = ToBase64Url(token);
             return $"{baseUrl}/playlist/accept-share?token={base64Token}";
         }
 
@@ -25,12 +25,12 @@ namespace music.Core
         {
             try
             {
-                var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(base64Token));
+                var decoded = FromBase64Url(base64Token);
                 var parts = decoded.Split(':');
                 if (parts.Length != 3) return null;
 
                 var playlistId = int.Parse(parts[0]);
-                var email = WebUtility.UrlDecode(parts[1]);
+                var email = parts[1];
                 var signature = parts[2];
 
                 return (playlistId, email, signature);
@@ -56,6 +56,26 @@ namespace music.Core
             using var hmac = new HMACSHA256(keyBytes);
             var hash = hmac.ComputeHash(dataBytes);
             return Convert.ToBase64String(hash);
+        }
+
+        private static string ToBase64Url(string input)
+        {
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(input))
+                         .Replace('+', '-')
+                         .Replace('/', '_')
+                         .TrimEnd('=');
+        }
+        private static string FromBase64Url(string input)
+        {
+            string base64 = input.Replace('-', '+').Replace('_', '/');
+            switch (base64.Length % 4)
+            {
+                case 2: base64 += "=="; break;
+                case 3: base64 += "="; break;
+                case 0: break;
+                default: throw new FormatException("Invalid base64url string");
+            }
+            return Encoding.UTF8.GetString(Convert.FromBase64String(base64));
         }
     }
 

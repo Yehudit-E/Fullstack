@@ -11,6 +11,7 @@ import UploadSongToPlaylist from "./components/UploadSongToPlaylist";
 import About from "./components/About";
 import Terms from "./components/Terms";
 import Contact from "./components/Contact";
+import AcceptShare from "./components/AcceptShare";
 
 
 export const router = createBrowserRouter([
@@ -38,7 +39,7 @@ export const router = createBrowserRouter([
             element: <UploadMusic/>,
           },
           {
-            path: "myplaylists/playlist/:playlistId/upload-song",
+            path: "myplaylists/playlist/:id/upload-song",
             element: <UploadSongToPlaylist/>,
           },
           {
@@ -52,7 +53,12 @@ export const router = createBrowserRouter([
           {
             path: "/contact",
             element: <Contact/>,
+          },
+          { 
+            path: "playlist/accept-share", 
+            element: <AcceptShare /> 
           }
+
 
         ]
     }

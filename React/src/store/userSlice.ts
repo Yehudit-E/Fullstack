@@ -3,6 +3,7 @@ import axios from "axios";
 import { User, UserDto } from "../models/User";
 import { UserLogin, UserRegister } from "../models/UserAuth";
 import api from "../interceptor/api";
+import { BASE_URL } from "../Global";
 let userEmpty: UserDto = {
     id: 0,
     userName: "",
@@ -10,7 +11,7 @@ let userEmpty: UserDto = {
     password: "",
     create_at: "",
 }
-let baseUrl = "https://music-server-im05.onrender.com";
+let baseUrl = BASE_URL;
 let userWithNewName;
 export const load = createAsyncThunk('user/load',
     async (id: string, thunkAPI) => {

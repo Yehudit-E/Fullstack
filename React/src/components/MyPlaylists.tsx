@@ -253,7 +253,7 @@ const MyPlaylist = () => {
                     className="playlist-image"
                   />
                   <div className="playlist-image-overlay">
-                    <button className="playlist-view-button" onClick={() => navigate(`playlist/${playlist.id}`)}>
+                    <button className="playlist-view-button" onClick={() => navigate(`playlist/${btoa(playlist.id.toString()+"-playlist")}`)}>
                       <ListMusic className="view-icon" />
                     </button>
                   </div>
