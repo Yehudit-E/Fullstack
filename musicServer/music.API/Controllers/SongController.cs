@@ -50,7 +50,7 @@ namespace music.API.Controllers
             var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
             var tokenId = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
             bool flag = await _iService.IsOwnerOfPlaylist(songDto.playlistId, tokenId);
-            if (!flag)
+            if (!flag && songDto.IsPublic==false)
                 return Forbid();
             return songDto;
         }

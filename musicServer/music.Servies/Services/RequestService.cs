@@ -49,11 +49,12 @@ namespace music.Service.Services
                 Genre = requestDto.SongGenre,
                 Album = requestDto.SongAlbum,
                 Year = requestDto.SongYear,
+                Lyrics = "",
                 CreatedAt = DateTime.Now,
                 Likes = 0,
                 IsPublic = false,
                 PlaylistId = 1,
-            };
+            }; ;
             Request request = new Request()
             {
                 UserId = requestDto.UserId,

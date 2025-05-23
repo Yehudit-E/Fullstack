@@ -1,0 +1,420 @@
+.song-details-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 2rem;
+    color: var(--color-white);
+    min-height: 80vh;
+}
+
+.song-details-header {
+    position: relative;
+}
+
+
+.song-details-content {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 2rem;
+}
+
+/* Left Section - Image and File Info */
+.song-left-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.song-image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    background: rgba(30, 30, 30, 0.3);
+}
+
+.song-image-container:hover {
+    transform: translateY(-5px);
+}
+
+.song-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.file-information {
+    background: rgba(30, 30, 30, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.file-information h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 0 !important;
+    margin-bottom: 1rem;
+    color: var(--color-white);
+    background: var(--color-white);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.file-info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+
+.file-info-item {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.file-info-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.file-info-value {
+    color: var(--color-white);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.song-controls {
+    display: flex;
+    flex-direction: column;
+}
+
+.control-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.play-control-button {
+    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
+    color: var(--color-white);
+}
+
+.play-control-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.play-song-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0rem;
+    padding: 0.35rem;
+    border-radius: 8px;
+    border: none;
+    /* background: rgba(255, 255, 255, 0.08); */
+    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
+    color: var(--color-white);
+    font-size: 0.85rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 319px !important;
+}
+
+.download-button {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-white);
+}
+
+.download-button:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+.add-button {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-white);
+}
+
+.add-button:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+/* Right Section - Song Title and Lyrics */
+.song-right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.song-title-section {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.song-details-title {
+    font-size: 2.2rem !important;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    background: var(--color-white);
+    -webkit-background-clip: text;
+    color: transparent;
+    /* letter-spacing: -0.9px; */
+    /* line-height: 1.2; */
+}
+
+.song-details-artist {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 0.5rem 0;
+}
+
+.song-details-genre {
+    display: inline-block;
+    /* background: rgba(255, 255, 255, 0.08); */
+    color: rgba(255, 255, 255, 0.9);
+    /* padding: 0.25rem 0.75rem; */
+    /* border-radius: 20px; */
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.song-details-plays {
+    margin-left: 15px;
+    display: inline-block;
+    /* background: rgba(255, 255, 255, 0.08); */
+    color: rgba(255, 255, 255, 0.9);
+    /* padding: 0.25rem 0.75rem; */
+    /* border-radius: 20px; */
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+.song-details-actions{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+.lyrics-section {
+    padding: 1.5rem;
+    background-color: rgba(30, 30, 30, 0.3);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.lyrics-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.lyrics-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-white);
+}
+
+.fetch-lyrics-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
+    border: none;
+    color: var(--color-white);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.fetch-lyrics-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.fetch-lyrics-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.lyrics-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 400px;
+    padding-right: 0.5rem;
+}
+
+.lyrics-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.lyrics-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.lyrics-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.lyrics-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.lyrics-text {
+    white-space: pre-wrap;
+    font-family: inherit;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+    padding: 0;
+}
+
+.lyrics-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.lyrics-placeholder-icon {
+    margin-bottom: 1rem;
+    color: var(--gradient-middle);
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+}
+
+.lyrics-placeholder p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+}
+
+.lyrics-placeholder-subtitle {
+    font-size: 0.9rem !important;
+    opacity: 0.7;
+}
+
+/* Loading and Error States */
+.loading-state,
+.error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    text-align: center;
+}
+
+/* .loading-spinner {
+  width: 4rem;
+  height: 4rem;
+  border: 2px solid transparent;
+  border-top-color: var(--gradient-middle);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+} */
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.error-state h2 {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+    color: var(--color-white);
+}
+
+.error-state p {
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .song-details-content {
+        grid-template-columns: 280px 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .song-details-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .song-left-section {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .lyrics-content {
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .song-details-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .song-title {
+        font-size: 2rem;
+    }
+
+    .lyrics-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .fetch-lyrics-button {
+        width: 100%;
+        justify-content: center;
+    }
+}

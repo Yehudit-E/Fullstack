@@ -16,7 +16,7 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote"
 import { MenuItem, IconButton, Menu, Select } from "@mui/material"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import { Download, ListMusic, Plus } from "lucide-react"
-import { Add as AddIcon } from "@mui/icons-material";
+import { Add as AddIcon } from "@mui/icons-material"
 
 import "./style/PublicSongs.css"
 import "./style/MenuStyles.css" // Import the shared menu styles
@@ -85,51 +85,28 @@ const PublicSongs = () => {
     setMenuAnchor((prev) => ({ ...prev, [songId]: null }))
   }
 
-  // const downloadSong = async (event: React.MouseEvent, fileUrl: string, fileName: string, songId: number) => {
-  //   event.stopPropagation()
-  //   try {
-  //     setDownloadingSong(songId)
-  //     const response = await fetch(fileUrl)
-  //     if (!response.ok) throw new Error("שגיאה בהורדת הקובץ")
-
-  //     const blob = await response.blob()
-  //     const link = document.createElement("a")
-
-  //     link.href = URL.createObjectURL(blob)
-  //     link.download = fileName
-  //     document.body.appendChild(link)
-  //     link.click()
-
-  //     document.body.removeChild(link)
-  //     URL.revokeObjectURL(link.href)
-  //   } catch (error) {
-  //     console.error("שגיאה בהורדה:", error)
-  //   } finally {
-  //     setDownloadingSong(null)
-  //   }
-  // }
   const handleDownload = async (song: Song) => {
     try {
       setDownloadingSong(song.id)
-      const response = await fetch(song.audioFilePath);
-      if (!response.ok) throw new Error("Error downloading the file");
+      const response = await fetch(song.audioFilePath)
+      if (!response.ok) throw new Error("Error downloading the file")
 
-      const blob = await response.blob();
-      const link = document.createElement("a");
+      const blob = await response.blob()
+      const link = document.createElement("a")
 
-      link.href = URL.createObjectURL(blob);
-      link.download = song.name;
-      document.body.appendChild(link);
-      link.click();
+      link.href = URL.createObjectURL(blob)
+      link.download = song.name
+      document.body.appendChild(link)
+      link.click()
 
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href);
+      document.body.removeChild(link)
+      URL.revokeObjectURL(link.href)
     } catch (error) {
-      console.error("Download error:", error);
+      console.error("Download error:", error)
     } finally {
       setDownloadingSong(null)
     }
-  };
+  }
 
   const handlePlaySong = (song: Song) => {
     try {
@@ -145,6 +122,10 @@ const PublicSongs = () => {
     event.stopPropagation()
     setCurrentSong(song)
     setShowPlaylistList(true)
+  }
+
+  const navigateToSongDetails = (songId: number) => {
+    navigator(`/song/${songId}`)
   }
 
   return (
@@ -169,9 +150,12 @@ const PublicSongs = () => {
         {authState && (
           <div className="upload-button-container">
             <button
-              onClick={() => { navigator("upload") }}
+              onClick={() => {
+                navigator("upload")
+              }}
               style={{
-                background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
+                background:
+                  "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
                 color: "var(--color-white)",
                 borderRadius: "3px", // פינות מעוגלות
                 padding: "4px 8px", // ריווח פנימי
@@ -180,7 +164,7 @@ const PublicSongs = () => {
                 justifyContent: "center", // מרכז אופקית
                 fontSize: "13px", // גודל הטקסט (אפשר לשנות אם צריך)
                 border: "none", // לבטל את הגבול אם יש
-                cursor: "pointer" // להפוך את הכפתור ללחיץ
+                cursor: "pointer", // להפוך את הכפתור ללחיץ
               }}
             >
               <AddIcon /> Upload Music
@@ -279,7 +263,6 @@ const PublicSongs = () => {
             <MenuItem value="artist">Artist</MenuItem>
           </Select>
         </div>
-
       </div>
 
       {/* Songs Grid */}
@@ -288,107 +271,124 @@ const PublicSongs = () => {
           <div className="loading-spinner"></div>
           <p className="loading-text">טוען שירים...</p>
         </div>
-      ) :error?(
+      ) : error ? (
         <div className="error-message">{error}</div>
-      ):(
+      ) : (
         <div>
-        {filteredSongs.length === 0 ? (
-          <div className="no-songs-container">
-            <MusicNoteIcon className="no-songs-icon" />
-            <h3 className="no-songs-title">No songs found</h3>
-            <p className="no-songs-subtitle">Try adjusting the filters or search terms</p>
-          </div>
-        ) : (
-          <div className="songs-grid">
-            {filteredSongs.map((song: Song) => (
-              <div key={song.id} className="song-card">
-                <div className="song-image-container">
-                  <img src={song.imageFilePath || "/placeholder.svg"} alt={song.name} className="song-image" />
-                  <div className="song-overlay">
-                    <button
-                      className={`play-button ${currentlyPlaying === song.id ? "playing" : ""}`}
-                      onClick={() => handlePlaySong(song)}
-                    >
-                      {currentlyPlaying === song.id ? (
-                        <PauseIcon className="play-icon" />
-                      ) : (
-                        <PlayArrowIcon className="play-icon" />
-                      )}
-                    </button>
-                  </div>
-                  <div className="song-options">
-                    <IconButton className="options-button" onClick={(e) => openMenu(e, song.id)}>
-                      <MoreHorizIcon className="options-icon" />
-                    </IconButton>
-                    <Menu
-                      anchorEl={menuAnchor[song.id]}
-                      open={Boolean(menuAnchor[song.id])}
-                      onClose={() => closeMenu(song.id)}
-                      className="options-menu"
-                    >
-                      <MenuItem className="menu-title" disabled>
-                        Options
-                      </MenuItem>
-                      <MenuItem
-                        className="menu-item"
-                        onClick={() => {
-                          closeMenu(song.id)
-                          // downloadSong(e, song.audioFilePath, song.name, song.id)
-                          handleDownload(song)
+          {filteredSongs.length === 0 ? (
+            <div className="no-songs-container">
+              <MusicNoteIcon className="no-songs-icon" />
+              <h3 className="no-songs-title">No songs found</h3>
+              <p className="no-songs-subtitle">Try adjusting the filters or search terms</p>
+            </div>
+          ) : (
+            <div className="songs-grid">
+              {filteredSongs.map((song: Song) => (
+                <div key={song.id} className="song-card" onClick={() => navigateToSongDetails(song.id)}>
+                  <div className="song-image-container">
+                    <img src={song.imageFilePath || "/placeholder.svg"} alt={song.name} className="song-image" />
+                    <div className="song-overlay">
+                      <button
+                        className={`play-button ${currentlyPlaying === song.id ? "playing" : ""}`}
+                        onClick={(e) => {
+                          e.stopPropagation() // Prevent navigation when clicking play
+                          handlePlaySong(song)
                         }}
                       >
-                        <Download size={17} className="menu-icon" />
-                        Download
-                      </MenuItem>
-                      {authState && (
+                        {currentlyPlaying === song.id ? (
+                          <PauseIcon className="play-icon" />
+                        ) : (
+                          <PlayArrowIcon className="play-icon" />
+                        )}
+                      </button>
+                    </div>
+                    <div className="song-options">
+                      <IconButton
+                        className="options-button"
+                        onClick={(e) => {
+                          e.stopPropagation() // Prevent navigation when opening menu
+                          openMenu(e, song.id)
+                        }}
+                      >
+                        <MoreHorizIcon className="options-icon" />
+                      </IconButton>
+                      <Menu
+                        anchorEl={menuAnchor[song.id]}
+                        open={Boolean(menuAnchor[song.id])}
+                        onClose={() => closeMenu(song.id)}
+                        className="options-menu"
+                        onClick={(e) => e.stopPropagation()} // Prevent navigation when clicking menu
+                      >
+                        <MenuItem className="menu-title" disabled>
+                          Options
+                        </MenuItem>
                         <MenuItem
                           className="menu-item"
-                          onClick={(e) => {
+                          onClick={() => {
                             closeMenu(song.id)
+                            handleDownload(song)
+                          }}
+                        >
+                          <Download size={17} className="menu-icon" />
+                          Download
+                        </MenuItem>
+                        {authState && (
+                          <MenuItem
+                            className="menu-item"
+                            onClick={(e) => {
+                              closeMenu(song.id)
+                              handleAddToPlaylist(e, song)
+                            }}
+                          >
+                            <ListMusic size={17} className="menu-icon" />
+                            Add to Playlist
+                          </MenuItem>
+                        )}
+                      </Menu>
+                    </div>
+                  </div>
+                  <div className="song-info">
+                    <h4 className="song-title">{song.name}</h4>
+                    <p className="song-artist">{song.artist}</p>
+
+                    <div className="song-actions">
+                      <button
+                        className="action-button"
+                        onClick={(e) => {
+                          e.stopPropagation() // Prevent navigation when downloading
+                          handleDownload(song)
+                        }}
+                        disabled={downloadingSong === song.id}
+                      >
+                        {downloadingSong === song.id ? (
+                          <div className="loading-spinner-small"></div>
+                        ) : (
+                          <>
+                            <Download size={11.5} className="action-icon" />
+                            <span style={{ fontSize: "0.62rem" }}>Download</span>
+                          </>
+                        )}
+                      </button>
+
+                      {authState && (
+                        <button
+                          className="action-button"
+                          onClick={(e) => {
+                            e.stopPropagation() // Prevent navigation when adding to playlist
                             handleAddToPlaylist(e, song)
                           }}
                         >
-                          <ListMusic size={17} className="menu-icon" />
-                          Add to Playlist
-                        </MenuItem>
+                          <Plus size={11.5} className="action-icon" />
+                          <span style={{ fontSize: "0.62rem", marginRight: "0.5rem" }}>Add to playlist</span>
+                        </button>
                       )}
-                    </Menu>
+                    </div>
                   </div>
                 </div>
-                <div className="song-info">
-                  <h4 className="song-title">{song.name}</h4>
-                  <p className="song-artist">{song.artist}</p>
-
-                  <div className="song-actions">
-                    {/* <Transcription song={song} /> */}
-                    <button
-                      className="action-button"
-                      onClick={() => handleDownload(song)}
-                      disabled={downloadingSong === song.id}
-                    >
-                      {downloadingSong === song.id ? (
-                        <div className="loading-spinner-small"></div>
-                      ) : (
-                        <>
-                          <Download size={11.5} className="action-icon" />
-                          <span style={{ fontSize: "0.62rem" }}>Download</span>
-                        </>
-                      )}
-                    </button>
-
-                    {authState && (
-                      <button className="action-button" onClick={(e) => handleAddToPlaylist(e, song)}>
-                        <Plus size={11.5} className="action-icon" />
-                        <span style={{ fontSize: "0.62rem", marginRight: "0.5rem" }}>Add to playlist</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
       )}
       {showPlaylistList && <AddToPlaylistModel song={currentSong} onClose={() => setShowPlaylistList(false)} />}
     </div>

@@ -115,10 +115,10 @@ const userSlice = createSlice({
                     state.user = userEmpty;
                     state.status = "failed";
                     state.authState = false;
-                    console.log("Failed");
                 }
             )
-            .addCase(loginUser.pending, (state) => {
+            .addCase(loginUser.pending, 
+                (state) => {
                 state.status = 'loading';
             })
             .addCase(loginUser.fulfilled,

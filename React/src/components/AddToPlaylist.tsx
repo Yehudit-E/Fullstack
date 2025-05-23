@@ -186,9 +186,9 @@ const AddToPlaylist = ({ song, onClose }: AddToPlaylistModalProps) => {
                       )}
                     </div>
                     {playlist.sharedUsers.length > 0 ? (
-                      <Users size={18} className="playlist-icon public" />
+                      <Users size={18} className="playlist-icon-2 public" />
                     ) : (
-                      <Lock size={18} className="playlist-icon private" />
+                      <Lock size={18} className="playlist-icon-2 private" />
                     )}
                     <span className="playlist-name">{playlist.name}</span>
                     <button

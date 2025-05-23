@@ -12,6 +12,7 @@ import About from "./components/About";
 import Terms from "./components/Terms";
 import Contact from "./components/Contact";
 import AcceptShare from "./components/AcceptShare";
+import SongDetails from "./components/SongDetails";
 
 
 export const router = createBrowserRouter([
@@ -57,6 +58,10 @@ export const router = createBrowserRouter([
           { 
             path: "playlist/accept-share", 
             element: <AcceptShare /> 
+          },
+          {
+            path: "song/:id",
+            element: <SongDetails/>
           }
 
 

@@ -140,15 +140,15 @@
   align-items: center;
 }
 
-.playlist-icon {
+.playlist-icon-2 {
   color: var(--color-white);
 }
 
-.playlist-icon.public {
+.playlist-icon-2.public {
   color: var(--gradient-end);
 }
 
-.playlist-icon.private {
+.playlist-icon-2.private {
   color: var(--gradient-middle);
 }
 
