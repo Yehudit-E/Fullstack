@@ -51,7 +51,7 @@ namespace music.Service.Services
                 Year = requestDto.SongYear,
                 Lyrics = "",
                 CreatedAt = DateTime.Now,
-                Likes = 0,
+                CountOfPlays = 0,
                 IsPublic = false,
                 PlaylistId = 1,
             }; ;

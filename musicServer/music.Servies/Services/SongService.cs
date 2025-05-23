@@ -60,9 +60,9 @@ namespace music.Service.Services
             songDto = _mapper.Map<SongDto>(song);
             return songDto;
         }
-        public async Task<SongDto> UpdateLikesAsync(int id)
+        public async Task<SongDto> UpdatePlaysAsync(int id)
         {
-            Song song = await _iManager._songRepository.UpdateLikesAsync(id);
+            Song song = await _iManager._songRepository.UpdatePlaysAsync(id);
             if (song != null)
                 await _iManager.SaveAsync();
             var songDto = _mapper.Map<SongDto>(song);

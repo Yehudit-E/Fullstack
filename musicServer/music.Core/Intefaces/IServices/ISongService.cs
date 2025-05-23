@@ -15,7 +15,7 @@ namespace music.Core.Intefaces.IServices
         Task<SongDto> GetByIdAsync(int id);
         Task<SongDto> AddAsync(SongDto songDto);       
         Task<SongDto> UpdateAsync(int id, SongDto songDto);
-        Task<SongDto> UpdateLikesAsync(int id);
+        Task<SongDto> UpdatePlaysAsync(int id);
         Task<bool> DeleteAsync(int id);
         Task<bool> IsOwnerOfSong(int songId, int userId);
         Task<bool> IsOwnerOfPlaylist(int playlistId, int userId);

@@ -83,17 +83,19 @@ namespace music.API.Controllers
             flag = await _iService.IsOwnerOfPlaylist(songPostModel.playlistId, tokenId);
             if (!flag)
                 return Forbid();
+            SongDto prevSongDto =await _iService.GetByIdAsync(id);
             SongDto songDto = _mapper.Map<SongDto>(songPostModel);
-            songDto.CreatedAt = DateTime.Now;
+            songDto.CountOfPlays = prevSongDto.CountOfPlays;
+            //songDto.CreatedAt = DateTime.Now;
             songDto = await _iService.UpdateAsync(id, songDto);
             if (songDto == null)
                 return NotFound();
             return songDto;
         }
-        [HttpPut("{id}/like")]
+        [HttpPut("{id}/plays")]
         public async Task<ActionResult<SongDto>> Put(int id)
         {
-            var songDto = await _iService.UpdateLikesAsync(id);
+            var songDto = await _iService.UpdatePlaysAsync(id);
             if (songDto == null)
                 return NotFound();
             return songDto;

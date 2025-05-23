@@ -19,7 +19,7 @@ namespace music.Core.Entities
         public string Lyrics { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsPublic { get; set; }
-        public int  Likes { get; set; }
+        public int  CountOfPlays { get; set; }
         public string AudioFilePath { get; set; }
         public string ImageFilePath { get; set; }
         public int PlaylistId { get; set; }
@@ -28,7 +28,7 @@ namespace music.Core.Entities
         public Song()
         {
             CreatedAt = DateTime.Now;
-            Likes = 0;
+            CountOfPlays = 0;
         }
     }
 }

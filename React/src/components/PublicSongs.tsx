@@ -58,9 +58,12 @@ const PublicSongs = () => {
         return sortedSongs.sort((a, b) => new Date(b.year).getTime() - new Date(a.year).getTime())
       case "artist":
         return sortedSongs.sort((a, b) => a.artist.localeCompare(b.artist))
-      case "name":
+      case "playCount":
+        return sortedSongs.sort((a, b) => b.countOfPlays - a.countOfPlays)
+        case "name":
       default:
         return sortedSongs.sort((a, b) => a.name.localeCompare(b.name))
+
     }
   }
 
@@ -74,7 +77,8 @@ const PublicSongs = () => {
     .filter(
       (song) =>
         song.name.toLowerCase().includes(search.toLowerCase()) ||
-        song.artist.toLowerCase().includes(search.toLowerCase()),
+        song.artist.toLowerCase().includes(search.toLowerCase())||
+        song.album.toLowerCase().includes(search.toLowerCase()),
     )
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>, songId: number) => {
     event.stopPropagation()
@@ -178,7 +182,7 @@ const PublicSongs = () => {
         <div className="search-container">
           <input
             type="text"
-            placeholder="Search songs..."
+            placeholder="Search songs by name artist or album..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="search-input"
@@ -229,7 +233,7 @@ const PublicSongs = () => {
           <Select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as string)}
-            renderValue={() => `Sort by: ${sortBy === "date" ? "Newest" : sortBy === "name" ? "Title" : "Artist"}`}
+            renderValue={() => `Sort by: ${sortBy === "date" ? "Newest" : sortBy === "name" ? "Title" :sortBy==="artist"? "Artist": "Most Played"}`}
             sx={{
               backgroundColor: "rgba(30, 30, 30, 0.5)",
               color: "var(--color-white)",
@@ -261,6 +265,7 @@ const PublicSongs = () => {
             <MenuItem value="date">Newest</MenuItem>
             <MenuItem value="name">Title</MenuItem>
             <MenuItem value="artist">Artist</MenuItem>
+            <MenuItem value="playCount">Most Played</MenuItem>
           </Select>
         </div>
       </div>
@@ -269,7 +274,7 @@ const PublicSongs = () => {
       {loading ? (
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p className="loading-text">טוען שירים...</p>
+          <p className="loading-text">Loading music...</p>
         </div>
       ) : error ? (
         <div className="error-message">{error}</div>

@@ -113,17 +113,32 @@ const UserDetails = () => {
       <Avatar
         onClick={handleClick}
         sx={{
-          width: 30,
-          height: 30,
-          // bgcolor: "rgba(255, 255, 255, 0.1)",
-           bgcolor: "rgba(205, 101, 198, 0.4)",
+          width: 32,
+          height: 32,
+          bgcolor: "rgba(255, 255, 255, 0.1)",
+          // bgcolor: "rgba(205, 101, 198)",
           color: "white",
           cursor: "pointer",
           "&:hover": { opacity: 0.8 },
         }}
       >
-        {user?.userName?.charAt(0) || <User size={20} />}
+        {/* {user?.userName?.charAt(0) || <User size={20} />} */}
+        <img
+          style={{
+            width: 37,
+            height: 32,
+          }}
+          src="/images/profile.png">
+        </img>
       </Avatar>
+      {/* <img
+        style={{
+          width: 40,
+          height: 40,
+        }}
+        onClick={handleClick}
+        src="/images/profile.png">
+      </img> */}
 
       <Menu
         anchorEl={anchorEl}
@@ -158,7 +173,7 @@ const UserDetails = () => {
                   disableUnderline: false,
                   className: "username-input-field",
                 }}
-                
+
                 autoComplete="off"
               />
               <div className="username-edit-actions">

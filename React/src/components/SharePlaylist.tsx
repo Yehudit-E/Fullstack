@@ -50,12 +50,10 @@ const SharePlaylist = ({ playlistId, closeShareDialog }: SharePlaylistProps) => 
       setError("Please enter a valid email address")
       return
     }
-
     setIsSubmitting(true)
 
     try {
-      console.log(playlistId,userEmail);
-      
+      console.log(playlistId,userEmail);   
       await PlaylistService.sharePlaylist(playlistId, userEmail)
       await PlaylistService.getFullPlaylistById(playlistId)
       handleClose()

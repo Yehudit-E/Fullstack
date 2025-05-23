@@ -10,7 +10,7 @@ const emptySong: SongDto = {
   album: '',
   create_at: '',
   isPublic: false,
-  likes: 0,
+  countOfPlays: 0,
   audioFilePath: '',
   imageFilePath: '',
   playlistId: 0,

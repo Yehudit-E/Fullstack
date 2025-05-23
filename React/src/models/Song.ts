@@ -9,7 +9,7 @@ export type Song = {
     album: string,
     create_at: string,
     isPublic: boolean,
-    likes: number,
+    countOfPlays: number,
     lyrics: string,
     audioFilePath: string,
     imageFilePath: string,
@@ -25,7 +25,7 @@ export type SongDto = {
     album: string,
     create_at: string,
     isPublic: boolean,
-    likes: number,
+    countOfPlays: number,
     lyrics: string,
     audioFilePath: string,
     imageFilePath: string,
@@ -42,4 +42,4 @@ export type SongPostModel = {
     audioFilePath: string,
     imageFilePath: string,
     playlistId: number,
-} 
+}

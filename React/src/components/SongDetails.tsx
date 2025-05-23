@@ -212,7 +212,7 @@ export default function SongDetailsPage() {
                         <div className="song-details-actions">
                             <div>
                                 <span className="song-details-genre"> <Music2 size={15} /> {song.genre}</span>
-                                <span className="song-details-plays"> <Headphones size={15} /> {song.likes}</span>
+                                <span className="song-details-plays"> <Headphones size={15} /> {song.countOfPlays}</span>
                             </div>
                             <div>
                                 <IconButton className="action-icon-button" onClick={() => handleDownload(song)} title="Download">

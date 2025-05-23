@@ -11,7 +11,7 @@ namespace music.Core.Intefaces.IRepositories
     public interface ISongRepository:IRepository<Song>
     {
         Task<IEnumerable<Song>> GetPublicAsync();
-        Task<Song> UpdateLikesAsync(int id);
+        Task<Song> UpdatePlaysAsync(int id);
         Task<Song> AddLyricsAsync(int id, string lyrics);
 
 

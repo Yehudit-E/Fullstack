@@ -22,14 +22,14 @@ namespace music.Data.repositories
             return await _dataSet.Where(x=>x.IsPublic==true).ToListAsync();
         }
 
-        public async Task<Song> UpdateLikesAsync(int id)
+        public async Task<Song> UpdatePlaysAsync(int id)
         {
             var existingEntity = await _dataSet.FindAsync(id);
             if (existingEntity == null)
             {
                 return null;
             }
-            existingEntity.Likes++;
+            existingEntity.CountOfPlays++;
             return existingEntity;
         }
         public override async Task<Song> UpdateAsync(int id, Song updatedEntity)

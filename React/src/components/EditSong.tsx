@@ -81,7 +81,7 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
         playlistId: playlistId,
         year: song.year,
         album: song.album,
-        lyrics: song.lyrics
+        lyrics: song.lyrics,
       }
 
       await SongService.updateSong(song.id, updatedSong)

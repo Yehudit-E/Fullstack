@@ -49,13 +49,13 @@ const SongService = {
         }
     },
 
-    // 6. עדכון "לייק" לשיר
-    likeSong: async (id:number) => {
+    // 6. עדכון "מספר השמעות" לשיר
+    addPlaySong: async (id:number) => {
         try {
-            const response = await api.put(`/song/${id}/like`);
+            const response = await api.put(`/song/${id}/plays`);
             return response.data;
         } catch (error) {
-            console.error("Error liking song:", error);
+            console.error("Error add play song:", error);
             throw error;
         }
     },
