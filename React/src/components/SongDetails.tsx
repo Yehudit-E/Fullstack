@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { ArrowLeft, Play, Pause, Download, Plus, Sparkles, Music2, Headphones, PlayCircle } from "lucide-react"
+import { ArrowLeft, Play, Pause, Download, Plus, Sparkles, Music2, Headphones, PlayCircle, Disc, Calendar, Share, Share2 } from "lucide-react"
 import "./style/SongDetails.css"
 import { useParams } from "react-router"
 import type { Song } from "../models/Song"
@@ -12,11 +12,13 @@ import AddToPlaylist from "./AddToPlaylist"
 import axios from "axios"
 import { IconButton } from "@mui/material"
 import { updateSongs } from "../store/songSlice"
+import ShareSong from "./ShareSong"
 
 export default function SongDetailsPage() {
-    const params = useParams()
-    //   const router = useRouter()
-    const songId = params.id as string
+    const { id } = useParams<{ id: string }>();
+    const decodeId = id ? atob(id) : "";
+    const realId = decodeId.split("-")[1];
+    const songId = Number.parseInt(decodeId || "0")
 
     const [song, setSong] = useState<Song | null>(null)
     const [lyrics, setLyrics] = useState<string>("")
@@ -26,14 +28,15 @@ export default function SongDetailsPage() {
     const [showAddToPlaylist, setShowAddToPlaylist] = useState(false)
     const [loadingLyrics, setLoadingLyrics] = useState(false)
     const [fileInfo, setFileInfo] = useState<{ contentType: string; contentLength: number; lastModified: string } | null>(null)
+    const [showShareSongDialog, setShowShareSongDialog] = useState(false)
     const authState = useSelector((state: StoreType) => state.user.authState)
-  const dispatch = useDispatch<Dispatch>()
+    const dispatch = useDispatch<Dispatch>()
     useEffect(() => {
         const fetchSong = async () => {
             let songData;
             try {
                 setLoading(true)
-                songData = await SongService.getSongById(Number.parseInt(songId))
+                songData = await SongService.getSongById(songId)
                 setSong(songData)
             } catch (err) {
                 setError("Failed to load song details")
@@ -89,7 +92,7 @@ export default function SongDetailsPage() {
                 setLyrics(response.data.corrected_lyrics)
                 setLoadingLyrics(false)
                 await SongService.addLyrics(song.id, response.data.corrected_lyrics)
-                const songData = await SongService.getSongById(Number.parseInt(songId))
+                const songData = await SongService.getSongById(songId)
                 setSong(songData)
             } else {
                 setLyrics(song.lyrics)
@@ -161,7 +164,7 @@ export default function SongDetailsPage() {
                             className="song-image"
                         />
                     </div>
-                    <button className="play-song-button" onClick={()=>handlePlaySong(song)}>
+                    <button className="play-song-button" onClick={() => handlePlaySong(song)}>
                         <PlayCircle size={18} style={{ marginRight: "0.5rem" }} />
                         <span>Play</span>
                     </button>
@@ -211,8 +214,10 @@ export default function SongDetailsPage() {
                         <p className="song-details-artist">{song.artist}</p>
                         <div className="song-details-actions">
                             <div>
-                                <span className="song-details-genre"> <Music2 size={15} /> {song.genre}</span>
-                                <span className="song-details-plays"> <Headphones size={15} /> {song.countOfPlays}</span>
+                                <span className="song-details"> <Disc size={15} /> {song.album}</span>
+                                <span className="song-details"> <Music2 size={15} /> {song.genre}</span>
+                                <span className="song-details"> <Headphones size={15} /> {song.countOfPlays}</span>
+                                <span className="song-details"> <Calendar size={15} /> {song.year}</span>
                             </div>
                             <div>
                                 <IconButton className="action-icon-button" onClick={() => handleDownload(song)} title="Download">
@@ -220,6 +225,9 @@ export default function SongDetailsPage() {
                                 </IconButton>
                                 <IconButton className="action-icon-button" onClick={() => setShowAddToPlaylist(true)} title="Add to Playlist">
                                     <Plus size={20} />
+                                </IconButton>
+                                <IconButton className="action-icon-button" onClick={() => {setShowShareSongDialog(true);}} title="Share by email">
+                                    <Share2 size={20} />
                                 </IconButton>
                             </div>
                         </div>
@@ -257,6 +265,12 @@ export default function SongDetailsPage() {
             </div>
 
             {showAddToPlaylist && song && <AddToPlaylist song={song} onClose={() => setShowAddToPlaylist(false)} />}
+            {showShareSongDialog && song &&(
+                <ShareSong
+                    songId={song.id}
+                    closeShareDialog={() => setShowShareSongDialog(false)}
+                />
+            )}
         </div>
     )
 }

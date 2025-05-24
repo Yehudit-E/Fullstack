@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { setCurrentIndex, updateSongs } from "../store/songSlice"
+import { setChange, setCurrentIndex, updateSongs } from "../store/songSlice"
 import type { Dispatch } from "../store/store"
 import PlaylistService from "../services/PlaylistService"
 import type { Playlist } from "../models/Playlist"
@@ -30,9 +30,7 @@ const PlaylistDetails = () => {
   const { id } = useParams<{ id: string }>();
   const decodeId=id?atob(id):"";
   const realId = decodeId.split("-")[1]; 
-  const playlistId = Number.parseInt(decodeId || "0")
-    console.log(playlistId,typeof playlistId);
-    
+  const playlistId = Number.parseInt(decodeId || "0")    
   const dispatch = useDispatch<Dispatch>()
   const navigate = useNavigate()
 
@@ -117,7 +115,6 @@ const PlaylistDetails = () => {
 
   const handlePlaySong = (index: number) => {
     console.log(index)
-
     dispatch(updateSongs(playlist?.songs || []))
     dispatch(setCurrentIndex(index))
   }

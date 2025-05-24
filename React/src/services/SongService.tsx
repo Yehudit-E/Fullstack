@@ -27,7 +27,7 @@ const SongService = {
     },
 
     // 4. הוספת שיר
-    addSong: async (songPostModel:SongPostModel) => {
+    addSong: async (songPostModel: SongPostModel) => {
         try {
             const response = await api.post("/song", songPostModel);
             return response.data;
@@ -38,8 +38,8 @@ const SongService = {
     },
 
     // 5. עדכון שיר
-    updateSong: async (id:number, song:SongPostModel) => {
-        
+    updateSong: async (id: number, song: SongPostModel) => {
+
         try {
             const response = await api.put(`/song/${id}`, song);
             return response.data;
@@ -50,7 +50,7 @@ const SongService = {
     },
 
     // 6. עדכון "מספר השמעות" לשיר
-    addPlaySong: async (id:number) => {
+    addPlaySong: async (id: number) => {
         try {
             const response = await api.put(`/song/${id}/plays`);
             return response.data;
@@ -61,13 +61,13 @@ const SongService = {
     },
 
     // 7. קבלת URL להעלאת קובץ ל-S3
-    getUploadUrl: async (fileName:string, contentType:string) => {
+    getUploadUrl: async (fileName: string, contentType: string) => {
         try {
-            console.log("filename"+fileName);
-            console.log("contentType"+contentType);
-            
+            console.log("filename" + fileName);
+            console.log("contentType" + contentType);
+
             const response = await api.get("/song/upload-url", {
-                params: { fileName, contentType},
+                params: { fileName, contentType },
             });
             return response.data.url;
         } catch (error) {
@@ -76,7 +76,7 @@ const SongService = {
         }
     },
 
- // 8. הוספת מילות שיר
+    // 8. הוספת מילות שיר
     addLyrics: async (id: number, lyrics: string) => {
         try {
             const response = await api.put(`/song/${id}/Lyrics`, lyrics, {
@@ -87,6 +87,20 @@ const SongService = {
             return response.data;
         } catch (error) {
             console.error("Error adding lyrics:", error);
+            throw error;
+        }
+    },
+    // 9. שיתוף שיר במייל
+    shareSongByEmail: async (songId: number, email: string) => {
+        try {
+            const response = await api.post(`/song/${songId}/share`, JSON.stringify(email), {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error sharing song by email:", error);
             throw error;
         }
     },

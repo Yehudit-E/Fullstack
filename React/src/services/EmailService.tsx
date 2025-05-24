@@ -1,14 +1,14 @@
 import api from "../interceptor/api";
-import { EmailRequest } from "../models/EmailRequest";
+import { ContactEmailRequest } from "../models/ContactEmailRequest";
 
 const API_URL = "/email";
 
 const EmailService = {
 
   // שליחת אימייל
-  sendEmail: async (request: EmailRequest) => {
+  sendContactEmail: async (request: ContactEmailRequest) => {
     try {
-      const response = await api.post(`${API_URL}/send`, request);
+      const response = await api.post(`${API_URL}/contact`, request);
       return response.data;
     } catch (error) {
       console.error("Error sending email:", error);

@@ -15,12 +15,13 @@ import PauseIcon from "@mui/icons-material/Pause"
 import MusicNoteIcon from "@mui/icons-material/MusicNote"
 import { MenuItem, IconButton, Menu, Select } from "@mui/material"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
-import { Download, ListMusic, Plus } from "lucide-react"
+import { Download, ListMusic, Plus, Share2 } from "lucide-react"
 import { Add as AddIcon } from "@mui/icons-material"
 
 import "./style/PublicSongs.css"
 import "./style/MenuStyles.css" // Import the shared menu styles
 import { useNavigate } from "react-router"
+import ShareSong from "./ShareSong"
 
 const PublicSongs = () => {
   const [songs, setSongs] = useState<Song[]>([])
@@ -32,6 +33,7 @@ const PublicSongs = () => {
   const [menuAnchor, setMenuAnchor] = useState<{ [key: string]: HTMLElement | null }>({})
   const [currentSong, setCurrentSong] = useState<Song>({} as Song)
   const [showPlaylistList, setShowPlaylistList] = useState<boolean>(false)
+  const [showShareDialog, setShowShareDialog] = useState<boolean>(false)
   const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(null)
   const dispatch = useDispatch<Dispatch>()
   const [downloadingSong, setDownloadingSong] = useState<number | null>(null)
@@ -60,7 +62,7 @@ const PublicSongs = () => {
         return sortedSongs.sort((a, b) => a.artist.localeCompare(b.artist))
       case "playCount":
         return sortedSongs.sort((a, b) => b.countOfPlays - a.countOfPlays)
-        case "name":
+      case "name":
       default:
         return sortedSongs.sort((a, b) => a.name.localeCompare(b.name))
 
@@ -77,7 +79,7 @@ const PublicSongs = () => {
     .filter(
       (song) =>
         song.name.toLowerCase().includes(search.toLowerCase()) ||
-        song.artist.toLowerCase().includes(search.toLowerCase())||
+        song.artist.toLowerCase().includes(search.toLowerCase()) ||
         song.album.toLowerCase().includes(search.toLowerCase()),
     )
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>, songId: number) => {
@@ -127,9 +129,14 @@ const PublicSongs = () => {
     setCurrentSong(song)
     setShowPlaylistList(true)
   }
+  const handleShareSong = (event: React.MouseEvent, song: Song) => {
+    event.stopPropagation()
+    setCurrentSong(song)
+    setShowShareDialog(true)
+  }
 
   const navigateToSongDetails = (songId: number) => {
-    navigator(`/song/${songId}`)
+    navigator(`/song/${btoa(songId.toString() + "-song")}`)
   }
 
   return (
@@ -233,7 +240,7 @@ const PublicSongs = () => {
           <Select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as string)}
-            renderValue={() => `Sort by: ${sortBy === "date" ? "Newest" : sortBy === "name" ? "Title" :sortBy==="artist"? "Artist": "Most Played"}`}
+            renderValue={() => `Sort by: ${sortBy === "date" ? "Newest" : sortBy === "name" ? "Title" : sortBy === "artist" ? "Artist" : "Most Played"}`}
             sx={{
               backgroundColor: "rgba(30, 30, 30, 0.5)",
               color: "var(--color-white)",
@@ -337,8 +344,9 @@ const PublicSongs = () => {
                           <Download size={17} className="menu-icon" />
                           Download
                         </MenuItem>
-                        {authState && (
+                        {authState && [
                           <MenuItem
+                            key="add-to-playlist"
                             className="menu-item"
                             onClick={(e) => {
                               closeMenu(song.id)
@@ -347,8 +355,19 @@ const PublicSongs = () => {
                           >
                             <ListMusic size={17} className="menu-icon" />
                             Add to Playlist
+                          </MenuItem>,
+                          <MenuItem
+                            key="share-song"
+                            className="menu-item"
+                            onClick={(e) => {
+                              closeMenu(song.id)
+                              handleShareSong(e, song)
+                            }}
+                          >
+                            <Share2 size={17} className="menu-icon" />
+                            Share Song
                           </MenuItem>
-                        )}
+                        ]}
                       </Menu>
                     </div>
                   </div>
@@ -396,6 +415,7 @@ const PublicSongs = () => {
         </div>
       )}
       {showPlaylistList && <AddToPlaylistModel song={currentSong} onClose={() => setShowPlaylistList(false)} />}
+      {showShareDialog && <ShareSong songId={currentSong.id} closeShareDialog={() => setShowShareDialog(false)} />}
     </div>
   )
 }

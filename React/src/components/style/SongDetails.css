@@ -183,7 +183,7 @@
     margin: 0 0 0.5rem 0;
 }
 
-.song-details-genre {
+.song-details{
     display: inline-block;
     /* background: rgba(255, 255, 255, 0.08); */
     color: rgba(255, 255, 255, 0.9);
@@ -191,18 +191,9 @@
     /* border-radius: 20px; */
     font-size: 0.8rem;
     margin-top: 0.5rem;
+    margin-right: 15px;
 }
 
-.song-details-plays {
-    margin-left: 15px;
-    display: inline-block;
-    /* background: rgba(255, 255, 255, 0.08); */
-    color: rgba(255, 255, 255, 0.9);
-    /* padding: 0.25rem 0.75rem; */
-    /* border-radius: 20px; */
-    font-size: 0.8rem;
-    margin-top: 0.5rem;
-}
 .song-details-actions{
     display: flex;
     align-items: center;

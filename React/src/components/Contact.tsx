@@ -6,7 +6,7 @@ import { useState } from "react"
 import { Mail, Phone, MapPin, Send, MessageSquare, AlertCircle, CheckCircle } from "lucide-react"
 import "./style/StaticPages.css"
 import EmailService from "../services/EmailService"
-import { EmailRequest } from "../models/EmailRequest"
+import { ContactEmailRequest } from "../models/ContactEmailRequest"
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -71,70 +71,13 @@ const Contact = () => {
   setIsSubmitting(true)
     
   try {
-    const emailRequest: EmailRequest = {
-      to: "musix.app.team@gmail.com",
-      subject: `New message from ${formData.name}`,
-      body: `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-        padding: 20px;
-        color: #333;
-      }
-      .container {
-        background-color: #fff;
-        border-radius: 8px;
-        padding: 20px;
-        border: 1px solid #ddd;
-        max-width: 600px;
-        margin: auto;
-      }
-      h2 {
-        color: #444;
-        margin-bottom: 20px;
-      }
-      .row {
-        margin-bottom: 10px;
-      }
-      .label {
-        font-weight: bold;
-        color: #555;
-      }
-      .value {
-        margin-left: 10px;
-        white-space: pre-line;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h2>New Contact Form Submission</h2>
-      <div class="row">
-        <span class="label">Name:</span>
-        <span class="value">${formData.name}</span>
-      </div>
-      <div class="row">
-        <span class="label">Email:</span>
-        <span class="value">${formData.email}</span>
-      </div>
-      <div class="row">
-        <span class="label">Subject:</span>
-        <span class="value">${formData.subject}</span>
-      </div>
-      <div class="row">
-        <span class="label">Message:</span>
-        <span class="value">${formData.message}</span>
-      </div>
-    </div>
-  </body>
-</html>`,
-      
+    const emailRequest: ContactEmailRequest = {
+      name: formData.name,
+      emailAdress: formData.email,
+      subject: formData.subject,
+      message: formData.message,
     }
-    await EmailService.sendEmail(emailRequest) // שליחה לסרוויס בפועל
+    await EmailService.sendContactEmail(emailRequest) // שליחה לסרוויס בפועל
     setSubmitStatus("success")
     setFormData({
       name: "",
