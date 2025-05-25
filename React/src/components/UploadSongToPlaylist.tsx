@@ -96,10 +96,10 @@ const UploadSongToPlaylist = () => {
       console.log(metadata);
 
       const title = metadata.common.title || file.name.replace(/\.[^/.]+$/, "")
-      const artist = metadata.common.artist || metadata.common.albumartist || "Unknown Artist"
+      const artist = metadata.common.artist || metadata.common.albumartist || ""
       const genre = metadata.common.genre?.[0] || "Unknown Genre"
       const album = metadata.common.album || ""
-      const year = metadata.common.year?.toString() || new Date().getFullYear().toString()
+      const year = metadata.common.year?.toString() || ""
       console.log("Extracted Metadata:", { title, artist, genre, album, year });
 
       setMetaData({ title, artist, genre, album, year })
@@ -257,10 +257,10 @@ console.log("----------------------------------------------",playlist,playlistId
       // Create song post model
       const songPostModel: SongPostModel = {
         name: metaData.title,
-        artist: metaData.artist,
-        genre: metaData.genre,
-        year: Number.parseInt(metaData.year),
-        album: metaData.album,
+        artist: metaData.artist || "Unknown Artist",
+        genre: metaData.genre || "Unknown Genre",
+        year: Number.parseInt(metaData.year) || new Date().getFullYear(),
+        album: metaData.album || "Unknown Album",
         audioFilePath: audioUrl,
         imageFilePath: imageUrl,
         playlistId: playlistId,

@@ -12,7 +12,7 @@ import type { Playlist } from "../models/Playlist"
 import type { Song } from "../models/Song"
 import { IconButton, Menu, MenuItem } from "@mui/material"
 import { Close, MoreHoriz, MusicNote } from "@mui/icons-material"
-import { Play, Clock, Music, Users, Calendar, ListMusic, User, ArrowLeft } from "lucide-react"
+import { Play, Clock, Music, Users, Calendar, ListMusic, User, ArrowLeft, ExternalLink } from "lucide-react"
 import SharePlaylist from "./SharePlaylist"
 import EditPlaylist from "./EditPlaylist"
 import DeletePlaylist from "./DeletePlaylist"
@@ -25,12 +25,13 @@ import DeleteSong from "./DeleteSong"
 import JSZip from "jszip"
 import { saveAs } from "file-saver"
 import RemoveSharingInPlaylist from "./RemoveSharingInPlaylist"
+import ShareSong from "./ShareSong"
 
 const PlaylistDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const decodeId=id?atob(id):"";
-  const realId = decodeId.split("-")[1]; 
-  const playlistId = Number.parseInt(decodeId || "0")    
+  const decodeId = id ? atob(id) : "";
+  const realId = decodeId.split("-")[1];
+  const playlistId = Number.parseInt(decodeId || "0")
   const dispatch = useDispatch<Dispatch>()
   const navigate = useNavigate()
 
@@ -48,6 +49,7 @@ const PlaylistDetails = () => {
   const [showDeleteSongDialog, setShowDeleteSongDialog] = useState(false)
   const [selectedSong, setSelectedSong] = useState<Song | null>(null)
   const [showRemoveSharingDialog, setShowRemoveSharingDialog] = useState(false)
+  const [showShareSongDialog, setShowShareSongDialog] = useState(false)
   const currentUser = useSelector((state: StoreType) => state.user.user)
   const navigator = useNavigate()
   useEffect(() => {
@@ -88,6 +90,9 @@ const PlaylistDetails = () => {
 
   const handleSharePlaylist = () => {
     setShowShareDialog(true)
+  }
+  const navigateToSongDetails = (songId: number) => {
+    navigator(`/song/${btoa(songId.toString() + "-song")}`)
   }
 
   const handleDownloadAll = async () => {
@@ -154,6 +159,10 @@ const PlaylistDetails = () => {
   const handleAddToPlaylist = (song: Song) => {
     setCurrentSong(song)
     setShowAddToPlaylist(true)
+  }
+  const handleShareSong = (song: Song) => {
+    setCurrentSong(song)
+    setShowShareSongDialog(true)
   }
 
   const downloadSong = async (fileUrl: string, fileName: string) => {
@@ -357,11 +366,11 @@ const PlaylistDetails = () => {
                             className="menu-item"
                             onClick={() => {
                               closeSongMenu(song.id)
-                              handlePlaySong(index)
+                              navigateToSongDetails(song.id)
                             }}
                           >
-                            <Play size={17} className="menu-icon" />
-                            Play
+                            <ExternalLink size={17} className="menu-icon" />
+                            View Details
                           </MenuItem>
                           <MenuItem
                             className="menu-item"
@@ -382,6 +391,16 @@ const PlaylistDetails = () => {
                           >
                             <Plus size={17} className="menu-icon" />
                             Add to Another Playlist
+                          </MenuItem>
+                          <MenuItem
+                            className="menu-item"
+                            onClick={() => {
+                              closeSongMenu(song.id)
+                              handleShareSong(song)
+                            }}
+                          >
+                            <Share2 size={17} className="menu-icon" />
+                            Share Song
                           </MenuItem>
                           <MenuItem
                             className="menu-item"
@@ -470,6 +489,8 @@ const PlaylistDetails = () => {
         <EditSong
           song={selectedSong}
           playlistId={playlistId}
+          setPlaylist={setPlaylist}
+          setSong={()=>{}}
           closeEditDialog={() => {
             setShowEditSongDialog(false)
             setSelectedSong(null)
@@ -491,7 +512,12 @@ const PlaylistDetails = () => {
           }}
         />
       )}
-
+      {showShareSongDialog && currentSong && (
+        <ShareSong
+          songId={currentSong.id}
+          closeShareDialog={() => setShowShareSongDialog(false)}
+        />
+      )}
 
     </div>
   )

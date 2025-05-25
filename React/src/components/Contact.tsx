@@ -242,7 +242,7 @@ const Contact = () => {
         </div>
       </div>
 
-      <div className="map-container">
+      {/* <div className="map-container">
         <h2 className="section-title centered">Find Us</h2>
         <div className="map-placeholder">
           <img src="/placeholder.svg?height=400&width=1000" alt="Map Location" className="map-image" />
@@ -250,7 +250,7 @@ const Contact = () => {
             <p>Interactive map would be displayed here</p>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <section className="faq-section">
         <h2 className="section-title centered">Frequently Asked Questions</h2>

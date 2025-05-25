@@ -4,24 +4,29 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Button } from "@mui/material"
-import { Close, Lyrics } from "@mui/icons-material"
+import { Close } from "@mui/icons-material"
 import { Music } from "lucide-react"
-import type { Song, SongDto, SongPostModel } from "../models/Song"
+import type { Song, SongPostModel } from "../models/Song"
 import SongService from "../services/SongService"
 import "./style/AddPlaylist.css" // Reuse the same styles
+import { Playlist } from "../models/Playlist"
 
 interface EditSongProps {
   song: Song
   playlistId: number
+  setPlaylist: React.Dispatch<React.SetStateAction<Playlist | null>>
+  setSong: React.Dispatch<React.SetStateAction<Song | null>>
   closeEditDialog: () => void
 }
 
-const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
+const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: EditSongProps) => {
   // State
   const [songData, setSongData] = useState({
     name: "",
     artist: "",
     genre: "",
+    album: "",
+    year: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -34,20 +39,17 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
         name: song.name || "",
         artist: song.artist || "",
         genre: song.genre || "",
+        album: song.album || "",
+        year: song.year?.toString() || "", // נוודא שזו מחרוזת
       })
     }
 
-    // Small delay to ensure the animation is visible
-    const timer = setTimeout(() => {
-      setOpen(true)
-    }, 50)
-
+    const timer = setTimeout(() => setOpen(true), 50)
     return () => clearTimeout(timer)
   }, [song])
-
   // Input Handlers
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setSongData((prev) => ({ ...prev, [name]: value }))
   }
 
@@ -70,21 +72,39 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
       setIsSubmitting(false)
       return
     }
-
+    const year = songData.year ? Math.min(parseInt(songData.year), new Date().getFullYear()) : new Date().getFullYear();
     try {
       const updatedSong: SongPostModel = {
         name: songData.name,
         artist: songData.artist,
-        genre: songData.genre,
+        genre: songData.genre || "Unknown Genre",
         audioFilePath: song.audioFilePath,
         imageFilePath: song.imageFilePath,
         playlistId: playlistId,
-        year: song.year,
-        album: song.album,
+        year: year,
+        album: songData.album || "Unknown Album",
         lyrics: song.lyrics,
       }
 
       await SongService.updateSong(song.id, updatedSong)
+      // Update the playlist state
+      setPlaylist((prev) => {
+        if (prev) {
+          return {
+            ...prev,
+            songs: prev.songs.map((s) => (s.id === song.id ? { ...s, ...updatedSong } : s)),
+          }
+        }
+        return prev
+      })
+      // Update the song state
+      setSong((prev) => {
+        if (prev && prev.id === song.id) {
+          return { ...prev, ...updatedSong }
+        }
+        return prev
+      })
+
       handleClose()
     } catch (error) {
       console.error("Error updating song:", error)
@@ -105,8 +125,9 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
         style: {
           backgroundColor: "var(--color-gray, #1e1e1e)",
           borderRadius: "8px",
-          maxWidth: "600px",
-          width: "100%",
+          maxWidth: "700px",
+          width: "90%",
+          maxHeight: "90vh",
         },
       }}
       TransitionProps={{
@@ -131,77 +152,135 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
         </IconButton>
       </DialogTitle>
 
-      <DialogContent className="modal-content">
-        <form className="add-playlist-form" onSubmit={handleSubmit}>
-          <div className="form-row">
+      <DialogContent className="modal-content" style={{ padding: "16px 24px !important" }}>
+        <form className="add-playlist-form" onSubmit={handleSubmit} style={{ padding: "20px", margin: 0 }}>
+          <div className="form-row" style={{ gap: "1.5rem", marginBottom: "1rem" }}>
             <div className="image-upload-container">
               <div
                 className="image-preview"
                 style={{
                   backgroundImage: song.imageFilePath ? `url(${song.imageFilePath})` : "none",
+                  width: "180px",
+                  height: "180px",
                 }}
               >
                 {!song.imageFilePath && (
                   <div className="upload-placeholder">
-                    <Music className="upload-icon" size={48} />
-                    <span>No Cover Image</span>
+                    <Music className="upload-icon" size={40} />
+                    <span style={{ fontSize: "0.8rem" }}>No Cover Image</span>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="form-fields">
-              <div className="form-group">
-                <label htmlFor="name" style={{ color: "var(--color-white)", fontSize: "0.875rem", fontWeight: "500" }}>
-                  Song Name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  value={songData.name}
-                  onChange={handleInputChange}
-                  placeholder="Enter song name"
-                  className="custom-input"
-                  required
-                  style={{
-                    backgroundColor: "rgba(30, 30, 30, 0.5)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    borderRadius: "0.375rem",
-                    color: "var(--color-white)",
-                    padding: "0.5rem 1rem",
-                    width: "100%",
-                  }}
-                />
+            <div className="form-fields" style={{ gap: "1rem" }}>
+              <div style={{ display: "flex", gap: "1rem" }}>
+
+                <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>
+                  <label htmlFor="name" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>
+                    Song Name
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    value={songData.name}
+                    onChange={handleInputChange}
+                    placeholder="Enter song name"
+                    className="custom-input"
+                    required
+                    style={{
+                      backgroundColor: "rgba(30, 30, 30, 0.5)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: "0.375rem",
+                      color: "var(--color-white)",
+                      padding: "0.4rem 0.8rem",
+                      width: "100%",
+                      fontSize: "0.85rem",
+                    }}
+                  />
+                </div>
+
+                <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>
+                  <label
+                    htmlFor="artist"
+                    style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}
+                  >
+                    Artist
+                  </label>
+                  <input
+                    id="artist"
+                    name="artist"
+                    value={songData.artist}
+                    onChange={handleInputChange}
+                    placeholder="Enter artist name"
+                    className="custom-input"
+                    required
+                    style={{
+                      backgroundColor: "rgba(30, 30, 30, 0.5)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: "0.375rem",
+                      color: "var(--color-white)",
+                      padding: "0.4rem 0.8rem",
+                      width: "100%",
+                      fontSize: "0.85rem",
+                    }}
+                  />
+                </div>
               </div>
 
-              <div className="form-group">
-                <label
-                  htmlFor="artist"
-                  style={{ color: "var(--color-white)", fontSize: "0.875rem", fontWeight: "500" }}
-                >
-                  Artist
-                </label>
-                <input
-                  id="artist"
-                  name="artist"
-                  value={songData.artist}
-                  onChange={handleInputChange}
-                  placeholder="Enter artist name"
-                  className="custom-input"
-                  required
-                  style={{
-                    backgroundColor: "rgba(30, 30, 30, 0.5)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    borderRadius: "0.375rem",
-                    color: "var(--color-white)",
-                    padding: "0.5rem 1rem",
-                    width: "100%",
-                  }}
-                />
+              <div style={{ display: "flex", gap: "1rem" }}>
+                <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>
+                  <label htmlFor="album" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>
+                    Album
+                  </label>
+                  <input
+                    id="album"
+                    name="album"
+                    value={songData.album}
+                    onChange={handleInputChange}
+                    placeholder="Enter album name"
+                    className="custom-input"
+                    style={{
+                      backgroundColor: "rgba(30, 30, 30, 0.5)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: "0.375rem",
+                      color: "var(--color-white)",
+                      padding: "0.4rem 0.8rem",
+                      width: "100%",
+                      fontSize: "0.85rem",
+                    }}
+                  />
+                </div>
+
+                <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>
+                  <label htmlFor="year" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>
+                    Year
+                  </label>
+                  <input
+                    id="year"
+                    name="year"
+                    type="number"
+                    value={songData.year}
+                    onChange={handleInputChange}
+                    placeholder="Enter year"
+                    className="custom-input"
+                    min={1800}
+                    max={new Date().getFullYear()}
+                    style={{
+                      backgroundColor: "rgba(30, 30, 30, 0.5)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: "0.375rem",
+                      color: "var(--color-white)",
+                      padding: "0.4rem 0.8rem",
+                      width: "100%",
+                      fontSize: "0.85rem",
+                    }}
+                  />
+                </div>
               </div>
 
-              <div className="form-group">
-                <label htmlFor="genre" style={{ color: "var(--color-white)", fontSize: "0.875rem", fontWeight: "500" }}>
+              <div className="form-group" style={{ gap: "0.3rem" }}>
+                <label htmlFor="genre" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>
                   Genre
                 </label>
                 <select
@@ -215,20 +294,29 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
                     border: "1px solid rgba(255, 255, 255, 0.1)",
                     borderRadius: "0.375rem",
                     color: "var(--color-white)",
-                    padding: "0.5rem 1rem",
+                    padding: "0.4rem 0.8rem",
                     width: "100%",
+                    fontSize: "0.85rem",
                   }}
                 >
                   {!songData.genre && <option value="">Select genre</option>}
                   {songData.genre &&
                     ![
-                      "Pop", "Rock", "Hip Hop", "Electronic", "R&B", "Jazz",
-                      "Classical", "Country", "Folk", "Alternative", "Metal",
-                      "Blues", "Reggae", "Other"
-                    ].includes(songData.genre) && (
-                      <option value={songData.genre}>{songData.genre}</option>
-                    )}
-
+                      "Pop",
+                      "Rock",
+                      "Hip Hop",
+                      "Electronic",
+                      "R&B",
+                      "Jazz",
+                      "Classical",
+                      "Country",
+                      "Folk",
+                      "Alternative",
+                      "Metal",
+                      "Blues",
+                      "Reggae",
+                      "Other",
+                    ].includes(songData.genre) && <option value={songData.genre}>{songData.genre}</option>}
                   <option value="Pop">Pop</option>
                   <option value="Rock">Rock</option>
                   <option value="Hip Hop">Hip Hop</option>
@@ -244,7 +332,6 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
                   <option value="Reggae">Reggae</option>
                   <option value="Other">Other</option>
                 </select>
-
               </div>
             </div>
           </div>
@@ -254,7 +341,6 @@ const EditSong = ({ song, playlistId, closeEditDialog }: EditSongProps) => {
       </DialogContent>
 
       <DialogActions className="modal-actions">
-
         <Button
           onClick={handleSubmit}
           disabled={isSubmitting}

@@ -11,11 +11,12 @@ import { useSelector } from "react-redux"
 const AcceptShare = () => {
   const [searchParams] = useSearchParams()
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "expired">("idle")
-  const [playlistName, setPlaylistName] = useState<string>("")
   const [ownerName, setOwnerName] = useState<string>("")
+  const [playlistName, setPlaylistName] = useState<string>("")
   const [errorMessage, setErrorMessage] = useState<string>("")
   const navigate = useNavigate()
-const authState=useSelector((state:StoreType)=>state.user.authState)
+  const authState = useSelector((state: StoreType) => state.user.authState)
+
   useEffect(() => {
     // Validate token on component mount
     const token = searchParams.get("token")
@@ -24,22 +25,13 @@ const authState=useSelector((state:StoreType)=>state.user.authState)
       setErrorMessage("The link is missing or invalid. Please check that you copied the full link.")
     } else {
       // Optionally fetch playlist details using the token
-      const fetchPlaylistInfo = async () => {
-        try {
-          // This is a placeholder - you would need to implement this endpoint
-          // const info = await PlaylistService.getPlaylistInfoFromToken(token)
-          // setPlaylistName(info.name)
-          // setOwnerName(info.ownerName)
+      const sharedByEmail = decodeURIComponent(searchParams.get("sharedByEmail") || "")
+      const nameOfPlaylist = decodeURIComponent(searchParams.get("playlistName") || "")
+      setOwnerName(sharedByEmail)
+      setPlaylistName(nameOfPlaylist)
+      console.log("Shared by email:", sharedByEmail)
+      console.log("Playlist name:", nameOfPlaylist);
 
-          // For now, we'll use placeholder data
-          setPlaylistName("Playlist")
-          setOwnerName("User")
-        } catch (error) {
-          console.error("Error fetching playlist info:", error)
-        }
-      }
-
-      fetchPlaylistInfo()
     }
   }, [searchParams])
 
@@ -51,13 +43,13 @@ const authState=useSelector((state:StoreType)=>state.user.authState)
       return
     }
 
-      // שלב חדש: בדיקת התחברות
-  if (authState === false) {
-    // שמירת הנתיב המקורי
-    sessionStorage.setItem("redirectAfterLogin", `/playlist/accept-share?token=${token}`)
-    navigate("/auth") // נניח שזה הנתיב לעמוד ההתחברות
-    return
-  }
+    // שלב חדש: בדיקת התחברות
+    if (authState === false) {
+      // שמירת הנתיב המקורי
+      sessionStorage.setItem("redirectAfterLogin", `/playlist/accept-share?token=${token}`)
+      navigate("/auth") // נניח שזה הנתיב לעמוד ההתחברות
+      return
+    }
     setStatus("loading")
 
     try {
@@ -93,8 +85,8 @@ const authState=useSelector((state:StoreType)=>state.user.authState)
   return (
     <div className="accept-share-container">
       <div className="accept-share-card">
-        <div className="card-header">
-          <h2 className="card-title">Playlist Invitation</h2>
+        <div className="card-acception-header">
+          <h2 className="card-acception-title">Playlist Invitation</h2>
         </div>
 
         {status === "idle" && (
@@ -106,8 +98,8 @@ const authState=useSelector((state:StoreType)=>state.user.authState)
             <div className="share-message">
               <h3>You've been invited to join a playlist</h3>
               {playlistName && ownerName && (
-                <p className="playlist-info">
-                  <strong>{ownerName}</strong> has invited you to join the playlist <strong>"{playlistName}"</strong>
+                <p className="playlist-acception-info">
+                  <span className="highlight">{ownerName}</span> has invited you to join the playlist <span className="highlight">"{playlistName}"</span>
                 </p>
               )}
               <p>
@@ -117,11 +109,11 @@ const authState=useSelector((state:StoreType)=>state.user.authState)
             </div>
 
             <div className="action-buttons">
-              <button className="accept-button" onClick={handleAccept}>
-                Accept Invitation
-              </button>
               <button className="decline-button" onClick={handleDecline}>
                 No Thanks
+              </button>
+              <button className="accept-button" onClick={handleAccept}>
+                Accept Invitation
               </button>
             </div>
           </div>

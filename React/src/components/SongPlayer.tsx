@@ -60,7 +60,7 @@ const SongPlayer = () => {
                     setHasCountedListen(true);
                     addPlay(songsList[currentSongIndex].id);
                 }
-            }, 5000);
+            }, 7000);
         }
 
         return () => {
@@ -128,20 +128,20 @@ const SongPlayer = () => {
                             max={duration}
                             onChange={handleSeek}
                             sx={{
-                                color: 'var( --gradient-end)',
+                                color: 'var( --gradient-middle)',
                                 height: "1px",
                                 width: '100%',  // הגדרת רוחב של 100% כך שיתפשט על כל הרוחב
                                 '& .MuiSlider-thumb': {
                                     width: 13,
                                     height: 13,
-                                    backgroundColor: 'var( --gradient-end)',
+                                    backgroundColor: 'var( --gradient-middle)',
                                     '&:hover': {
                                         boxShadow: 'none',
-                                        backgroundColor: 'var(--gradient-end)', // מונע שינוי צבע
+                                        backgroundColor: 'var(--gradient-middle)', // מונע שינוי צבע
                                     },
                                 },
                                 '& .MuiSlider-track': {
-                                    backgroundColor: 'var( --gradient-end)',
+                                    backgroundColor: 'var( --gradient-middle)',
                                 },
                                 '& .MuiSlider-rail': {
                                     backgroundColor: 'rgba(240, 240, 240, 0.8)',
@@ -171,19 +171,19 @@ const SongPlayer = () => {
                             />
 
                             <Slider value={muted ? 0 : volume} min={0} max={1} step={0.01} onChange={(_, newValue) => setVolume(newValue as number)} sx={{
-                                color: 'var( --gradient-end)',
+                                color: 'var( --gradient-middle)',
                                 height: "1px",
                                 '& .MuiSlider-thumb': {
                                     width: 11,
                                     height: 11,
-                                    backgroundColor: 'var( --gradient-end)',
+                                    backgroundColor: 'var( --gradient-middle)',
                                     '&:hover': {
                                         boxShadow: 'none',
-                                        backgroundColor: 'var(--gradient-end)', // מונע שינוי צבע
+                                        backgroundColor: 'var(--gradient-middle)', // מונע שינוי צבע
                                     }
                                 },
                                 '& .MuiSlider-track': {
-                                    backgroundColor: 'var( --gradient-end)',
+                                    backgroundColor: 'var( --gradient-middle)',
                                 },
                                 '& .MuiSlider-rail': {
                                     backgroundColor: 'rgba(240, 240, 240, 0.8)',

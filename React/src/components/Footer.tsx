@@ -35,15 +35,15 @@ const Footer = () => {
         </div>
 
         <div className="footer-social">
-          <a href="#" className="social-icon" aria-label="Github">
+          <a href="https://github.com/yehudit-e/fullstack" className="social-icon" aria-label="Github">
             <Github size={16} />
           </a>
-          <a href="#" className="social-icon" aria-label="Twitter">
+          {/* <a href="#" className="social-icon" aria-label="Twitter">
             <Twitter size={16} />
           </a>
           <a href="#" className="social-icon" aria-label="Instagram">
             <Instagram size={16} />
-          </a>
+          </a> */}
         </div>
 
         <div className="footer-copyright">

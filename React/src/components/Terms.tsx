@@ -305,7 +305,7 @@ const Terms = () => {
       <div className="terms-footer">
         <p>
           If you have any questions about these Terms, please contact us at{" "}
-          <a href="mailto:musix.system@gmail.com">musix.system@gmail.com</a>
+          <a href="mailto:musix.app.team@gmail.com">musix.app.team@gmail.com</a>
         </p>
       </div>
     </div>

@@ -15,7 +15,7 @@ import PauseIcon from "@mui/icons-material/Pause"
 import MusicNoteIcon from "@mui/icons-material/MusicNote"
 import { MenuItem, IconButton, Menu, Select } from "@mui/material"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
-import { Download, ListMusic, Plus, Share2 } from "lucide-react"
+import { Download, ExternalLink, ListMusic, Plus, Share2, Play, Headphones } from "lucide-react"
 import { Add as AddIcon } from "@mui/icons-material"
 
 import "./style/PublicSongs.css"
@@ -65,7 +65,6 @@ const PublicSongs = () => {
       case "name":
       default:
         return sortedSongs.sort((a, b) => a.name.localeCompare(b.name))
-
     }
   }
 
@@ -137,6 +136,15 @@ const PublicSongs = () => {
 
   const navigateToSongDetails = (songId: number) => {
     navigator(`/song/${btoa(songId.toString() + "-song")}`)
+  }
+
+  const formatPlayCount = (count: number): string => {
+    if (count >= 1000000) {
+      return `${(count / 1000000).toFixed(1)}M`
+    } else if (count >= 1000) {
+      return `${(count / 1000).toFixed(1)}K`
+    }
+    return count.toString()
   }
 
   return (
@@ -240,7 +248,9 @@ const PublicSongs = () => {
           <Select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as string)}
-            renderValue={() => `Sort by: ${sortBy === "date" ? "Newest" : sortBy === "name" ? "Title" : sortBy === "artist" ? "Artist" : "Most Played"}`}
+            renderValue={() =>
+              `Sort by: ${sortBy === "date" ? "Newest" : sortBy === "name" ? "Title" : sortBy === "artist" ? "Artist" : "Most Played"}`
+            }
             sx={{
               backgroundColor: "rgba(30, 30, 30, 0.5)",
               color: "var(--color-white)",
@@ -338,6 +348,16 @@ const PublicSongs = () => {
                           className="menu-item"
                           onClick={() => {
                             closeMenu(song.id)
+                            navigateToSongDetails(song.id)
+                          }}
+                        >
+                          <ExternalLink size={17} className="menu-icon" />
+                          View Details
+                        </MenuItem>
+                        <MenuItem
+                          className="menu-item"
+                          onClick={() => {
+                            closeMenu(song.id)
                             handleDownload(song)
                           }}
                         >
@@ -366,7 +386,7 @@ const PublicSongs = () => {
                           >
                             <Share2 size={17} className="menu-icon" />
                             Share Song
-                          </MenuItem>
+                          </MenuItem>,
                         ]}
                       </Menu>
                     </div>
@@ -374,6 +394,14 @@ const PublicSongs = () => {
                   <div className="song-info">
                     <h4 className="song-title">{song.name}</h4>
                     <p className="song-artist">{song.artist}</p>
+
+                    {/* Play Count Display */}
+                    <div className="song-stats">
+                      <div className="play-count">
+                        <Headphones size={12} className="play-count-icon" />
+                        <span className="play-count-text">{formatPlayCount(song.countOfPlays || 0)} plays</span>
+                      </div>
+                    </div>
 
                     <div className="song-actions">
                       <button

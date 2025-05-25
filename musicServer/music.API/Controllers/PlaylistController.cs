@@ -173,8 +173,8 @@ namespace music.API.Controllers
             var playlist = await _iService.GetByIdAsync(playlistId);
             if (playlist == null || playlist.OwnerId != tokenId)
                 return Forbid();
-
-            var success = await _iService.SharePlaylistAsync(playlist, emailRequest.Email);
+            var user =await _userService.GetByIdAsync(tokenId);
+            var success = await _iService.SharePlaylistAsync(playlist, emailRequest.Email,user.Email);
             if (!success)
                 return BadRequest();
             return Ok();

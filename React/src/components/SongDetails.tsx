@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { ArrowLeft, Play, Pause, Download, Plus, Sparkles, Music2, Headphones, PlayCircle, Disc, Calendar, Share, Share2 } from "lucide-react"
+import { ArrowLeft, Play, Pause, Download, Plus, Sparkles, Music2, Headphones, PlayCircle, Disc, Calendar, Share, Share2, Edit } from "lucide-react"
 import "./style/SongDetails.css"
 import { useParams } from "react-router"
 import type { Song } from "../models/Song"
@@ -13,6 +13,7 @@ import axios from "axios"
 import { IconButton } from "@mui/material"
 import { updateSongs } from "../store/songSlice"
 import ShareSong from "./ShareSong"
+import EditSong from "./EditSong"
 
 export default function SongDetailsPage() {
     const { id } = useParams<{ id: string }>();
@@ -29,6 +30,7 @@ export default function SongDetailsPage() {
     const [loadingLyrics, setLoadingLyrics] = useState(false)
     const [fileInfo, setFileInfo] = useState<{ contentType: string; contentLength: number; lastModified: string } | null>(null)
     const [showShareSongDialog, setShowShareSongDialog] = useState(false)
+    const [showEditSongDialog, setShowEditSongDialog] = useState(false)
     const authState = useSelector((state: StoreType) => state.user.authState)
     const dispatch = useDispatch<Dispatch>()
     useEffect(() => {
@@ -216,7 +218,9 @@ export default function SongDetailsPage() {
                             <div>
                                 <span className="song-details"> <Disc size={15} /> {song.album}</span>
                                 <span className="song-details"> <Music2 size={15} /> {song.genre}</span>
-                                <span className="song-details"> <Headphones size={15} /> {song.countOfPlays}</span>
+                                {song.isPublic && (
+                                    <span className="song-details"> <Headphones size={15} /> {song.countOfPlays}</span>
+                                )}
                                 <span className="song-details"> <Calendar size={15} /> {song.year}</span>
                             </div>
                             <div>
@@ -226,9 +230,14 @@ export default function SongDetailsPage() {
                                 <IconButton className="action-icon-button" onClick={() => setShowAddToPlaylist(true)} title="Add to Playlist">
                                     <Plus size={20} />
                                 </IconButton>
-                                <IconButton className="action-icon-button" onClick={() => {setShowShareSongDialog(true);}} title="Share by email">
+                                <IconButton className="action-icon-button" onClick={() => { setShowShareSongDialog(true); }} title="Share by email">
                                     <Share2 size={20} />
                                 </IconButton>
+                                { !song.isPublic && (
+                                <IconButton className="action-icon-button" onClick={() => { setShowEditSongDialog(true); }} title="Share by email">
+                                    <Edit size={20} />
+                                </IconButton>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -265,10 +274,19 @@ export default function SongDetailsPage() {
             </div>
 
             {showAddToPlaylist && song && <AddToPlaylist song={song} onClose={() => setShowAddToPlaylist(false)} />}
-            {showShareSongDialog && song &&(
+            {showShareSongDialog && song && (
                 <ShareSong
                     songId={song.id}
                     closeShareDialog={() => setShowShareSongDialog(false)}
+                />
+            )}
+            {showEditSongDialog && song && (
+                <EditSong
+                    song={song}
+                    playlistId={song.playlistId}
+                    setPlaylist={()=>{}}
+                    setSong={setSong}
+                    closeEditDialog={() => setShowEditSongDialog(false)}
                 />
             )}
         </div>

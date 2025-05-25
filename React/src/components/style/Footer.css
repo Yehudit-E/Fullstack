@@ -105,7 +105,7 @@
 }
 
 .heart-icon {
-  color: #ff6b6b;
+  color: var(--gradient-middle);
 }
 
 /* Adjust spacing when player is active */

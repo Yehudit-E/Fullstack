@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router"
 import type { StoreType } from "../store/store"
 import { Music, PlayCircle, ListMusic, Download, Share2, Headphones, Radio, Star, ChevronRight, Zap, Heart, Users } from "lucide-react"
 import "./style/Home.css"
+import "./style/Home2.css"
 import ColorSplashBackground from "./color-splash-background"
 import { motion } from "framer-motion"
 

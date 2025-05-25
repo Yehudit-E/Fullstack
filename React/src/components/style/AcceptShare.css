@@ -30,19 +30,22 @@
   }
 }
 
-.card-header {
+.card-acception-header {
   background: rgba(0, 0, 0, 0.3);
-  padding: 1.25rem;
+  padding: 1.25rem 14rem 1.25rem 14rem;
   text-align: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.card-title {
+.card-acception-title {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: white;
-}
+  weight:20px !important;
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; /* גם לגרסאות דפדפן תומכות */}
 
 .card-content {
   padding: 2rem;
@@ -73,11 +76,14 @@
   color: white;
 }
 
-.playlist-info {
+.playlist-acception-info {
   font-size: 1.1rem;
   margin-bottom: 1rem;
 }
-
+.highlight{
+  color:var(--gradient-middle);
+  /* background-color: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end)); */
+}
 .share-message p {
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
@@ -138,7 +144,6 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Loading State */
 .loading-state {
   padding: 2rem;
 }
@@ -165,7 +170,6 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* Success State */
 .success-state {
   padding: 2rem;
 }
@@ -207,7 +211,6 @@
   }
 }
 
-/* Error State */
 .error-state {
   padding: 2rem;
 }
@@ -235,7 +238,6 @@
   font-size: 0.9rem;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .accept-share-container {
     padding: 1rem;

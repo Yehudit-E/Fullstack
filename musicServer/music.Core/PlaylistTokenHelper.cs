@@ -10,7 +10,17 @@ namespace music.Core
 {
     public static class PlaylistTokenHelper
     {
-        public static string GenerateSecureLink(int playlistId, string email, string baseUrl, string secretKey)
+        //public static string GenerateSecureLink(int playlistId, string email, string baseUrl, string secretKey)
+        //{
+        //    var normalizedEmail = email.ToLower();
+        //    var dataToSign = $"{playlistId}:{normalizedEmail}";
+        //    var signature = GenerateSignature(dataToSign, secretKey);
+
+        //    var token = $"{playlistId}:{normalizedEmail}:{signature}";
+        //    var base64Token = ToBase64Url(token);
+        //    return $"{baseUrl}/playlist/accept-share?token={base64Token}";
+        //}
+        public static string GenerateSecureLink(int playlistId, string email, string baseUrl, string secretKey, string playlistName, string sharedByEmail)
         {
             var normalizedEmail = email.ToLower();
             var dataToSign = $"{playlistId}:{normalizedEmail}";
@@ -18,8 +28,14 @@ namespace music.Core
 
             var token = $"{playlistId}:{normalizedEmail}:{signature}";
             var base64Token = ToBase64Url(token);
-            return $"{baseUrl}/playlist/accept-share?token={base64Token}";
+
+            // הקפדה על קידוד הפרמטרים לשימוש ב-URL
+            var encodedPlaylistName = WebUtility.UrlEncode(playlistName);
+            var encodedSharedByEmail = WebUtility.UrlEncode(sharedByEmail);
+
+            return $"{baseUrl}/playlist/accept-share?token={base64Token}&playlistName={encodedPlaylistName}&sharedByEmail={encodedSharedByEmail}";
         }
+
 
         public static (int playlistId, string email, string signature)? ParseToken(string base64Token)
         {
