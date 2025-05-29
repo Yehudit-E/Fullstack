@@ -119,5 +119,22 @@ namespace music.Service
 
             return Result<LoginResponseDto>.NotFound("User registration failed.");
         }
+
+        public async Task<User> GetOrCreateUserAsync(string email, string name)
+        {
+            var user = await _repositoryManager._userRepository.GetByEmailAsync(email);
+            if (user == null)
+            {
+                user = new User
+                {
+                    UserName= name,
+                    Email = email,
+                    Password=""
+                };
+                await _repositoryManager._userRepository.AddAsync(user);
+                await _repositoryManager.SaveAsync();
+            }
+            return user;
+        }
     }
 }

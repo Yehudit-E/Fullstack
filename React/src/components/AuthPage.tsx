@@ -4,6 +4,7 @@ import { useState } from "react"
 import Login from "./Login"
 import Register from "./Register"
 import "./style/Auth.css"
+import Google from "./Google"
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true)
@@ -34,7 +35,7 @@ const AuthPage = () => {
             }}
           ></div>
         </div>
-
+<Google />
         {/* Form Container */}
         <div className="auth-form-container">{isLogin ? <Login /> : <Register />}</div>
       </div>

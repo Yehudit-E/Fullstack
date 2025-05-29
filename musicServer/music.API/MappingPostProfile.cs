@@ -9,6 +9,7 @@ namespace music.API
         public MappingPostProfile()
         {
             CreateMap<SongPostModel, SongDto>();
+            CreateMap<PublicSongPostModel, SongDto>();
             CreateMap<UserPostModel, UserDto>();
             CreateMap<PlaylistPostModel, PlaylistDto>();
         }

@@ -12,7 +12,6 @@ namespace music.Core.Entities
         [Key]
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
         public List<User> Users { get; set; }
         public List<Permission> permission { get; set; }
     }

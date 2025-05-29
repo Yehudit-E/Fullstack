@@ -33,7 +33,7 @@ namespace music.Api.Extensions
         {
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
                 options.AddPolicy("UserOrAdmin", policy => policy.RequireRole("User", "Admin"));
                 //options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
             });

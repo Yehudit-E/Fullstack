@@ -1,0 +1,171 @@
+@if (isVisible && songToEdit) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content large-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Edit Song: {{ songToEdit.name }}</h2>
+        <button class="close-btn" (click)="closeModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      
+      <form [formGroup]="editSongForm" (ngSubmit)="onEditSong()" class="modal-form">
+        @if (editSongError) {
+          <div class="error-message">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            {{ editSongError }}
+          </div>
+        }
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editName">Song Name</label>
+            <input 
+              type="text" 
+              id="editName" 
+              formControlName="name" 
+              placeholder="Enter song name"
+              class="form-input"
+              [class.error]="editSongForm.get('name')?.invalid && editSongForm.get('name')?.touched">
+            @if (editSongForm.get('name')?.invalid && editSongForm.get('name')?.touched) {
+              <div class="field-error">
+                {{ getFormErrorMessage('name') }}
+              </div>
+            }
+          </div>
+          
+          <div class="form-group">
+            <label for="editArtist">Artist</label>
+            <input 
+              type="text" 
+              id="editArtist" 
+              formControlName="artist" 
+              placeholder="Enter artist name"
+              class="form-input"
+              [class.error]="editSongForm.get('artist')?.invalid && editSongForm.get('artist')?.touched">
+            @if (editSongForm.get('artist')?.invalid && editSongForm.get('artist')?.touched) {
+              <div class="field-error">
+                {{ getFormErrorMessage('artist') }}
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editAlbum">Album</label>
+            <input 
+              type="text" 
+              id="editAlbum" 
+              formControlName="album" 
+              placeholder="Enter album name"
+              class="form-input"
+              [class.error]="editSongForm.get('album')?.invalid && editSongForm.get('album')?.touched">
+            @if (editSongForm.get('album')?.invalid && editSongForm.get('album')?.touched) {
+              <div class="field-error">
+                {{ getFormErrorMessage('album') }}
+              </div>
+            }
+          </div>
+          
+          <div class="form-group">
+            <label for="editGenre">Genre</label>
+            <input 
+              type="text" 
+              id="editGenre" 
+              formControlName="genre" 
+              placeholder="Enter genre"
+              class="form-input"
+              [class.error]="editSongForm.get('genre')?.invalid && editSongForm.get('genre')?.touched">
+            @if (editSongForm.get('genre')?.invalid && editSongForm.get('genre')?.touched) {
+              <div class="field-error">
+                {{ getFormErrorMessage('genre') }}
+              </div>
+            }
+          </div>
+          
+          <div class="form-group">
+            <label for="editYear">Year</label>
+            <input 
+              type="number" 
+              id="editYear" 
+              formControlName="year" 
+              placeholder="Enter year"
+              class="form-input"
+              [class.error]="editSongForm.get('year')?.invalid && editSongForm.get('year')?.touched">
+            @if (editSongForm.get('year')?.invalid && editSongForm.get('year')?.touched) {
+              <div class="field-error">
+                {{ getFormErrorMessage('year') }}
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editAudioFilePath">Audio File URL</label>
+            <input 
+              type="url" 
+              id="editAudioFilePath" 
+              formControlName="audioFilePath" 
+              placeholder="Enter audio file URL"
+              class="form-input"
+              readonly
+              [class.error]="editSongForm.get('audioFilePath')?.invalid && editSongForm.get('audioFilePath')?.touched">
+            @if (editSongForm.get('audioFilePath')?.invalid && editSongForm.get('audioFilePath')?.touched) {
+              <div class="field-error">
+                {{ getFormErrorMessage('audioFilePath') }}
+              </div>
+            }
+          </div>
+          
+          <div class="form-group">
+            <label for="editImageFilePath">Image File URL</label>
+            <input 
+              type="url" 
+              id="editImageFilePath" 
+              formControlName="imageFilePath" 
+              placeholder="Enter image file URL"
+              class="form-input"
+              readonly
+              [class.error]="editSongForm.get('imageFilePath')?.invalid && editSongForm.get('imageFilePath')?.touched">
+            @if (editSongForm.get('imageFilePath')?.invalid && editSongForm.get('imageFilePath')?.touched) {
+              <div class="field-error">
+                {{ getFormErrorMessage('imageFilePath') }}
+              </div>
+            }
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="editLyrics">Lyrics (Optional)</label>
+          <textarea 
+            id="editLyrics" 
+            formControlName="lyrics" 
+            placeholder="Enter song lyrics..."
+            class="form-textarea"
+            rows="4">
+          </textarea>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="submit-btn" [disabled]="isEditingSong || editSongForm.invalid">
+            @if (isEditingSong) {
+              <div class="spinner"></div>
+              Updating...
+            } @else {
+              Update Song
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

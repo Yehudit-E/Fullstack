@@ -24,17 +24,18 @@ namespace music.Data.repositories
 
         public async Task<IEnumerable<Request>> GetFullAsync()
         {
-            return await _dataSet.Include(x =>x.User).ToListAsync();
+            return await _dataSet.Include(x => x.Song).Include(x => x.User).ToListAsync();
         }
 
         public async Task<Request> UpdateStatusAsync(int id, bool IsApproved)
         {
-            var request = await _dataSet.FindAsync(id);
+            var request = await _dataSet.Include(x => x.Song).FirstOrDefaultAsync(x => x.Id == id);
             if (request == null)
                 return null;
             request.IsAnswered = true;
             request.IsApproved = IsApproved;
-
+            if (IsApproved)
+                request.Song.IsPublic = true;
             return request;
         }
     }

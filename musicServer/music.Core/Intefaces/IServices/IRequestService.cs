@@ -15,7 +15,7 @@ namespace music.Core.Intefaces.IServices
         Task<IEnumerable<Request>> GetFullNotAnsweredAsync();
         Task<RequestDto> GetByIdAsync(int id);
         Task<bool> AddAsync(RequestDto requestDto);
-        Task<RequestDto> UpdateStatusAsync(int id, bool IApproved);
+        Task<Request> UpdateStatusAsync(int id, bool IApproved);
         Task<bool> DeleteAsync(int id);
     }
 }

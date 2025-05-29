@@ -1,0 +1,261 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+html, body { height: 100%; }
+body {background-color: #121212; margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* :root {
+    --primary-gradient: linear-gradient(90deg, #d59039, #f7c26b);
+    --dark-bg: #121212 !important;
+    --card-bg: #1e1e1e !important;
+    --card-hover: #252525;
+    --text-light: #ffffff;
+    --text-muted: #a0a0a0;
+    --border-color: #333333;
+    --input-bg: #2a2a2a;
+    --border-radius: 12px;
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
+    --transition: all 0.3s ease;
+  } */
+
+  /* Global Styles */
+:root {
+    --primary-gradient: linear-gradient(90deg, #d59039, #f7c26b);
+    --dark-bg: #121212;
+    --sidebar-bg: #1a1a1a;
+    --card-bg: #1e1e1e;
+    --card-hover: #252525;
+    --text-light: #ffffff;
+    --text-muted: #a0a0a0;
+    --border-color: #333333;
+    --input-bg: #2a2a2a;
+    --border-radius: 12px;
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
+    --transition: all 0.3s ease;
+    --danger: #ff6b6b;
+    --success: #4cd964;
+    --warning: #ffcc00;
+    --info: #5ac8fa;
+
+      --color-black: #000000;
+  --color-white: #ffffff;
+  --gradient-start: #f05371; 
+  --gradient-middle: #bd4ed5; 
+  --gradient-end: #7940d4; 
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+
+  /*  */
+
+  /* Global Styles */
+:root {
+    --accent-color: #d59039;
+    --accent-color-light: #f7c26b;
+    --accent-color-dark: #b37730;
+    --accent-color-rgb: 213, 144, 57;
+  
+    --primary-gradient: linear-gradient(90deg, var(--accent-color), var(--accent-color-light));
+    --dark-bg: #121212;
+    --light-bg: #f5f5f5;
+    --sidebar-bg: #1a1a1a;
+    --card-bg: #1e1e1e;
+    --card-hover: #252525;
+    --text-light: #ffffff;
+    --text-dark: #333333;
+    --text-muted: #a0a0a0;
+    --border-color: #333333;
+    --input-bg: #2a2a2a;
+    --border-radius: 12px;
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0, 0.2);
+    --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
+    --transition: all 0.3s ease;
+    --danger: #ff6b6b;
+    --success: #4cd964;
+    --warning: #ffcc00;
+    --info: #5ac8fa;
+  }
+  
+  /* Light theme variables */
+  .light {
+    --dark-bg: #f5f5f5;
+    --sidebar-bg: #ffffff;
+    --card-bg: #ffffff;
+    --card-hover: #f0f0f0;
+    --text-light: #333333;
+    --text-muted: #666666;
+    --border-color: #dddddd;
+    --input-bg: #f0f0f0;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Font size classes */
+  .text-small {
+    font-size: 0.875rem;
+  }
+  
+  .text-medium {
+    font-size: 1rem;
+  }
+  
+  .text-large {
+    font-size: 1.125rem;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+  }
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+
+
+  

@@ -1,0 +1,273 @@
+<div class="upload-container">
+  <div class="upload-card">
+    <!-- Header -->
+    <div class="upload-header">
+      <h1 class="upload-title">
+        <span class="gradient-text">Upload Public Song</span>
+      </h1>
+      <p class="upload-subtitle">Share your music with the world</p>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="upload-steps">
+      <div class="upload-step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
+        <div class="step-number">1</div>
+        <div class="step-label">Upload Files</div>
+      </div>
+      <div class="step-connector"></div>
+      <div class="upload-step" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">
+        <div class="step-number">2</div>
+        <div class="step-label">Song Details</div>
+      </div>
+      <div class="step-connector"></div>
+      <div class="upload-step" [class.active]="currentStep >= 3">
+        <div class="step-number">3</div>
+        <div class="step-label">Confirmation</div>
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    @if (error) {
+      <div class="error-message">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        {{ error }}
+      </div>
+    }
+
+    <!-- Success Message -->
+    @if (success) {
+      <div class="success-message">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        Your song has been uploaded successfully!
+      </div>
+    }
+
+    <!-- Step Content -->
+    <div class="upload-content">
+      <!-- Step 1: Upload Files -->
+      @if (currentStep === 1) {
+        <div class="step-content">
+          <div class="upload-icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13"></path>
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+          </div>
+
+          <!-- Audio File Upload -->
+          <div class="file-upload-section">
+            <h3>Select Audio File</h3>
+            @if (!audioFile) {
+              <div class="dropzone" 
+                   (drop)="onAudioFileDrop($event)" 
+                   (dragover)="onDragOver($event)"
+                   (click)="audioFileInput.click()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <p>Drag and drop your audio file here</p>
+                <p class="dropzone-subtext">or click to browse</p>
+                <p class="dropzone-formats">Supported: MP3, WAV, FLAC, AAC</p>
+                <!-- <p class="dropzone-note">Cover art will be automatically extracted from the file</p> -->
+              </div>
+            } @else {
+              <div class="selected-file">
+                <div class="file-info">
+                  <div class="file-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <circle cx="12" cy="15" r="3"></circle>
+                      <path d="M12 12v6"></path>
+                    </svg>
+                  </div>
+                  <div class="file-details">
+                    <p class="file-name">{{ audioFile.name }}</p>
+                    <p class="file-size">{{ formatFileSize(audioFile.size) }}</p>
+                    <!-- @if (extractedImage) {
+                      <p class="file-meta">✓ Cover art extracted</p>
+                    } @else {
+                      <p class="file-meta">No cover art found</p>
+                    } -->
+                  </div>
+                  <button class="file-remove" (click)="removeAudioFile()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Upload Progress -->
+                @if (isLoading) {
+                  <div class="upload-progress-section">
+                    <div class="progress-item">
+                      <div class="progress-header">
+                        <span>Uploading Audio File</span>
+                        <span>{{ uploadProgress.audio }}%</span>
+                      </div>
+                      <div class="progress-bar">
+                        <div class="progress-fill" [style.width.%]="uploadProgress.audio"></div>
+                      </div>
+                    </div>
+
+                    @if (extractedImage) {
+                      <div class="progress-item">
+                        <div class="progress-header">
+                          <span>Uploading Cover Art</span>
+                          <span>{{ uploadProgress.image }}%</span>
+                        </div>
+                        <div class="progress-bar">
+                          <div class="progress-fill" [style.width.%]="uploadProgress.image"></div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+            <input #audioFileInput type="file" accept="audio/*" (change)="onAudioFileSelected($event)" style="display: none;">
+          </div>
+
+          <!-- Extracted Metadata Preview -->
+          @if (audioFile && (metaData.title || metaData.artist)) {
+            <div class="metadata-preview">
+              <h4>Extracted Information</h4>
+              <div class="metadata-grid">
+                @if (metaData.title) {
+                  <div class="metadata-item">
+                    <span class="metadata-label">Title:</span>
+                    <span class="metadata-value">{{ metaData.title }}</span>
+                  </div>
+                }
+                @if (metaData.artist) {
+                  <div class="metadata-item">
+                    <span class="metadata-label">Artist:</span>
+                    <span class="metadata-value">{{ metaData.artist }}</span>
+                  </div>
+                }
+                @if (extractedImage) {
+                  <div class="metadata-item">
+                    <span class="metadata-label">Cover Art:</span>
+                    <span class="metadata-value success">✓ Found</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <div class="step-actions">
+            <button class="btn btn-secondary" (click)="goToSongs()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              Cancel
+            </button>
+            <button class="btn btn-primary" (click)="uploadFilesAndContinue()" [disabled]="!audioFile || isLoading">
+              @if (isLoading) {
+                <div class="spinner"></div>
+                Uploading...
+              } @else {
+                Upload & Continue
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              }
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- Step 2: Song Details -->
+      @if (currentStep === 2) {
+        <div class="step-content">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="title">Title *</label>
+              <input type="text" id="title" [(ngModel)]="metaData.title" placeholder="Song title" required>
+            </div>
+
+            <div class="form-group">
+              <label for="artist">Artist *</label>
+              <input type="text" id="artist" [(ngModel)]="metaData.artist" placeholder="Artist name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="album">Album</label>
+              <input type="text" id="album" [(ngModel)]="metaData.album" placeholder="Album name (optional)">
+            </div>
+
+            <div class="form-group">
+              <label for="genre">Genre</label>
+              <select id="genre" [(ngModel)]="metaData.genre">
+                <option value="">Select genre</option>
+                @for (genre of genres; track genre) {
+                  <option [value]="genre">{{ genre }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="year">Year</label>
+              <input type="number" id="year" [(ngModel)]="metaData.year" [min]="1900" [max]="2024">
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn btn-secondary" (click)="previousStep()" [disabled]="isLoading">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              Back
+            </button>
+            <button class="btn btn-primary" (click)="submitSong()" [disabled]="isLoading || !metaData.title || !metaData.artist">
+              @if (isLoading) {
+                <div class="spinner"></div>
+                Adding Song...
+              } @else {
+                Add to Public Songs
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              }
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- Step 3: Success -->
+      @if (currentStep === 3) {
+        <div class="step-content success-step">
+          <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h2 class="success-title">Song Uploaded Successfully!</h2>
+          <p class="success-message">Your song has been added to the public songs library and is now available for everyone to enjoy.</p>
+          
+          <div class="step-actions">
+            <button class="btn btn-secondary" (click)="resetForm()">
+              Upload Another Song
+            </button>
+            <button class="btn btn-primary" (click)="goToSongs()">
+              View Public Songs
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

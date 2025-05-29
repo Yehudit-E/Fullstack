@@ -1,0 +1,342 @@
+/* Music Player Overlay */
+.music-player-overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-color);
+  animation: slideUp 0.3s ease-out;
+}
+
+.music-player {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.player-close-btn {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.1rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.player-close-btn:hover {
+  background: var(--error-color);
+  color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+.player-close-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Song Info */
+.player-song-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 0 0 250px;
+  min-width: 0;
+}
+
+.player-song-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.player-song-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.player-song-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-song-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-song-artist {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Controls */
+.player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.player-control-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgb(36, 36, 36,0.5);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.player-control-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.player-control-btn:active {
+  transform: scale(0.95);
+}
+
+.player-control-btn svg {
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+}
+
+/* Progress Section */
+.player-progress-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.player-time {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  min-width: 40px;
+  text-align: center;
+}
+
+.player-progress-container {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.player-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.player-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
+  border-radius: 3px;
+  transition: width 0.1s ease;
+  position: relative;
+}
+
+.player-progress-fill::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: var(--text-primary);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.player-progress-container:hover .player-progress-fill::after {
+  opacity: 1;
+}
+
+/* Volume Section */
+.player-volume-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 0 0 120px;
+
+}
+.player-volume-section input[type="range"] {
+border:1px solid var(--border-color);
+
+}
+.volume-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.player-volume-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+    background: linear-gradient(
+    to right, 
+    var(--gradient-middle) 0%, 
+    var(--gradient-middle) calc(var(--value) * 1%), 
+    var(--bg-tertiary) calc(var(--value) * 1%), 
+    var(--bg-tertiary) 100%
+  );
+}
+
+.player-volume-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--gradient-middle);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.player-volume-bar::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.player-volume-bar::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: var(--gradient-middle);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .music-player {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .player-song-info {
+    flex: none;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .player-progress-section {
+    order: 3;
+    width: 100%;
+  }
+
+  .player-volume-section {
+    order: 4;
+    justify-content: center;
+    flex: none;
+  }
+
+  .player-controls {
+    order: 2;
+  }
+
+  .player-close-btn {
+    top: 1rem;
+    right: 0.5rem;
+
+  }
+}
+
+@media (max-width: 480px) {
+  .music-player {
+    padding: 0.75rem;
+  }
+
+  .player-song-info {
+    gap: 0.75rem;
+  }
+
+  .player-song-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .player-control-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .player-control-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .player-volume-section {
+    flex: 0 0 100px;
+  }
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

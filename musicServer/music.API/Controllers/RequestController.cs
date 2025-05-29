@@ -23,12 +23,12 @@ namespace music.API.Controllers
             _mapper = mapper;
         }
         // GET: api/<requestController>
-        [HttpGet]
-        [Authorize(Policy ="Admin")]
-        public async Task<IEnumerable<RequestDto>> Get()
-        {
-            return await _iService.GetAsync();
-        }
+        //[HttpGet]
+        //[Authorize(Policy ="Admin")]
+        //public async Task<IEnumerable<RequestDto>> Get()
+        //{
+        //    return await _iService.GetAsync();
+        //}
         [HttpGet("full")]
         [Authorize(Policy = "Admin")]
         public async Task<IEnumerable<Request>> GetFull()
@@ -67,12 +67,12 @@ namespace music.API.Controllers
         // PUT api/<requestControllers>/5
         [HttpPut("{id}")]
         [Authorize(Policy = "Admin")]
-        public async Task<ActionResult<RequestDto>> Put(int id, bool isApproved)
+        public async Task<ActionResult<Request>> Put(int id, IsApproveModel isApprovedModel)
         {
-            var requestDto = await _iService.UpdateStatusAsync(id, isApproved);
-            if (requestDto == null)
+            var request = await _iService.UpdateStatusAsync(id, isApprovedModel.IsApproved);
+            if (request == null)
                 return NotFound();
-            return Ok(requestDto);
+            return Ok(request);
         }
 
         // DELETE api/<requestControllers>/5
@@ -81,5 +81,9 @@ namespace music.API.Controllers
         //{
         //    return await _iService.DeleteAsync(id);
         //}
+    }
+    public class IsApproveModel
+    {
+        public bool IsApproved { get; set; }
     }
 }

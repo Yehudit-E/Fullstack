@@ -76,6 +76,19 @@ namespace music.API.Controllers
                 return NotFound();
             return songDto;
         }
+        [HttpPost("public")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<SongDto>> Post([FromBody] PublicSongPostModel songPostModel)
+        {
+            SongDto songDto = _mapper.Map<SongDto>(songPostModel);
+            songDto.CreatedAt = DateTime.Now;
+            songDto.IsPublic = true;
+            songDto.playlistId = 1;
+            songDto = await _iService.AddAsync(songDto);
+            if (songDto == null)
+                return NotFound();
+            return songDto;
+        }
         // PUT api/<SongControllers>/5
         [HttpPut("{id}")]
         public async Task<ActionResult<SongDto>> Put(int id, [FromBody] SongPostModel songPostModel)
@@ -91,6 +104,22 @@ namespace music.API.Controllers
             SongDto prevSongDto = await _iService.GetByIdAsync(id);
             SongDto songDto = _mapper.Map<SongDto>(songPostModel);
             songDto.CountOfPlays = prevSongDto.CountOfPlays;
+            songDto.IsPublic = prevSongDto.IsPublic;
+            // songDto.CreatedAt = DateTime.Now;
+            songDto = await _iService.UpdateAsync(id, songDto);
+            if (songDto == null)
+                return NotFound();
+            return songDto;
+        }
+        [HttpPut("public/{id}")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<SongDto>> Put(int id, [FromBody] PublicSongPostModel songPostModel)
+        {
+            SongDto prevSongDto = await _iService.GetByIdAsync(id);
+            SongDto songDto = _mapper.Map<SongDto>(songPostModel);
+            songDto.CountOfPlays = prevSongDto.CountOfPlays;
+            songDto.IsPublic = prevSongDto.IsPublic;
+            songDto.playlistId = 1;
             // songDto.CreatedAt = DateTime.Now;
             songDto = await _iService.UpdateAsync(id, songDto);
             if (songDto == null)
@@ -118,12 +147,12 @@ namespace music.API.Controllers
             return songDto;
         }
         // DELETE api/<SongControllers>/5
-        //[HttpDelete("{id}")]
-        //[Authorize(Policy = "Admin")]
-        //public async Task<ActionResult<bool>> Delete(int id)
-        //{
-        //    return await _iService.DeleteAsync(id);
-        //}
+        [HttpDelete("{id}")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<bool>> Delete(int id)
+        {
+            return await _iService.DeleteAsync(id);
+        }
 
         //// ⬆️ שלב 1: קבלת URL להעלאת קובץ ל-S3
         [HttpGet("upload-url")]

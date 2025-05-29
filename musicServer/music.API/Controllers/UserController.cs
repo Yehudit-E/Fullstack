@@ -91,14 +91,14 @@ namespace music.API.Controllers
                 return NotFound();
             return Ok(userDto);
         }
-        // DELETE api/<UserControllers>/5
-        //[HttpDelete("{id}")]
-        //[Authorize(Policy = "Admin")]
-        //public async Task<ActionResult<bool>> Delete(int id)
-        //{
-        //    if (id == null)
-        //        return BadRequest("User data is required.");
-        //    return await _iService.DeleteAsync(id);
-        //}
+        //DELETE api/<UserControllers>/5
+        [HttpDelete("{id}")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<bool>> Delete(int id)
+        {
+            if (id == null)
+                return BadRequest("User data is required.");
+            return await _iService.DeleteAsync(id);
+        }
     }
 }

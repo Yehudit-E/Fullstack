@@ -10,13 +10,8 @@ namespace music.Core.DTOs
     public class RequestDto
     {
         public int UserId { get; set; }
-        public string SongName { get; set; }
-        public string SongArtist { get; set; }
-        public string SongGenre { get; set; }
-        public string SongAlbum { get; set; }
-        public int SongYear { get; set; }
-        public string SongAudioFilePath { get; set; }
-        public string SongImageFilePath { get; set; }
+        public SongRequest Song { get; set; }
+
 
     }
 }

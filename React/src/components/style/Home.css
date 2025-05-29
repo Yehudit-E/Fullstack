@@ -1,4 +1,3 @@
-/* HomePage.css */
 
 .home-page {
     color: var(--color-white);
@@ -76,18 +75,17 @@
    animation: float 6s ease-in-out infinite;
  }
   .album-cover {
-   width: 180px !important;
-   height: 180px !important;
+    margin-right: 35px;
+    margin-bottom: 15px;
+    width: 180px !important;
+    height: 180px !important;
  }
- /* Hero Section */
  .hero-section {
    margin-top: 0 !important;
    padding-top: 0 !important;
    position: relative;
-   /* min-height: 100vh; */
    display: flex;
    align-items: center;
-   /* padding: 2rem; */
    overflow: hidden;
  }
 
@@ -247,13 +245,12 @@
      transform: translateX(-50%) translateY(15px);
    }
  }
-  /* Shared Styles */
   .section-header {
     text-align: center;
     margin-bottom: 3rem;
   }
   
-  .section-title {
+  .home-section-title {
     font-size: 2.5rem;
     font-weight: 800;
     margin-bottom: 1rem;
@@ -277,7 +274,6 @@
     color: transparent;
   }
   
-  /* Animation for sections */
   .features-section,
   .discover-section,
   .how-it-works-section,
@@ -297,7 +293,6 @@
     transform: translateY(0);
   }
   
-  /* Hero Section */
   .hero-section {
     min-height: 90vh;
     display: flex;
@@ -370,7 +365,6 @@
     transform: translateY(-3px);
   }
   
-   /* App Preview Section */
  .app-preview-section {
    padding: 6rem 2rem;
    background-color: rgba(10, 10, 10, 0.8);
@@ -446,7 +440,6 @@
    filter: blur(5px);
  }
   
-  /* Stats Section */
   .stats-section {
     padding: 3rem 2rem;
     background: rgba(30, 30, 30, 0.3);
@@ -495,7 +488,6 @@
     }
   }
   
-  /* Features Section */
   .features-section {
     padding: 6rem 2rem;
   }
@@ -529,23 +521,10 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 1.5rem;
+    background: rgb(41, 40, 40,0.5);
+    margin-left: 60px;
   }
   
-  .feature-icon-wrapper.purple {
-    background: linear-gradient(135deg, #9c27b0, #673ab7);
-  }
-  
-  .feature-icon-wrapper.blue {
-    background: linear-gradient(135deg, #2196f3, #03a9f4);
-  }
-  
-  .feature-icon-wrapper.pink {
-    background: linear-gradient(135deg, #e91e63, #f48fb1);
-  }
-  
-  .feature-icon-wrapper.green {
-    background: linear-gradient(135deg, #4caf50, #8bc34a);
-  }
   
   .feature-icon {
     color: white;
@@ -562,7 +541,6 @@
     line-height: 1.6;
   }
   
-  /* Discover Section */
   .discover-section {
     padding: 6rem 2rem;
     display: flex;
@@ -674,7 +652,6 @@
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
   }
   
-  /* How It Works Section */
   .how-it-works-section {
     padding: 6rem 2rem;
   }
@@ -748,7 +725,6 @@
     }
   }
   
-  /* Testimonials Section */
   .testimonials-section {
     padding: 6rem 2rem;
     background: rgba(20, 20, 20, 0.3);
@@ -828,7 +804,6 @@
     margin: 0;
   }
   
-  /* CTA Section */
   .cta-section {
     padding: 6rem 2rem;
     position: relative;
@@ -936,7 +911,6 @@
     transform: translate(-50%, -50%);
   }
   
-  /* Footer */
   .home-footer {
     padding: 3rem 2rem;
     background: rgba(15, 15, 15, 0.8);
@@ -1001,7 +975,6 @@
     color: var(--color-white);
   }
   
-  /* Responsive Styles */
   @media (max-width: 992px) {
     .hero-section {
       flex-direction: column;

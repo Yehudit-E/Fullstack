@@ -58,8 +58,9 @@ builder.Configuration["SMTP:PORT"] = Env.GetString("SMTP_PORT");
 builder.Configuration["SMTP:GOOGLE_USER_EMAIL"] = Env.GetString("GOOGLE_USER_EMAIL");
 builder.Configuration["SMTP:PASSWORD"] = Env.GetString("PASSWORD");
 
-string connectionString = Env.GetString("DATABASE_CONNECTION_STRING");
 
+string connectionString = Env.GetString("DATABASE_CONNECTION_STRING");
+Console.WriteLine(connectionString);
 builder.Services.AddDbContext<DataContext>(options =>
      options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
     options => options.CommandTimeout(60)));

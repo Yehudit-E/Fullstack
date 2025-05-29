@@ -33,7 +33,6 @@ export type SongDto = {
 }
 export type SongPostModel = {
     name: string,
-    description?: string,
     artist: string,
     genre: string,
     year: number,

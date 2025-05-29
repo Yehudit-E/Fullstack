@@ -68,6 +68,30 @@ export const registerUser = createAsyncThunk('user/register',
         }
     }
 );
+export const connectWithGoogle = createAsyncThunk(
+    'auth/connectWithGoogle',
+    async ({ token }: { token: string; }, thunkAPI) => {
+        try {
+            const response = await axios.post<{ user: User; token: string }>(
+                `${BASE_URL}/api/Auth/google`,
+                { token });
+            localStorage.setItem("authToken", response.data.token);
+            const res = { response: response.data, name: response.data.user.userName, email: response.data.user.email };
+            console.log(res);
+            
+            return res;
+
+        } catch (error: any) {
+            if (error.response && typeof error.response.data === 'string') {
+                return thunkAPI.rejectWithValue(error.response.data);
+            }
+            if (error.response && error.response.data && error.response.data.message) {
+                return thunkAPI.rejectWithValue(error.response.data.message);
+            }
+            return thunkAPI.rejectWithValue('An unknown error occurred');
+        }
+    }
+);
 
 const userSlice = createSlice({
     name: 'user',

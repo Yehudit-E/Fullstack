@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router"
 import type { StoreType } from "../store/store"
-import { Music, PlayCircle, ListMusic, Download, Share2, Headphones, Radio, Star, ChevronRight, Zap, Heart, Users } from "lucide-react"
+import { Music, PlayCircle, ListMusic, Download, Share2, Headphones, Radio, Star, ChevronRight, Zap, Heart, Users, Sparkles } from "lucide-react"
 import "./style/Home.css"
 import "./style/Home2.css"
 import ColorSplashBackground from "./color-splash-background"
@@ -173,13 +173,13 @@ const Home = () => {
         {/* Features Section */}
         <section id="features" className={`features-section ${isVisible.features ? "visible" : ""}`}>
           <div className="section-header">
-            <h2 className="section-title">Why Choose Our Platform</h2>
+            <h2 className="home-section-title">Why Choose Our Platform</h2>
             <p className="section-subtitle">Experience music like never before with our feature-rich platform</p>
           </div>
 
           <div className="features-grid">
             <div className="feature-card">
-              <div className="feature-icon-wrapper purple">
+              <div className="feature-icon-wrapper ">
                 <ListMusic size={24} className="feature-icon" />
               </div>
               <h3 className="feature-title">Custom Playlists</h3>
@@ -189,7 +189,7 @@ const Home = () => {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon-wrapper blue">
+              <div className="feature-icon-wrapper">
                 <Share2 size={24} className="feature-icon" />
               </div>
               <h3 className="feature-title">Share with Friends</h3>
@@ -199,7 +199,7 @@ const Home = () => {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon-wrapper pink">
+              <div className="feature-icon-wrapper">
                 <Download size={24} className="feature-icon" />
               </div>
               <h3 className="feature-title">Download Music</h3>
@@ -209,13 +209,12 @@ const Home = () => {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon-wrapper green">
-                <Radio size={24} className="feature-icon" />
+              <div className="feature-icon-wrapper">
+                <Sparkles size={24} className="feature-icon" />
               </div>
-              <h3 className="feature-title">High Quality Audio</h3>
+              <h3 className="feature-title">AI Transcription</h3>
               <p className="feature-description">
-                Enjoy crystal clear sound quality that brings your music to life with every beat.
-              </p>
+Get automatic transcription of your songs using advanced artificial intelligence.              </p>
             </div>
           </div>
         </section>
@@ -230,7 +229,7 @@ const Home = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="section-title">Experience the Future of Music</h2>
+            <h2 className="home-section-title">Experience the Future of Music</h2>
             <p className="section-description">
               Our platform is designed to give you the best music experience possible. With intuitive controls,
               high-quality streaming, and a beautiful interface, you'll never want to listen to music any other way.
@@ -261,7 +260,7 @@ const Home = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="app-screenshot">
-              <img src="/placeholder.svg?height=600&width=300" alt="App screenshot" />
+              <img src="/images/image.png" alt="App screenshot" />
               <div className="app-screenshot-reflection"></div>
             </div>
           </motion.div>
@@ -270,7 +269,7 @@ const Home = () => {
         {/* How It Works Section */}
         <section id="howItWorks" className={`how-it-works-section ${isVisible.howItWorks ? "visible" : ""}`}>
           <div className="section-header">
-            <h2 className="section-title">How It Works</h2>
+            <h2 className="home-section-title">How It Works</h2>
             <p className="section-subtitle">Get started with our platform in just a few simple steps</p>
           </div>
 
@@ -322,7 +321,7 @@ const Home = () => {
         {/* Testimonials Section */}
         <section id="testimonials" className={`testimonials-section ${isVisible.testimonials ? "visible" : ""}`}>
           <div className="section-header">
-            <h2 className="section-title">What Our Users Say</h2>
+            <h2 className="home-section-title">What Our Users Say</h2>
             <p className="section-subtitle">Join thousands of satisfied users who love our platform</p>
           </div>
 

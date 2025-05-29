@@ -34,11 +34,11 @@ namespace music.API.Controllers
         //{
         //    return await _iService.GetAsync();
         //}
-        //[HttpGet("full")]
-        //public async Task<IEnumerable<Playlist>> GetFull()
-        //{
-        //    return await _iService.GetFullAsync();
-        //}
+        [HttpGet("full")]
+        public async Task<IEnumerable<Playlist>> GetFull()
+        {
+            return await _iService.GetFullAsync();
+        }
 
         //// GET api/<PlaylistControllers>/5
         //[HttpGet("{id}")]

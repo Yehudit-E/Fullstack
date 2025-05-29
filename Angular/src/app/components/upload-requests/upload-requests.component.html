@@ -1,0 +1,287 @@
+<div class="requests-container">
+    <!-- Header -->
+    <div class="header-content">
+        <h1 class="page-title">
+
+            <span class="gradient-text">Song Requests</span>
+        </h1>
+        <p class="page-subtitle">Manage user song upload requests</p>
+    </div>
+    @if (isLoading) {
+    <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading requests...</p>
+    </div>
+    }
+    @else {
+    <div class="requests-header">
+
+
+        <!-- Stats Cards -->
+        <div class="stats-cards">
+            <div class="stat-card pending">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-number">{{ getPendingCount() }}</span>
+                    <span class="stat-label">Pending</span>
+                </div>
+            </div>
+
+            <div class="stat-card approved">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-number">{{ getApprovedCount() }}</span>
+                    <span class="stat-label">Approved</span>
+                </div>
+            </div>
+
+            <div class="stat-card rejected">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-number">{{ getRejectedCount() }}</span>
+                    <span class="stat-label">Rejected</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab-btn" [class.active]="activeTab === 'pending'" (click)="setActiveTab('pending')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Pending Requests
+                <span class="tab-badge">{{ getPendingCount() }}</span>
+            </button>
+
+            <button class="tab-btn" [class.active]="activeTab === 'answered'" (click)="setActiveTab('answered')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                Answered Requests
+                <span class="tab-badge">{{ getAnsweredCount() }}</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-section">
+        <!-- Search -->
+        <div class="search-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" placeholder="Search by song, artist, or user..." [(ngModel)]="searchTerm"
+                (input)="onSearch()" class="search-input">
+        </div>
+
+        <!-- Status Filter (only for answered tab) -->
+        @if (activeTab === 'answered') {
+        <div class="filter-controls">
+            <span class="filter-label">Filter by status:</span>
+            <div class="filter-buttons">
+                <button class="filter-btn" [class.active]="statusFilter === 'all'" (click)="setStatusFilter('all')">
+                    All
+                </button>
+                <button class="filter-btn approved" [class.active]="statusFilter === 'approved'"
+                    (click)="setStatusFilter('approved')">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Approved
+                </button>
+                <button class="filter-btn rejected" [class.active]="statusFilter === 'rejected'"
+                    (click)="setStatusFilter('rejected')">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                    Rejected
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- Requests List -->
+    <div class="requests-list-container">
+        @if (isLoading) {
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading requests...</p>
+        </div>
+        } @else if (filteredRequests.length === 0) {
+        <div class="empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <h3>No requests found</h3>
+            <p>{{ searchTerm ? 'Try adjusting your search criteria' : (activeTab === 'pending' ? 'No pending
+                requests at
+                the moment' : 'No answered requests found') }}</p>
+        </div>
+        } @else {
+        <div class="requests-grid">
+            @for (request of filteredRequests; track request.id) {
+            <div class="request-card" [class.playing]="currentlyPlaying?.id === request.id">
+                <!-- Request Header -->
+                <div class="request-header">
+                    <div class="request-user">
+                        <div class="user-avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">{{ request.user.userName }}</span>
+                            <span class="user-email">{{ request.user.email }}</span>
+                        </div>
+                    </div>
+
+                    @if (request.isAnswered) {
+                    <div class="status-badge" [class.approved]="request.isApproved"
+                        [class.rejected]="!request.isApproved">
+                        <svg *ngIf="request.isApproved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <svg *ngIf="!request.isApproved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                        {{ request.isApproved ? 'Approved' : 'Rejected' }}
+                    </div>
+                    } @else {
+                    <div class="status-badge pending">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Pending
+                    </div>
+                    }
+                </div>
+
+                <!-- Song Info -->
+                <div class="song-info">
+                    <div class="song-image">
+                        <img [src]="request.song.imageFilePath" [alt]="request.song.name">
+                        <div class="play-overlay" (click)="playSong(request)">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="song-details">
+                        <h3 class="song-name">{{ request.song.name }}</h3>
+                        <p class="song-artist">{{ request.song.artist }}</p>
+                        <p class="song-album">{{ request.song.album }}</p>
+
+                        <div class="song-meta">
+                            <span class="meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M9 18V5l12-2v13"></path>
+                                    <circle cx="6" cy="18" r="3"></circle>
+                                </svg>
+
+                                {{ request.song.genre ? request.song.genre : 'Unknown Genre' }}
+                            </span>
+                            <span class="meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                {{ request.song.year }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                @if (!request.isAnswered) {
+                <div class="request-actions">
+                    <button class="action-btn approve-btn" (click)="approveRequest(request)"
+                        [disabled]="isProcessing(request.id)" title="Approve Request">
+                        @if (isProcessing(request.id)) {
+                        <div class="mini-spinner"></div>
+                        } @else {
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        }
+                        Approve
+                    </button>
+
+                    <button class="action-btn reject-btn" (click)="rejectRequest(request)"
+                        [disabled]="isProcessing(request.id)" title="Reject Request">
+                        @if (isProcessing(request.id)) {
+                        <div class="mini-spinner"></div>
+                        } @else {
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                        }
+                        Reject
+                    </button>
+                </div>
+                }
+            </div>
+            }
+        </div>
+        }
+    </div>
+
+    <!-- Player Component -->
+    <app-player [currentSong]="currentlyPlaying?.song" [isVisible]="showMusicPlayer" (onClose)="onPlayerClose()"
+        (onSongEnd)="onSongEnd()">
+    </app-player>
+    }
+</div>
