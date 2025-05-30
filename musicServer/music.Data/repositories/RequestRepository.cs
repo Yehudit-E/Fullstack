@@ -19,12 +19,12 @@ namespace music.Data.repositories
 
         public async Task<IEnumerable<Request>> GetFullNotAnsweredAsync()
         {
-            return await _dataSet.AsSplitQuery().Where(x => x.IsApproved == false).Include(x => x.User).ToListAsync();
+            return await _dataSet.Where(x => x.IsApproved == false).Include(x => x.User).ToListAsync();
         }
 
         public async Task<IEnumerable<Request>> GetFullAsync()
         {
-            return await _dataSet.AsSplitQuery().Include(x => x.Song).Include(x => x.User).ToListAsync();
+            return await _dataSet.Include(x => x.Song).Include(x => x.User).ToListAsync();
         }
 
         public async Task<Request> UpdateStatusAsync(int id, bool IsApproved)

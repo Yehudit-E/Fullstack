@@ -17,15 +17,15 @@ namespace music.Data.repositories
         { }
         public async Task<IEnumerable<User>> GetFullAsync()
         {
-            return await _dataSet.AsSplitQuery().Include(x => x.OwnedPlaylists).Include(x=>x.SharedPlaylists).ToListAsync();
+            return await _dataSet.Include(x => x.OwnedPlaylists).Include(x=>x.SharedPlaylists).ToListAsync();
         }
         public async Task<User?> GetFullByIdAsync(int id)
         {
-            return await _dataSet.AsSplitQuery().Where(x=>x.Id==id).Include(x => x.OwnedPlaylists).Include(x => x.SharedPlaylists).FirstOrDefaultAsync();
+            return await _dataSet.Where(x=>x.Id==id).Include(x => x.OwnedPlaylists).Include(x => x.SharedPlaylists).FirstOrDefaultAsync();
         }
         public User? GetUserWithRoles(string email)
         {
-            return  _dataSet.AsSplitQuery().Where(x=>x.Email==email).Include(x=>x.Roles).FirstOrDefault();
+            return  _dataSet.Where(x=>x.Email==email).Include(x=>x.Roles).FirstOrDefault();
         }
         public async Task<User> GetByEmailAsync(string UserEmail)
         {

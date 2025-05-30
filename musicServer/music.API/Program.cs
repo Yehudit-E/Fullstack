@@ -17,7 +17,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     options.JsonSerializerOptions.WriteIndented = true;
 });
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>{
    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
@@ -60,7 +60,7 @@ builder.Configuration["SMTP:PASSWORD"] = Env.GetString("PASSWORD");
 
 
 string connectionString = Env.GetString("DATABASE_CONNECTION_STRING");
-Console.WriteLine(connectionString);
+//Console.WriteLine(connectionString);
 builder.Services.AddDbContext<DataContext>(options =>
      options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
     options => options.CommandTimeout(60)));
