@@ -1,12 +1,9 @@
-using Auto1040.Api.Extensions;
 using DotNetEnv;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using music.Api.Extensions;
 using music.Data;
-using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,7 +44,7 @@ builder.AddJwtAuthentication();
 builder.AddJwtAuthorization();
 
 Env.Load();
-// מוסיף את המשתנים ל-AppSettings בצורה דינאמית
+
 builder.Configuration["AWS:BucketName"] = Env.GetString("AWS_BUCKET_NAME");
 builder.Configuration["AWS:Region"] = Env.GetString("AWS_REGION");
 builder.Configuration["AWS:AccessKey"] = Env.GetString("AWS_ACCESS_KEY");

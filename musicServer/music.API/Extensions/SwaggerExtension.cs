@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 
-namespace Auto1040.Api.Extensions
+namespace music.Api.Extensions
 {
     public static class SwaggerExtension
     {
