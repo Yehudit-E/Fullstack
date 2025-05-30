@@ -1,3 +1,3 @@
 
-const BASE_URL ="https://localhost:7044";
+const BASE_URL ="https://music-server-im05.onrender.com";
 export {BASE_URL};

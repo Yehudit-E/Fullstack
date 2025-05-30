@@ -15,7 +15,7 @@ WORKDIR /src
 COPY ["music.API/music.API.csproj", "music.API/"]
 COPY ["music.Data/music.Data.csproj", "music.Data/"]
 COPY ["music.Core/music.Core.csproj", "music.Core/"]
-COPY ["music.Servies/music.Service.csproj", "music.Servies/"]
+COPY ["music.Service/music.Service.csproj", "music.Service/"]
 RUN dotnet restore "./music.API/music.API.csproj"
 COPY . .
 WORKDIR "/src/music.API"

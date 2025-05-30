@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\music.Data\music.Data.csproj" />
-    <ProjectReference Include="..\music.Servies\music.Service.csproj" />
+    <ProjectReference Include="..\music.Service\music.Service.csproj" />
   </ItemGroup>
 
 </Project>
