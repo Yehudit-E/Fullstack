@@ -15,7 +15,7 @@ import PauseIcon from "@mui/icons-material/Pause"
 import MusicNoteIcon from "@mui/icons-material/MusicNote"
 import { MenuItem, IconButton, Menu, Select } from "@mui/material"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
-import { Download, ExternalLink, ListMusic, Plus, Share2, Play, Headphones } from "lucide-react"
+import { Download, ExternalLink, ListMusic, Plus, Share2, Headphones } from "lucide-react"
 import { Add as AddIcon } from "@mui/icons-material"
 
 import "./style/PublicSongs.css"

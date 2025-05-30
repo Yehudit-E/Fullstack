@@ -1,12 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { ArrowLeft, Play, Pause, Download, Plus, Sparkles, Music2, Headphones, PlayCircle, Disc, Calendar, Share, Share2, Edit } from "lucide-react"
+import { useDispatch } from "react-redux"
+import { ArrowLeft, Download, Plus, Sparkles, Music2, Headphones, PlayCircle, Disc, Calendar, Share2, Edit } from "lucide-react"
 import "./style/SongDetails.css"
 import { useParams } from "react-router"
 import type { Song } from "../models/Song"
-import type { Dispatch, StoreType } from "../store/store"
+import type { Dispatch } from "../store/store"
 import SongService from "../services/SongService"
 import AddToPlaylist from "./AddToPlaylist"
 import axios from "axios"
@@ -18,20 +18,17 @@ import EditSong from "./EditSong"
 export default function SongDetailsPage() {
     const { id } = useParams<{ id: string }>();
     const decodeId = id ? atob(id) : "";
-    const realId = decodeId.split("-")[1];
     const songId = Number.parseInt(decodeId || "0")
 
     const [song, setSong] = useState<Song | null>(null)
     const [lyrics, setLyrics] = useState<string>("")
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
-    const [isPlaying, setIsPlaying] = useState(false)
     const [showAddToPlaylist, setShowAddToPlaylist] = useState(false)
     const [loadingLyrics, setLoadingLyrics] = useState(false)
     const [fileInfo, setFileInfo] = useState<{ contentType: string; contentLength: number; lastModified: string } | null>(null)
     const [showShareSongDialog, setShowShareSongDialog] = useState(false)
     const [showEditSongDialog, setShowEditSongDialog] = useState(false)
-    const authState = useSelector((state: StoreType) => state.user.authState)
     const dispatch = useDispatch<Dispatch>()
     useEffect(() => {
         const fetchSong = async () => {

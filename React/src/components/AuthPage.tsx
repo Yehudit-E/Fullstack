@@ -35,7 +35,10 @@ const AuthPage = () => {
             }}
           ></div>
         </div>
-<Google />
+        <div className="auth-google-container">
+          <Google />
+        </div>
+        
         {/* Form Container */}
         <div className="auth-form-container">{isLogin ? <Login /> : <Register />}</div>
       </div>

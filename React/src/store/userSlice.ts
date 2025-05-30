@@ -12,7 +12,6 @@ let userEmpty: UserDto = {
     create_at: "",
 }
 let baseUrl = BASE_URL;
-let userWithNewName;
 export const load = createAsyncThunk('user/load',
     async (id: string, thunkAPI) => {
 

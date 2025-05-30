@@ -1,5 +1,5 @@
 import { Song } from "./Song"
-import { User, UserDto } from "./User"
+import { UserDto } from "./User"
 
 export type Playlist ={
     id :number,

@@ -34,7 +34,6 @@
 
 .gradient-text {
   background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
-  -webkit-background-clip: text;
   color: transparent;
 }
 
@@ -227,6 +226,9 @@
   color: var(--gradient-middle);
 }
 
+.auth-google-container{
+padding: 0rem 2rem;
+}
 /* Animation */
 @keyframes fadeIn {
   from {

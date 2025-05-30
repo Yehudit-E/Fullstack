@@ -4,10 +4,9 @@ import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router"
 import type { StoreType } from "../store/store"
-import { Music, PlayCircle, ListMusic, Download, Share2, Headphones, Radio, Star, ChevronRight, Zap, Heart, Users, Sparkles } from "lucide-react"
+import { PlayCircle, ListMusic, Download, Share2,  Star,  Zap, Heart, Users, Sparkles } from "lucide-react"
 import "./style/Home.css"
 import "./style/Home2.css"
-import ColorSplashBackground from "./color-splash-background"
 import { motion } from "framer-motion"
 
 const Home = () => {

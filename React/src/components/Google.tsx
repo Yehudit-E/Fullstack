@@ -1,10 +1,8 @@
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Divider, Typography } from "@mui/material";
 import { AlertCircle } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
-import "./style/Google.css";
 import { Dispatch } from "../store/store";
 import { connectWithGoogle, load } from "../store/userSlice";
 
@@ -53,7 +51,7 @@ const Google = () => {
             }
         }
         catch (error) {
-            setErrorMessage('הרשמה באמצעות Google נכשלה');
+            setErrorMessage('Google Sign-In failed. Please try again.');
             setTimeout(() => {
                 setErrorOpen(false);
             }, 3000);
@@ -61,14 +59,7 @@ const Google = () => {
     }
 
     return (<>
-        <Box sx={{ display: 'flex', alignItems: 'center', my: 4 }}>
-            <Divider sx={{ flexGrow: 1, borderColor: 'grey.500' }} />
-            <Typography variant="body2" sx={{ mx: 2, color: 'grey.500', fontSize: '20px' }}>
-                או
-            </Typography>
-            <Divider sx={{ flexGrow: 1, borderColor: 'grey.500' }} />
-        </Box>
-        <Box sx={{ direction: 'ltr' }}>
+        <div style={{ direction: 'ltr' ,margin:'0'}}>
             <GoogleLogin
                 locale='en'
                 text="signin_with"
@@ -87,7 +78,9 @@ const Google = () => {
                 theme="outline"
                 size="large"
             />
-        </Box>
+            <div style={{margin:"6px 6px", display: "flex", alignItems: "center", justifyContent: "center" }}>or</div>
+        </div>
+        
         {errorOpen && errorMessage && (
             <div className="google-error-message">
                 <AlertCircle className="google-error-icon" size={18} />

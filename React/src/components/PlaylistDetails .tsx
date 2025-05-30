@@ -5,14 +5,14 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { setChange, setCurrentIndex, updateSongs } from "../store/songSlice"
+import {  setCurrentIndex, updateSongs } from "../store/songSlice"
 import type { Dispatch } from "../store/store"
 import PlaylistService from "../services/PlaylistService"
 import type { Playlist } from "../models/Playlist"
 import type { Song } from "../models/Song"
 import { IconButton, Menu, MenuItem } from "@mui/material"
-import { Close, MoreHoriz, MusicNote } from "@mui/icons-material"
-import { Play, Clock, Music, Users, Calendar, ListMusic, User, ArrowLeft, ExternalLink } from "lucide-react"
+import {  MoreHoriz, MusicNote } from "@mui/icons-material"
+import { Play, Clock, Music, Users, Calendar, ListMusic, User, ExternalLink } from "lucide-react"
 import SharePlaylist from "./SharePlaylist"
 import EditPlaylist from "./EditPlaylist"
 import DeletePlaylist from "./DeletePlaylist"
@@ -30,7 +30,6 @@ import ShareSong from "./ShareSong"
 const PlaylistDetails = () => {
   const { id } = useParams<{ id: string }>();
   const decodeId = id ? atob(id) : "";
-  const realId = decodeId.split("-")[1];
   const playlistId = Number.parseInt(decodeId || "0")
   const dispatch = useDispatch<Dispatch>()
   const navigate = useNavigate()
@@ -38,7 +37,6 @@ const PlaylistDetails = () => {
   const [playlist, setPlaylist] = useState<Playlist | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
   const [songMenuAnchor, setSongMenuAnchor] = useState<{ [key: number]: HTMLElement | null }>({})
   const [showShareDialog, setShowShareDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
@@ -81,9 +79,6 @@ const PlaylistDetails = () => {
     setShowEditDialog(true)
   }
 
-  const handleDeletePlaylist = () => {
-    setShowDeleteDialog(true)
-  }
   const handleRemoveSharingInPlaylist = () => {
     setShowRemoveSharingDialog(true)
   }
@@ -139,13 +134,8 @@ const PlaylistDetails = () => {
     })
   }
 
-  const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setMenuAnchor(event.currentTarget)
-  }
 
-  const closeMenu = () => {
-    setMenuAnchor(null)
-  }
+
 
   const openSongMenu = (event: React.MouseEvent<HTMLButtonElement>, songId: number) => {
     event.stopPropagation()

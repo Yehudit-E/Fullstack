@@ -1,5 +1,5 @@
 import api from "../interceptor/api";
-import { SongDto, SongPostModel } from "../models/Song";
+import { SongPostModel } from "../models/Song";
 
 const SongService = {
 

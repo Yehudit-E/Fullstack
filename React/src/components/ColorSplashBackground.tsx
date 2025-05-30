@@ -94,8 +94,6 @@ const ColorSplashBackground = ({ opacity = 0.3 }: ColorSplashBackgroundProps) =>
 
         const controlPoint1X = x + Math.cos(angle - 0.2) * length * 0.5
         const controlPoint1Y = y + Math.sin(angle - 0.2) * length * 0.5
-        const controlPoint2X = x + Math.cos(angle + 0.2) * length * 0.5
-        const controlPoint2Y = y + Math.sin(angle + 0.2) * length * 0.5
         const endX = x + Math.cos(angle) * length
         const endY = y + Math.sin(angle) * length
 

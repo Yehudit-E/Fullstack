@@ -3,21 +3,15 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  Typography,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import DownloadIcon from "@mui/icons-material/Download";
 import SpeedIcon from "@mui/icons-material/Speed";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { resetSongs } from "../store/songSlice";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "../store/store";
 import { Song, SongDto } from "../models/Song";
-import { ArrowLeft, Download, Gauge } from "lucide-react";
+import { ArrowLeft, Download } from "lucide-react";
 
 type Props = {
   song: SongDto | Song;

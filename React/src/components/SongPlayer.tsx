@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { VolumeUp, VolumeOff, Close } from "@mui/icons-material";
+import { VolumeUp, VolumeOff } from "@mui/icons-material";
 import { Box, CardMedia, IconButton, Slider, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch, StoreType } from "../store/store";
 import { useNavigate } from "react-router";
 import { SkipPreviousRounded, Replay10Rounded, PlayArrowRounded, PauseRounded, Forward30Rounded, SkipNextRounded } from '@mui/icons-material';
-import { nextSong, prevSong, resetSongs, setChange, updateSongs } from "../store/songSlice";
+import { nextSong, prevSong, setChange } from "../store/songSlice";
 import PlayerOptionsMenu from "./PlayerOptionsMenu";
 import SongService from "../services/SongService";
 

@@ -4,12 +4,12 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 
-import { Button, IconButton, Menu, MenuItem, Select } from "@mui/material"
+import {  IconButton, Menu, MenuItem, Select } from "@mui/material"
 import type { UserDto } from "../models/User"
 import type { Playlist } from "../models/Playlist"
 import { MoreHoriz, MusicNote } from "@mui/icons-material"
-import { useDispatch, useSelector } from "react-redux"
-import type { Dispatch, StoreType } from "../store/store"
+import {  useSelector } from "react-redux"
+import type {  StoreType } from "../store/store"
 import "./style/MyPlaylists.css"
 import { Music, Users, Lock, Trash2, ListMusic, Share2 } from "lucide-react"
 import AddPlaylist from "./AddPlaylist"
@@ -25,8 +25,7 @@ const MyPlaylist = () => {
   const [ownedPlaylists, setOwnedPlaylists] = useState<Playlist[]>([])
   const [sharedPlaylists, setSharedPlaylists] = useState<Playlist[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [showForm, setShowForm] = useState<boolean>(false)
-  const [editingPlaylist, setEditingPlaylist] = useState<Playlist | null>(null)
+  const [showForm] = useState<boolean>(false)
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [menuAnchor, setMenuAnchor] = useState<{ [key: string]: HTMLElement | null }>({})
   const [activeTab, setActiveTab] = useState<"owned" | "shared">("owned")
@@ -38,7 +37,6 @@ const MyPlaylist = () => {
   const [openShareDialog, setOpenShareDialog] = useState(false)
   const [playlistToEdit, setPlaylistToEdit] = useState<Playlist>({} as Playlist)
   const navigate = useNavigate()
-  const dispatch = useDispatch<Dispatch>()
   console.log(user)
 
   useEffect(() => {
@@ -62,14 +60,6 @@ const MyPlaylist = () => {
     setIsLoading(false)
   }
 
-  const handleCreatePlaylist = () => {
-    setEditingPlaylist(null)
-    setShowForm(true)
-  }
-
-  const handleFormSuccess = () => {
-    loadPlaylists()
-  }
 
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>, playlistId: number) => {
     event.stopPropagation()

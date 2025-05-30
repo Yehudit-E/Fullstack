@@ -1,7 +1,7 @@
 "use client"
 
 import { Link } from "react-router"
-import { Heart, Github, Twitter, Instagram } from "lucide-react"
+import { Heart, Github } from "lucide-react"
 import "./style/Footer.css"
 
 const Footer = () => {

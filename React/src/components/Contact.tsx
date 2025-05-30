@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Mail, Phone, MapPin, Send, MessageSquare, AlertCircle, CheckCircle } from "lucide-react"
+import { Mail, Phone, MapPin, Send, AlertCircle, CheckCircle } from "lucide-react"
 import "./style/StaticPages.css"
 import EmailService from "../services/EmailService"
 import { ContactEmailRequest } from "../models/ContactEmailRequest"

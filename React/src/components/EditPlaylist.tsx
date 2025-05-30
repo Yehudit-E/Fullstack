@@ -5,12 +5,11 @@ import type React from "react"
 
 import { useSelector } from "react-redux"
 import type { StoreType } from "../store/store"
-import type { User, UserDto } from "../models/User"
+import type { UserDto } from "../models/User"
 import type { Playlist } from "../models/Playlist"
 import PlaylistService from "../services/PlaylistService"
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material"
-import { CloudUpload, Close, Lock } from "@mui/icons-material"
-import { Users } from "lucide-react"
+import { CloudUpload, Close } from "@mui/icons-material"
 import "./style/AddPlaylist.css" // Reuse the same styles
 
 interface EditPlaylistProps {

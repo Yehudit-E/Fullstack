@@ -7,7 +7,6 @@ import { useSelector } from "react-redux"
 import { Buffer } from "buffer"
 import * as mm from "music-metadata-browser"
 import SongService from "../services/SongService"
-import api from "../interceptor/api"
 import type { Request } from "../models/Request"
 import { Music, Upload, FileMusic, X, Check, ChevronLeft, AlertCircle } from "lucide-react"
 import "./style/UploadMusic.css"
@@ -30,7 +29,6 @@ const UploadMusic = () => {
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
   const [step, setStep] = useState(1)
-  const [isPublic, setIsPublic] = useState(true)
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const xhrRef = useRef<XMLHttpRequest | null>(null)
@@ -142,17 +140,17 @@ const UploadMusic = () => {
       setError("")
 
       // Extract metadata including image
-      const metadata = await mm.parseBlob(file)
+      // const metadata = await mm.parseBlob(file)
 
-      // Extract and upload image if available
-      let imageUrl = null
-      if (metadata.common.picture && metadata.common.picture.length > 0) {
-        const image = metadata.common.picture[0].data
-        const imageFormat = metadata.common.picture[0].format || "jpeg"
-        const imageName = `${file.name.replace(/\.[^/.]+$/, "")}_cover.${imageFormat.split("/")[1] || "jpg"}`
+      // // Extract and upload image if available
+      // let imageUrl = null;
+      // if (metadata.common.picture && metadata.common.picture.length > 0) {
+      //   const image = metadata.common.picture[0].data
+      //   const imageFormat = metadata.common.picture[0].format || "jpeg"
+      //   const imageName = `${file.name.replace(/\.[^/.]+$/, "")}_cover.${imageFormat.split("/")[1] || "jpg"}`
 
-        imageUrl = await uploadImage(image, imageName, imageFormat)
-      }
+      //   imageUrl = await uploadImage(image, imageName, imageFormat)
+      // }
 
       // Upload audio file
       const uploadUrl = await SongService.getUploadUrl(file.name, file.type)
@@ -206,7 +204,6 @@ const UploadMusic = () => {
 
       // Get the upload URL for the audio file
       const uploadUrl = await SongService.getUploadUrl(file.name, file.type)
-      const audioUrl = uploadUrl.split("?")[0]
 
       // Extract metadata again to get the image
       const metadata = await mm.parseBlob(file)

@@ -50,10 +50,10 @@ const AddToPlaylist = ({ song, onClose }: AddToPlaylistModalProps) => {
         playlistServices.getUserSharedPlaylists(user.id),
       ])
 
-      const owned2: Playlist[] = owned.map((p: Playlist) => ({
-        ...p,
-        owner: user,
-      }))
+      // const owned2: Playlist[] = owned.map((p: Playlist) => ({
+      //   ...p,
+      //   owner: user,
+      // }))
       setPlaylists([
         ...owned.map((p: Playlist) => ({
           ...p,
