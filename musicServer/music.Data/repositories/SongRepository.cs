@@ -19,7 +19,7 @@ namespace music.Data.repositories
 
         public async Task<IEnumerable<Song>> GetPublicAsync()
         {
-            return await _dataSet.Where(x=>x.IsPublic==true).ToListAsync();
+            return await _dataSet.AsSplitQuery().Where(x=>x.IsPublic==true).ToListAsync();
         }
 
         public async Task<Song> UpdatePlaysAsync(int id)
