@@ -14,7 +14,7 @@ import "./style/UserDetails.css"
 import { UserDto } from "../models/User"
 import UserService from "../services/UserService"
 
-const UserDetails = () => {
+const UserProfile = () => {
   const dispatch = useDispatch<Dispatch>()
   const user = useSelector((state: StoreType) => state.user.user)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -205,4 +205,4 @@ const UserDetails = () => {
   )
 }
 
-export default UserDetails
+export default UserProfile

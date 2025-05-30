@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router"
 import { useState, useEffect, useRef } from "react"
 import { LogIn, Menu, X } from "lucide-react"
 import "./style/Header.css"
-import UserDetails from "./UserDetails"
+import UserDetails from "./UserProfile"
 
 const Header = () => {
   const authState = useSelector((store: StoreType) => store.user.authState)
