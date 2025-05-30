@@ -11,9 +11,7 @@ namespace music.Data.repositories
 {
     public class PlaylistRepository:Repository<Playlist>,IPlaylistRepository
     {
-        public PlaylistRepository(DataContext dataContex) : base(dataContex)
-        {
-        }
+        public PlaylistRepository(DataContext dataContex) : base(dataContex){}
         public async Task<IEnumerable<Playlist>> GetFullAsync()
         {
             return await _dataSet.Include(x => x.Songs).ToListAsync();

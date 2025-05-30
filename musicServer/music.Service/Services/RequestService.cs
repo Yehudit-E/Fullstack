@@ -21,7 +21,7 @@ namespace music.Service.Services
         private readonly IEmailService _emailService;
 
 
-        public RequestService(IRepositoryManager iManager, IMapper mapper, IEmailService emailService,IUserService userService,ISongService songService)
+        public RequestService(IRepositoryManager iManager, IMapper mapper, IEmailService emailService, IUserService userService, ISongService songService)
         {
             _iManager = iManager;
             _mapper = mapper;
@@ -70,7 +70,7 @@ namespace music.Service.Services
                 SongId = song.Id,
                 Song = song
             };
-                            
+
             request = await _iManager._requestRepository.AddAsync(request);
             if (request == null)
                 return false;

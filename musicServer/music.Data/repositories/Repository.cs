@@ -12,7 +12,6 @@ namespace music.Data.repositories
     public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly DbSet<T> _dataSet;
-        protected readonly IRepositoryManager _iManager;
         public Repository(DataContext dataContex)
         {
             _dataSet = dataContex.Set<T>();

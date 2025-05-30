@@ -8,7 +8,7 @@ using music.Core.Intefaces.IServices;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace music.API.Controllers      
+namespace music.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -57,7 +57,7 @@ namespace music.API.Controllers
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
             var tokenId = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
-            if (tokenId != requestDto.UserId) 
+            if (tokenId != requestDto.UserId)
                 return Forbid();
             //RequestDto requestDto = _mapper.Map<RequestDto>(requestPostModel);
             bool res = await _iService.AddAsync(requestDto);

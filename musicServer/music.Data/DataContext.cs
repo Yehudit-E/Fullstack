@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using music.Core.Entities;
 
 namespace music.Data
@@ -25,13 +24,6 @@ namespace music.Data
             base.OnConfiguring(optionsBuilder);
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        optionsBuilder.UseSqlServer("Data Source =DESKTOP-8ED3CL9; Initial Catalog = music2_db; Integrated Security = true;TrustServerCertificate=True;");
-        //    }
-        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // קשר One-to-Many – המשתמש שהוא הבעלים של רשימת ההשמעה
