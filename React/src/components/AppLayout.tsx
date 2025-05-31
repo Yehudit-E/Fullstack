@@ -53,10 +53,10 @@ const AppLayout = () => {
   const hasSongPlayer = songsList[0].id !== 0;
 
   return (
-    <div style={{margin:0,padding:0,width:  "100vw",minHeight: "100vh",display: "flex",flexDirection: "column"}} className={`app-layout ${hasSongPlayer ? 'song-player-active' : ''}`}>
+    <div style={{margin:0,padding:0,width:"100vw",minHeight:"100vh",display: "flex",flexDirection: "column"}} >
       <Header />
       <div style={{ marginTop: "60px" }}> </div>
-      <main className="app-main" style={{ minHeight:"85vh"}}>
+      <main  style={{ minHeight:"85vh"}}>
         <Outlet />
       </main>
       {!hasSongPlayer && (
