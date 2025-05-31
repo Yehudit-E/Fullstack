@@ -35,13 +35,6 @@ html, body {
   height: 100%;
 }
 
-/* .app-layout {
-  width: 100vw;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-} */
-
 /* סגנון ל-main שמכיל את התוכן */
 .app-main {
   width: 100%;
