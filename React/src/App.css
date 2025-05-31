@@ -35,13 +35,12 @@ html, body {
   height: 100%;
 }
 
-/* סגנון לקונטיינר הראשי של האפליקציה */
-.app-layout {
+/* .app-layout {
   width: 100vw;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
+} */
 
 /* סגנון ל-main שמכיל את התוכן */
 .app-main {
