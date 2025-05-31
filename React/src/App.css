@@ -20,8 +20,8 @@ body {
   font-family: Arial, sans-serif;
   background-color: var(--color-black);
   color: var(--color-white); 
-  /* margin: 0;
-  padding: 0; */
+  margin: 0;
+  padding: 0;
   direction: ltr;
 }
 ::-webkit-scrollbar {
@@ -33,10 +33,4 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-}
-
-/* סגנון ל-main שמכיל את התוכן */
-.app-main {
-  width: 100%;
-  flex-grow: 1; /* תופס את כל הגובה הזמין */
 }
