@@ -11,7 +11,6 @@ function App() {
     
       <Provider store={store}>
         <RouterProvider router={router} />
-        <Outlet/>
       </Provider>
     </>
   )
