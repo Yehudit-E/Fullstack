@@ -7,7 +7,6 @@ import { Dispatch, StoreType } from "../store/store";
 import SongPlayer from "./SongPlayer";
 import { loadSongs } from "../store/songSlice";
 import Footer from "./Footer";
-
 const AppLayout = () => {
   const dispatch = useDispatch<Dispatch>();
   const songsList = useSelector((state: StoreType) => state.songPlayer.songs)
