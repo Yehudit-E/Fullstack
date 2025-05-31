@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux'
 import './App.css'
 import store from './store/store'
-import { Outlet, RouterProvider } from 'react-router'
+import { RouterProvider } from 'react-router'
 import { router } from './Router'
 
 function App() {
