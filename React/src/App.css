@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --color-black: #000000;   
   --color-white: #ffffff;
   --color-gray: #282828;   
@@ -7,16 +7,8 @@
   --gradient-middle: #bd4ed5; 
   --gradient-end: #7940d4; 
 }
-/* @font-face {
-  font-family: "FbBangyNew-Regular";
-  src: url("/fonts/FbBangyNew-Regular.otf") format("opentype"),
-       url("/fonts/FbBangyNew-Regular.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-} */
 
 body {
-  /* font-family: "FbBangyNew-Regular", sans-serif; */
   font-family: Arial, sans-serif;
   background-color: var(--color-black);
   color: var(--color-white); 
@@ -27,7 +19,6 @@ body {
 ::-webkit-scrollbar {
   display: none; 
 }
-/* ודא ש־html ו־body תופסים את כל המסך */
 html, body {
   margin: 0;
   padding: 0;
@@ -42,8 +33,7 @@ html, body {
   flex-direction: column;
 }
 
-/* סגנון ל-main שמכיל את התוכן */
 .app-main {
   width: 100%;
-  flex-grow: 1; /* תופס את כל הגובה הזמין */
-}
+  flex-grow: 1;  
+} */
