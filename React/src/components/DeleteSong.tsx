@@ -1,4 +1,3 @@
-"use client"
 
 import { useState, useEffect } from "react"
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material"

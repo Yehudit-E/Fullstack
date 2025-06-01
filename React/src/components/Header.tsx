@@ -1,4 +1,3 @@
-"use client"
 
 import { useSelector } from "react-redux"
 import type { StoreType } from "../store/store"
