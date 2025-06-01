@@ -53,10 +53,28 @@ const AppLayout = () => {
   const hasSongPlayer = songsList[0].id !== 0;
 
   return (
-    <div className={`app-layout ${hasSongPlayer ? 'song-player-active' : ''}`}>
+    // <div className={`app-layout ${hasSongPlayer ? 'song-player-active' : ''}`}>
+    //   <Header />
+    //   <div style={{ marginTop: "60px" }}> </div>
+    //   <main className="app-main" style={{ minHeight:"85vh"}}>
+    //     <Outlet />
+    //   </main>
+    //   {!hasSongPlayer && (
+    //     <>
+    //       <Footer />
+    //     </>
+    //   )}
+    //   {hasSongPlayer && (
+    //     <>
+    //       <div style={{ marginBottom: "100px" }}> </div>
+    //       {songId !== 0 && <SongPlayer />}
+    //     </>
+    //   )}
+    // </div>
+    <div >
       <Header />
-      <div style={{ marginTop: "60px" }}> </div>
-      <main className="app-main" style={{ minHeight:"85vh"}}>
+      <div > </div>
+      <main >
         <Outlet />
       </main>
       {!hasSongPlayer && (
@@ -66,7 +84,7 @@ const AppLayout = () => {
       )}
       {hasSongPlayer && (
         <>
-          <div style={{ marginBottom: "100px" }}> </div>
+          {/* <div style={{ marginBottom: "100px" }}> </div> */}
           {songId !== 0 && <SongPlayer />}
         </>
       )}

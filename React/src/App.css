@@ -1,4 +1,4 @@
-/* :root {
+:root {
   --color-black: #000000;   
   --color-white: #ffffff;
   --color-gray: #282828;   
@@ -36,4 +36,4 @@ html, body {
 .app-main {
   width: 100%;
   flex-grow: 1;  
-} */
+}
