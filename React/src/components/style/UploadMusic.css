@@ -2,12 +2,12 @@
 
 /* Page Container - Centered Layout */
 .upload-page-container {
-  display: flex;
+  /* display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 2rem 1rem;
-  background-color: var(--color-black);
+  background-color: var(--color-black); */
 }
 
 /* Card Container */
