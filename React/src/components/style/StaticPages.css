@@ -1,7 +1,6 @@
 /* StaticPages.css - Shared styles for static pages */
 
 .static-page-container {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem 1rem 4rem;
   color: var(--color-white);

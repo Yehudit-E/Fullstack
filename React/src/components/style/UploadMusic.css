@@ -577,7 +577,6 @@
 
 /* Original UploadMusic.css styles for compatibility */
 .upload-music-container {
-  max-width: 900px;
   margin: 0 auto;
   padding: 2rem 1rem;
   color: var(--color-white);
