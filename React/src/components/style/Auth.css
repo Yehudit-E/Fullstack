@@ -1,12 +1,12 @@
 /* Auth.css - Styles for authentication components */
 
 .auth-container {
-  /* display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 0 !important;
-  background-color: var(--color-black); */
+  background-color: var(--color-black);
 }
 
 .auth-card {

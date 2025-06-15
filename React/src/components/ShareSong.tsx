@@ -90,8 +90,9 @@ const ShareSong = ({ songId, closeShareDialog }: ShareSongProps) => {
         style: {
           backgroundColor: "var(--color-gray, #1e1e1e)",
           borderRadius: "8px",
-          maxWidth: "500px",
+          maxWidth: "750px",
           width: "100%",
+          minHeight:"450px"
         },
       }}
       TransitionProps={{
@@ -105,7 +106,7 @@ const ShareSong = ({ songId, closeShareDialog }: ShareSongProps) => {
             background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
             WebkitBackgroundClip: "text",
             color: "transparent",
-            fontSize: "22px",
+            fontSize: "25px",
             fontWeight: "700",
           }}
         >
@@ -118,7 +119,7 @@ const ShareSong = ({ songId, closeShareDialog }: ShareSongProps) => {
 
       <div className="share-icon-container">
         <div className="share-icon">
-          <Users size={40} />
+          <Users size={60} />
         </div>
       </div>
 

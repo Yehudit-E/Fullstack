@@ -124,9 +124,10 @@ const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi
         style: {
           backgroundColor: "var(--color-gray, #1e1e1e)",
           borderRadius: "8px",
-          maxWidth: "700px",
+          maxWidth: "850px",
           width: "90%",
           maxHeight: "90vh",
+          minHeight:"500px"
         },
       }}
       TransitionProps={{
@@ -140,7 +141,7 @@ const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi
             background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
             WebkitBackgroundClip: "text",
             color: "transparent",
-            fontSize: "22px",
+            fontSize: "25px",
             fontWeight: "700",
           }}
         >
@@ -159,13 +160,13 @@ const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi
                 className="image-preview"
                 style={{
                   backgroundImage: song.imageFilePath ? `url(${song.imageFilePath})` : "none",
-                  width: "180px",
-                  height: "180px",
+                  width: "220px",
+                  height: "220px",
                 }}
               >
                 {!song.imageFilePath && (
                   <div className="upload-placeholder">
-                    <Music className="upload-icon" size={40} />
+                    <Music className="upload-icon" size={60} />
                     <span style={{ fontSize: "0.8rem" }}>No Cover Image</span>
                   </div>
                 )}
@@ -176,7 +177,7 @@ const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi
               <div style={{ display: "flex", gap: "1rem" }}>
 
                 <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>
-                  <label htmlFor="name" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>
+                  <label htmlFor="name" style={{ color: "var(--color-white)", fontSize: "0.95rem", fontWeight: "500" }}>
                     Song Name
                   </label>
                   <input
@@ -194,7 +195,7 @@ const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi
                       color: "var(--color-white)",
                       padding: "0.4rem 0.8rem",
                       width: "100%",
-                      fontSize: "0.85rem",
+                      fontSize: "0.95rem",
                     }}
                   />
                 </div>
@@ -202,7 +203,7 @@ const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi
                 <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>
                   <label
                     htmlFor="artist"
-                    style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}
+                    style={{ color: "var(--color-white)", fontSize: "0.95rem", fontWeight: "500" }}
                   >
                     Artist
                   </label>
@@ -221,7 +222,7 @@ const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi
                       color: "var(--color-white)",
                       padding: "0.4rem 0.8rem",
                       width: "100%",
-                      fontSize: "0.85rem",
+                      fontSize: "0.95rem",
                     }}
                   />
                 </div>
@@ -229,7 +230,7 @@ const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi
 
               <div style={{ display: "flex", gap: "1rem" }}>
                 <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>
-                  <label htmlFor="album" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>
+                  <label htmlFor="album" style={{ color: "var(--color-white)", fontSize: "0.95rem", fontWeight: "500" }}>
                     Album
                   </label>
                   <input
@@ -246,13 +247,13 @@ const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi
                       color: "var(--color-white)",
                       padding: "0.4rem 0.8rem",
                       width: "100%",
-                      fontSize: "0.85rem",
+                      fontSize: "0.95rem",
                     }}
                   />
                 </div>
 
                 <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>
-                  <label htmlFor="year" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>
+                  <label htmlFor="year" style={{ color: "var(--color-white)", fontSize: "0.95rem", fontWeight: "500" }}>
                     Year
                   </label>
                   <input
@@ -272,14 +273,14 @@ const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi
                       color: "var(--color-white)",
                       padding: "0.4rem 0.8rem",
                       width: "100%",
-                      fontSize: "0.85rem",
+                      fontSize: "0.95rem",
                     }}
                   />
                 </div>
               </div>
 
               <div className="form-group" style={{ gap: "0.3rem" }}>
-                <label htmlFor="genre" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>
+                <label htmlFor="genre" style={{ color: "var(--color-white)", fontSize: "0.95rem", fontWeight: "500" }}>
                   Genre
                 </label>
                 <select
@@ -295,7 +296,7 @@ const EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi
                     color: "var(--color-white)",
                     padding: "0.4rem 0.8rem",
                     width: "100%",
-                    fontSize: "0.85rem",
+                    fontSize: "0.95rem",
                   }}
                 >
                   {!songData.genre && <option value="">Select genre</option>}

@@ -112,8 +112,8 @@ const UserProfile = () => {
       <Avatar
         onClick={handleClick}
         sx={{
-          width: 32,
-          height: 32,
+          width: 35,
+          height: 35,
           bgcolor: "rgba(255, 255, 255, 0.1)",
           // bgcolor: "rgba(205, 101, 198)",
           color: "white",

@@ -105,7 +105,7 @@ namespace music.API.Controllers
             SongDto songDto = _mapper.Map<SongDto>(songPostModel);
             songDto.CountOfPlays = prevSongDto.CountOfPlays;
             songDto.IsPublic = prevSongDto.IsPublic;
-            // songDto.CreatedAt = DateTime.Now;
+            songDto.CreatedAt= prevSongDto.CreatedAt;
             songDto = await _iService.UpdateAsync(id, songDto);
             if (songDto == null)
                 return NotFound();

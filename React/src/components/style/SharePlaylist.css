@@ -8,6 +8,7 @@
     border-radius: 8px;
     overflow: hidden;
     transform-origin: center;
+    width: 85% !important;
   }
   
   .share-playlist-modal .modal-header {
@@ -57,7 +58,7 @@
   }
   
   .share-message {
-    font-size: 15px;
+    font-size: 1.2rem;
     margin: 0 0 20px 0;
     color: var(--color-white);
     text-align: center;
@@ -74,7 +75,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
     color: var(--color-white);
-    font-size: 14px;
+    font-size: 1.2rem;
     transition: border-color 0.3s;
   }
   
@@ -89,7 +90,7 @@
     padding: 0.5rem;
     background-color: rgba(255, 77, 79, 0.1);
     border-radius: 0.25rem;
-    font-size: 0.875rem;
+    font-size: 0.95rem ;
   }
   
   .share-playlist-modal .modal-actions {

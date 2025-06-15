@@ -6,7 +6,7 @@
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     padding: 1.5rem 0;
     color: var(--color-white);
-    font-size: 0.85rem;
+    font-size: 0.95rem !important;
     margin-top: 30px !important;
   }
 
@@ -25,14 +25,9 @@
   gap: 0.3rem !important;
 }
 
-.footer-logo-image {
-  height: 20px !important;
-  width: 20px !important;
-  object-fit: contain;
-}
 
 .footer-logo-text {
-  font-size: 1rem;
+  font-size: 1.4rem !important;
   font-weight: 700;
   background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
   -webkit-background-clip: text;
@@ -52,6 +47,7 @@
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   transition: color 0.2s ease;
+  font-size: 1.06rem !important;
 }
 
 .footer-link:hover {
@@ -93,7 +89,7 @@
   align-items: center;
   gap: 0.5rem;
   color: rgba(255, 255, 255, 0.5);
-  font-size: 0.75rem;
+  font-size:1rem !important;
   text-align: center;
 }
 

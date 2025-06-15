@@ -1,12 +1,12 @@
 /* AcceptShare.css */
 
 .accept-share-container {
-  /* display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   min-height: 60vh;
   padding: 2rem;
-  color: var(--color-white); */
+  color: var(--color-white);
 }
 
 .accept-share-card {

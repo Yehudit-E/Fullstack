@@ -148,6 +148,13 @@ const PublicSongs = () => {
 
   return (
     <div className="music-page-container">
+      <div className="color-splash-background">
+        <div className="color-splash splash-1"></div>
+        <div className="color-splash splash-2"></div>
+        <div className="color-splash splash-3"></div>
+        <div className="color-splash splash-4"></div>
+        <div className="color-splash splash-5"></div>
+      </div>
       {/* Header Section */}
       <div className="music-page-header">
         <div className="header-text">
@@ -156,7 +163,7 @@ const PublicSongs = () => {
               background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
               WebkitBackgroundClip: "text",
               color: "transparent",
-              fontSize: "22px",
+              // fontSize: "22px",
             }}
             className="header-title"
           >
@@ -176,11 +183,11 @@ const PublicSongs = () => {
                   "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
                 color: "var(--color-white)",
                 borderRadius: "3px", // פינות מעוגלות
-                padding: "4px 8px", // ריווח פנימי
+                padding: "6.5px 10px", // ריווח פנימי
                 display: "flex", // מאפשר למרכז את התוכן
                 alignItems: "center", // מרכז אנכית
                 justifyContent: "center", // מרכז אופקית
-                fontSize: "13px", // גודל הטקסט (אפשר לשנות אם צריך)
+                fontSize: "16px", // גודל הטקסט (אפשר לשנות אם צריך)
                 border: "none", // לבטל את הגבול אם יש
                 cursor: "pointer", // להפוך את הכפתור ללחיץ
               }}
@@ -211,7 +218,7 @@ const PublicSongs = () => {
               backgroundColor: "rgba(30, 30, 30, 0.5)",
               color: "var(--color-white)",
               width: "100%",
-              height: "35px",
+              height: "38px",
               borderRadius: "0.375rem",
               "& .MuiSvgIcon-root": {
                 color: "var(--color-white)",
@@ -254,7 +261,7 @@ const PublicSongs = () => {
               backgroundColor: "rgba(30, 30, 30, 0.5)",
               color: "var(--color-white)",
               width: "100%",
-              height: "35px",
+              height: "38px",
               borderRadius: "0.375rem",
               "& .MuiSvgIcon-root": {
                 color: "var(--color-white)",
@@ -391,13 +398,13 @@ const PublicSongs = () => {
                     </div>
                   </div>
                   <div className="song-info">
-                    <h4 className="song-title">{song.name}</h4>
+                    <h4 className="public-song-title">{song.name}</h4>
                     <p className="song-artist">{song.artist}</p>
 
                     {/* Play Count Display */}
                     <div className="song-stats">
                       <div className="play-count">
-                        <Headphones size={12} className="play-count-icon" />
+                        <Headphones size={15} className="play-count-icon" />
                         <span className="play-count-text">{formatPlayCount(song.countOfPlays || 0)} plays</span>
                       </div>
                     </div>
@@ -415,8 +422,8 @@ const PublicSongs = () => {
                           <div className="loading-spinner-small"></div>
                         ) : (
                           <>
-                            <Download size={11.5} className="action-icon" />
-                            <span style={{ fontSize: "0.62rem" }}>Download</span>
+                            <Download size={12.5} className="action-icon" />
+                            <span style={{ fontSize: "0.8rem" }}>Download</span>
                           </>
                         )}
                       </button>
@@ -429,8 +436,8 @@ const PublicSongs = () => {
                             handleAddToPlaylist(e, song)
                           }}
                         >
-                          <Plus size={11.5} className="action-icon" />
-                          <span style={{ fontSize: "0.62rem", marginRight: "0.5rem" }}>Add to playlist</span>
+                          <Plus size={12.5} className="action-icon" />
+                          <span style={{ fontSize: "0.8rem", marginRight: "0.5rem" }}>Add to playlist</span>
                         </button>
                       )}
                     </div>

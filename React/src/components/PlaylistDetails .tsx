@@ -1,17 +1,29 @@
+"use client"
 
 import type React from "react"
 
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import {  setCurrentIndex, updateSongs } from "../store/songSlice"
+import { setCurrentIndex, updateSongs } from "../store/songSlice"
 import type { Dispatch } from "../store/store"
 import PlaylistService from "../services/PlaylistService"
 import type { Playlist } from "../models/Playlist"
 import type { Song } from "../models/Song"
 import { IconButton, Menu, MenuItem } from "@mui/material"
-import {  MoreHoriz, MusicNote } from "@mui/icons-material"
-import { Play, Clock, Music, Users, Calendar, ListMusic, User, ExternalLink } from "lucide-react"
+import { MoreHoriz } from "@mui/icons-material"
+import {
+  Play,
+  Clock,
+  Music,
+  Users,
+  Calendar,
+  ListMusic,
+  User,
+  ExternalLink,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react"
 import SharePlaylist from "./SharePlaylist"
 import EditPlaylist from "./EditPlaylist"
 import DeletePlaylist from "./DeletePlaylist"
@@ -27,8 +39,8 @@ import RemoveSharingInPlaylist from "./RemoveSharingInPlaylist"
 import ShareSong from "./ShareSong"
 
 const PlaylistDetails = () => {
-  const { id } = useParams<{ id: string }>();
-  const decodeId = id ? atob(id) : "";
+  const { id } = useParams<{ id: string }>()
+  const decodeId = id ? atob(id) : ""
   const playlistId = Number.parseInt(decodeId || "0")
   const dispatch = useDispatch<Dispatch>()
   const navigate = useNavigate()
@@ -47,8 +59,10 @@ const PlaylistDetails = () => {
   const [selectedSong, setSelectedSong] = useState<Song | null>(null)
   const [showRemoveSharingDialog, setShowRemoveSharingDialog] = useState(false)
   const [showShareSongDialog, setShowShareSongDialog] = useState(false)
+  const [showSharedUsers, setShowSharedUsers] = useState(false)
   const currentUser = useSelector((state: StoreType) => state.user.user)
   const navigator = useNavigate()
+
   useEffect(() => {
     const fetchPlaylist = async () => {
       try {
@@ -85,25 +99,26 @@ const PlaylistDetails = () => {
   const handleSharePlaylist = () => {
     setShowShareDialog(true)
   }
+
   const navigateToSongDetails = (songId: number) => {
     navigator(`/song/${btoa(songId.toString() + "-song")}`)
   }
 
   const handleDownloadAll = async () => {
     if (!playlist?.songs || playlist.songs.length === 0) return
-    console.log("Downloading all songs...");
+    console.log("Downloading all songs...")
 
     const zip = new JSZip()
-    const folder = zip.folder(playlist.name || "playlist") // יצירת תיקייה בשם הפלייליסט
-    console.log("Creating zip folder:", folder);
+    const folder = zip.folder(playlist.name || "playlist")
+    console.log("Creating zip folder:", folder)
     try {
       for (const song of playlist.songs) {
         const response = await fetch(song.audioFilePath)
         const blob = await response.blob()
-        const fileName = `${song.name}.mp3` // שימי לב לסיומת אם זה לא mp3 תשני בהתאם
+        const fileName = `${song.name}.mp3`
         folder?.file(fileName, blob)
       }
-      console.log("Adding songs to zip folder:", playlist.songs);
+      console.log("Adding songs to zip folder:", playlist.songs)
 
       const zipBlob = await zip.generateAsync({ type: "blob" })
       saveAs(zipBlob, `${playlist.name || "playlist"}.zip`)
@@ -133,9 +148,6 @@ const PlaylistDetails = () => {
     })
   }
 
-
-
-
   const openSongMenu = (event: React.MouseEvent<HTMLButtonElement>, songId: number) => {
     event.stopPropagation()
     setSongMenuAnchor((prev) => ({ ...prev, [songId]: event.currentTarget }))
@@ -149,6 +161,7 @@ const PlaylistDetails = () => {
     setCurrentSong(song)
     setShowAddToPlaylist(true)
   }
+
   const handleShareSong = (song: Song) => {
     setCurrentSong(song)
     setShowShareSongDialog(true)
@@ -178,12 +191,16 @@ const PlaylistDetails = () => {
     return currentUser.id === userId
   }
 
+  const toggleSharedUsers = () => {
+    setShowSharedUsers(!showSharedUsers)
+  }
+
   if (loading) {
     return (
       <div className="playlist-details-container">
-        <div className="loading-container">
+        <div className="loading-state">
           <div className="loading-spinner"></div>
-          <p className="loading-text">Loading playlist...</p>
+          <p>Loading playlist details...</p>
         </div>
       </div>
     )
@@ -192,10 +209,12 @@ const PlaylistDetails = () => {
   if (error || !playlist) {
     return (
       <div className="playlist-details-container">
-        <div className="error-container">
-          <MusicNote style={{ fontSize: "4rem", color: "#4a4a4a" }} />
-          <h3 className="error-title">Playlist not found</h3>
-          <p className="error-message">{error || "Unable to load playlist details"}</p>
+        <div className="error-state">
+          <h2>Playlist Not Found</h2>
+          <p>{error || "The requested playlist could not be found."}</p>
+          <button onClick={() => window.history.back()} className="back-button">
+            Go Back
+          </button>
         </div>
       </div>
     )
@@ -203,229 +222,236 @@ const PlaylistDetails = () => {
 
   return (
     <div className="playlist-details-container">
-      {/* <IconButton onClick={() => { navigate("/myplaylists") }} className="back-button">
-        <ArrowLeft />
-      </IconButton> */}
-      <div className="playlist-layout">
-        {/* Left Side - Playlist Details */}
-
-        <div className="playlist-sidebar">
-
-          <div className="playlist-cover-container">
-
+      <div className="playlist-details-content">
+        {/* Left Side - Image and Playlist Info */}
+        <div className="playlist-left-section">
+          <div className="playlist-image-container">
             <img
               src={playlist.imageFilePath || "/placeholder.svg?height=300&width=300"}
               alt={playlist.name}
-              className="playlist-cover-image"
+              className="playlist-image"
             />
-            <div className="playlist-cover-overlay">
-              <button className="play-all-button" onClick={handlePlayAll}>
-                <PlayCircle size={48} />
-              </button>
-            </div>
           </div>
 
-          <div className="playlist-info-container">
-            {/* <div className="playlist-type-badge">Playlist</div> */}
-            <h1 className="playlist-title">{playlist.name}</h1>
-            {playlist.description && <p className="playlist-description">{playlist.description}</p>}
+          <button className="play-playlist-button" onClick={handlePlayAll}>
+            <PlayCircle size={18} style={{ marginRight: "0.5rem" }} />
+            <span>Play All</span>
+          </button>
 
-            <div className="playlist-stats">
-              <div className="stat-item">
-                <Music size={16} />
-                <span>{playlist.songs?.length || 0} songs</span>
+          <div className="playlist-information">
+            <h3>Playlist Information</h3>
+            <div className="playlist-info-grid">
+              <div className="playlist-info-item">
+                <span className="playlist-info-label">Songs</span>
+                <span className="playlist-info-value">{playlist.songs?.length || 0}</span>
               </div>
-              {/* <div className="stat-divider"></div> */}
-            </div>
-            <div className="stat-item">
-              <Calendar size={16} />
-              <span>Created {formatDate(playlist.createdAt)}</span>
-            </div>
-            <div className="playlist-people">
-              <div className="playlist-creator">
-                <User size={14} />
-                <span>
-                  Created by{" "}
-                  <strong>{isCurrentUser(playlist.owner?.id) ? "you" : playlist.owner?.userName || "Unknown"}</strong>
+              <div className="playlist-info-item">
+                <span className="playlist-info-label">Created</span>
+                <span className="playlist-info-value">{formatDate(playlist.createdAt)}</span>
+              </div>
+              <div className="playlist-info-item">
+                <span className="playlist-info-label">Owner</span>
+                <span className="playlist-info-value">
+                  {isCurrentUser(playlist.owner?.id) ? "You" : playlist.owner?.userName || "Unknown"}
                 </span>
               </div>
-
               {playlist.sharedUsers && playlist.sharedUsers.length > 0 && (
-                <div className="playlist-shared">
-                  <Users size={14} />
-                  <span>Shared with </span>
-                  <div className="shared-names">
-                    {playlist.sharedUsers.map((user, index) => (
-                      <span key={user.id} className="shared-user-name">
-                        {isCurrentUser(user.id) ? "you" : user.userName || "User"}
-                        {index < playlist.sharedUsers.length - 1 ? ", " : ""}
-                      </span>
-                    ))}
+                <div className="playlist-info-item">
+                  <span className="playlist-info-label">Shared with</span>
+                  <div className="shared-users-container">
+                    <button className="shared-users-toggle" onClick={toggleSharedUsers}>
+                      <span className="playlist-info-value">{playlist.sharedUsers.length} users</span>
+                      {showSharedUsers ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                    </button>
+                    {showSharedUsers && (
+                      <div className="shared-users-list">
+                        {playlist.sharedUsers.map((user) => (
+                          <div key={user.id} className="shared-user-item">
+                            <User size={14} />
+                            <span>{isCurrentUser(user.id) ? "You" : user.userName || "Unknown User"}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
-              <button className="action-playlist-button primary" onClick={handlePlayAll}>
-                <PlayCircle size={18} style={{ marginRight: "0.5rem" }} />
-                <span>Play All</span>
-              </button>
             </div>
           </div>
         </div>
 
-        {/* Right Side - Songs List */}
-        <div className="songs-content">
-          <h3 className="section-title">
-            Songs
-            <div className="action-buttons-row">
-              <IconButton className="action-icon-button" onClick={handlePlayAll} title="Play All">
-                <PlayCircle size={20} />
-              </IconButton>
-              {isCurrentUser(playlist.owner?.id) && (<>
-                <IconButton className="action-icon-button" onClick={handleEditPlaylist} title="Edit">
-                  <Edit size={20} />
-                </IconButton>
-                <IconButton className="action-icon-button" onClick={handleSharePlaylist} title="Share">
-                  <Share2 size={20} />
-                </IconButton>
-              </>)}
-              <IconButton className="action-icon-button" onClick={() => navigator("upload-song")} title="Upload">
-                <Upload size={20} />
-              </IconButton>
-              <IconButton className="action-icon-button" onClick={handleDownloadAll} title="Download All">
-                <Download size={20} />
-              </IconButton>
-              {/* <IconButton className="action-icon-button danger" onClick={handleDeletePlaylist} title="Delete">
-                <Trash2 size={20} />
-              </IconButton> */}
-              <IconButton className="action-icon-button danger" onClick={() => handleRemoveSharingInPlaylist()} title="Remove Sharing">
-                <Trash2 size={20} />
-              </IconButton>
+        {/* Right Side - Playlist Title and Songs */}
+        <div className="playlist-right-section">
+          <div className="playlist-title-section">
+            <div className="playlist-details-text">
+              <h1 className="playlist-details-title">{playlist.name}</h1>
+              {playlist.description && <p className="playlist-details-description">{playlist.description}</p>}
             </div>
-          </h3>
+            <div className="playlist-details-actions">
+              <div>
+                <IconButton className="action-icon-button" onClick={handlePlayAll} title="Play All">
+                  <PlayCircle size={21} />
+                </IconButton>
+                {isCurrentUser(playlist.owner?.id) && (
+                  <>
+                    <IconButton className="action-icon-button" onClick={handleEditPlaylist} title="Edit">
+                      <Edit size={21} />
+                    </IconButton>
+                    <IconButton className="action-icon-button" onClick={handleSharePlaylist} title="Share">
+                      <Share2 size={21} />
+                    </IconButton>
+                  </>
+                )}
+                <IconButton className="action-icon-button" onClick={() => navigator("upload-song")} title="Upload">
+                  <Upload size={21} />
+                </IconButton>
+                <IconButton className="action-icon-button" onClick={handleDownloadAll} title="Download All">
+                  <Download size={21} />
+                </IconButton>
+                <IconButton
+                  className="action-icon-button danger"
+                  onClick={() => handleRemoveSharingInPlaylist()}
+                  title="Remove Sharing"
+                >
+                  <Trash2 size={21} />
+                </IconButton>
+              </div>
+            </div>
 
-          {playlist.songs && playlist.songs.length > 0 ? (
-            <div className="songs-table-container">
-              <table className="songs-table">
-                <thead>
-                  <tr>
-                    <th className="song-number">#</th>
-                    <th className="song-info-header">Title</th>
-                    <th className="song-artist">Artist</th>
-                    <th className="song-genre">Genre</th>
-                    <th className="song-duration">
-                      <Clock size={16} />
-                    </th>
-                    <th className="song-list-actions"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {playlist.songs.map((song, index) => (
-                    <tr key={song.id} className="song-row">
-                      <td className="song-number">{index + 1}</td>
-                      <td className="song-list-info">
-                        <div className="song-list-image-container">
-                          <img
-                            src={song.imageFilePath || "/placeholder.svg?height=40&width=40"}
-                            alt={song.name}
-                            className="song-image"
-                          />
-                          <div className="play-overlay" onClick={() => handlePlaySong(index)}>
-                            <Play size={12} />
-                          </div>
-                        </div>
-                        <span className="song-title">{song.name}</span>
-                      </td>
-                      <td className="song-artist">{song.artist}</td>
-                      <td className="song-genre">{song.genre}</td>
-                      <td className="song-duration">{formatDuration(150)}</td>
-                      <td className="song-actions">
-                        <IconButton className="song-menu-button" onClick={(e) => openSongMenu(e, song.id)}>
-                          <MoreHoriz fontSize="small" />
-                        </IconButton>
-                        <Menu
-                          anchorEl={songMenuAnchor[song.id]}
-                          open={Boolean(songMenuAnchor[song.id])}
-                          onClose={() => closeSongMenu(song.id)}
-                          className="options-menu"
-                        >
-                          <MenuItem className="menu-title" disabled>
-                            Song Options
-                          </MenuItem>
-                          <MenuItem
-                            className="menu-item"
-                            onClick={() => {
-                              closeSongMenu(song.id)
-                              navigateToSongDetails(song.id)
-                            }}
-                          >
-                            <ExternalLink size={17} className="menu-icon" />
-                            View Details
-                          </MenuItem>
-                          <MenuItem
-                            className="menu-item"
-                            onClick={() => {
-                              closeSongMenu(song.id)
-                              downloadSong(song.audioFilePath, song.name)
-                            }}
-                          >
-                            <Download size={17} className="menu-icon" />
-                            Download
-                          </MenuItem>
-                          <MenuItem
-                            className="menu-item"
-                            onClick={() => {
-                              closeSongMenu(song.id)
-                              handleAddToPlaylist(song)
-                            }}
-                          >
-                            <Plus size={17} className="menu-icon" />
-                            Add to Another Playlist
-                          </MenuItem>
-                          <MenuItem
-                            className="menu-item"
-                            onClick={() => {
-                              closeSongMenu(song.id)
-                              handleShareSong(song)
-                            }}
-                          >
-                            <Share2 size={17} className="menu-icon" />
-                            Share Song
-                          </MenuItem>
-                          <MenuItem
-                            className="menu-item"
-                            onClick={() => {
-                              closeSongMenu(song.id)
-                              setSelectedSong(song)
-                              setShowEditSongDialog(true)
-                            }}
-                          >
-                            <Edit size={17} className="menu-icon" />
-                            Edit Song
-                          </MenuItem>
-                          <MenuItem
-                            className="menu-item"
-                            onClick={() => {
-                              closeSongMenu(song.id)
-                              setSelectedSong(song)
-                              setShowDeleteSongDialog(true)
-                            }}
-                          >
-                            <Trash2 size={17} className="menu-icon" />
-                            Remove from Playlist
-                          </MenuItem>
-                        </Menu>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          </div>
+
+          <div className="songs-section">
+            <div className="songs-header">
+              <h2>Songs</h2>
             </div>
-          ) : (
-            <div className="no-songs-message">
-              <ListMusic size={40} />
-              <p>This playlist doesn't have any songs yet</p>
+
+            <div className="songs-content">
+              {playlist.songs && playlist.songs.length > 0 ? (
+                <div className="songs-table-container">
+                  <table className="songs-table">
+                    <thead>
+                      <tr>
+                        <th className="song-number">#</th>
+                        <th className="song-info-header">Title</th>
+                        <th className="song-artist">Artist</th>
+                        <th className="song-genre">Genre</th>
+                        <th className="song-duration">
+                          <Clock size={20} />
+                        </th>
+                        <th className="song-list-actions"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {playlist.songs.map((song, index) => (
+                        <tr key={song.id} className="song-row">
+                          <td className="song-number">{index + 1}</td>
+                          <td className="song-list-info">
+                            <div className="song-list-image-container">
+                              <img
+                                src={song.imageFilePath || "/placeholder.svg?height=40&width=40"}
+                                alt={song.name}
+                                className="song-image"
+                              />
+                              <div className="play-overlay" onClick={() => handlePlaySong(index)}>
+                                <Play size={14} />
+                              </div>
+                            </div>
+                            <span className="song-2-title">{song.name}</span>
+                          </td>
+                          <td className="song-artist">{song.artist}</td>
+                          <td className="song-genre">{song.genre}</td>
+                          <td className="song-duration">{formatDuration(150)}</td>
+                          <td className="song-actions">
+                            <IconButton className="song-menu-button" onClick={(e) => openSongMenu(e, song.id)}>
+                              <MoreHoriz fontSize="small" />
+                            </IconButton>
+                            <Menu
+                              anchorEl={songMenuAnchor[song.id]}
+                              open={Boolean(songMenuAnchor[song.id])}
+                              onClose={() => closeSongMenu(song.id)}
+                              className="options-menu"
+                            >
+                              <MenuItem className="menu-title" disabled>
+                                Song Options
+                              </MenuItem>
+                              <MenuItem
+                                className="menu-item"
+                                onClick={() => {
+                                  closeSongMenu(song.id)
+                                  navigateToSongDetails(song.id)
+                                }}
+                              >
+                                <ExternalLink size={17} className="menu-icon" />
+                                View Details
+                              </MenuItem>
+                              <MenuItem
+                                className="menu-item"
+                                onClick={() => {
+                                  closeSongMenu(song.id)
+                                  downloadSong(song.audioFilePath, song.name)
+                                }}
+                              >
+                                <Download size={17} className="menu-icon" />
+                                Download
+                              </MenuItem>
+                              <MenuItem
+                                className="menu-item"
+                                onClick={() => {
+                                  closeSongMenu(song.id)
+                                  handleAddToPlaylist(song)
+                                }}
+                              >
+                                <Plus size={17} className="menu-icon" />
+                                Add to Another Playlist
+                              </MenuItem>
+                              <MenuItem
+                                className="menu-item"
+                                onClick={() => {
+                                  closeSongMenu(song.id)
+                                  handleShareSong(song)
+                                }}
+                              >
+                                <Share2 size={17} className="menu-icon" />
+                                Share Song
+                              </MenuItem>
+                              <MenuItem
+                                className="menu-item"
+                                onClick={() => {
+                                  closeSongMenu(song.id)
+                                  setSelectedSong(song)
+                                  setShowEditSongDialog(true)
+                                }}
+                              >
+                                <Edit size={17} className="menu-icon" />
+                                Edit Song
+                              </MenuItem>
+                              <MenuItem
+                                className="menu-item"
+                                onClick={() => {
+                                  closeSongMenu(song.id)
+                                  setSelectedSong(song)
+                                  setShowDeleteSongDialog(true)
+                                }}
+                              >
+                                <Trash2 size={17} className="menu-icon" />
+                                Remove from Playlist
+                              </MenuItem>
+                            </Menu>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="songs-placeholder">
+                  <ListMusic size={48} className="songs-placeholder-icon" />
+                  <p>This playlist doesn't have any songs yet</p>
+                  <p className="songs-placeholder-subtitle">Add some songs to get started</p>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
 
@@ -435,10 +461,9 @@ const PlaylistDetails = () => {
       {showEditDialog && (
         <EditPlaylist
           playlist={playlist}
-          setPlaylists={() => { }} // We'll refresh the playlist after edit
+          setPlaylists={() => { }}
           closeEditDialog={() => {
             setShowEditDialog(false)
-            // Refresh playlist data
             PlaylistService.getFullPlaylistById(playlistId).then(setPlaylist)
           }}
         />
@@ -457,6 +482,7 @@ const PlaylistDetails = () => {
           }}
         />
       )}
+
       {showRemoveSharingDialog && (
         <RemoveSharingInPlaylist
           playlistId={playlistId}
@@ -474,16 +500,16 @@ const PlaylistDetails = () => {
       {showAddToPlaylist && currentSong && (
         <AddToPlaylistModel song={currentSong} onClose={() => setShowAddToPlaylist(false)} />
       )}
+
       {showEditSongDialog && selectedSong && (
         <EditSong
           song={selectedSong}
           playlistId={playlistId}
           setPlaylist={setPlaylist}
-          setSong={()=>{}}
+          setSong={() => { }}
           closeEditDialog={() => {
             setShowEditSongDialog(false)
             setSelectedSong(null)
-            // Refresh playlist data
             PlaylistService.getFullPlaylistById(playlistId).then(setPlaylist)
           }}
         />
@@ -496,18 +522,14 @@ const PlaylistDetails = () => {
           closeDeleteDialog={() => {
             setShowDeleteSongDialog(false)
             setSelectedSong(null)
-            // Refresh playlist data
             PlaylistService.getFullPlaylistById(playlistId).then(setPlaylist)
           }}
         />
       )}
-      {showShareSongDialog && currentSong && (
-        <ShareSong
-          songId={currentSong.id}
-          closeShareDialog={() => setShowShareSongDialog(false)}
-        />
-      )}
 
+      {showShareSongDialog && currentSong && (
+        <ShareSong songId={currentSong.id} closeShareDialog={() => setShowShareSongDialog(false)} />
+      )}
     </div>
   )
 }

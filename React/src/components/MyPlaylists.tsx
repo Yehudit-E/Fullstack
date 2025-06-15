@@ -99,7 +99,7 @@ const MyPlaylist = () => {
               background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
               WebkitBackgroundClip: "text",
               color: "transparent",
-              fontSize: "22px",
+              // fontSize: "22px",
             }}
             className="header-title"
           >
@@ -141,7 +141,7 @@ const MyPlaylist = () => {
             placeholder="Search playlists..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
+            className="search-2-input"
           />
         </div>
 
@@ -163,7 +163,7 @@ const MyPlaylist = () => {
               backgroundColor: "rgba(30, 30, 30, 0.5)",
               color: "var(--color-white)",
               width: "100%",
-              height: "35px",
+              height: "38px",
               borderRadius: "0.375rem",
               "& .MuiSvgIcon-root": {
                 color: "var(--color-white)",
@@ -264,12 +264,12 @@ const MyPlaylist = () => {
                     <div className="playlist-visibility">
                       {playlist.sharedUsers?.length > 0 ? (
                         <div className="visibility-badge public">
-                          <Users size={14} />
+                          <Users size={15} />
                           <span>Shared</span>
                         </div>
                       ) : (
                         <div className="visibility-badge private">
-                          <Lock size={14} />
+                          <Lock size={15} />
                           <span>Personal</span>
                         </div>
                       )}

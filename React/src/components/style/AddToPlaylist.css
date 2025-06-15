@@ -8,6 +8,8 @@
   border-radius: 8px;
   overflow: hidden;
   transform-origin: center;
+  width: 900px !important;
+  max-width: 90vw;
 }
 
 .modal-header {
@@ -47,7 +49,7 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   color: var(--color-white);
-  font-size: 0.9rem;
+  font-size: 1rem;
   transition: border-color 0.3s;
 }
 
@@ -154,7 +156,7 @@
 
 .playlist-name {
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--color-white);
   white-space: nowrap;
   overflow: hidden;
@@ -165,7 +167,7 @@
   background: none;
   border: none;
   color: #a0a0a0;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   cursor: pointer;
   padding: 4px 8px;
   transition: color 0.2s ease;
@@ -191,7 +193,7 @@
 }
 
 .owner-info {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #a0a0a0;
   margin: 0;
 }
@@ -201,7 +203,7 @@
 }
 
 .shared-title {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #a0a0a0;
   margin: 0 0 0px 0;
 }
@@ -210,7 +212,7 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
-  font-size: 13px !important;
+  font-size: 15px !important;
 }
 
 .shared-user {
@@ -220,7 +222,7 @@
 }
 
 .no-shared {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #a0a0a0;
   font-style: italic;
   margin: 0;

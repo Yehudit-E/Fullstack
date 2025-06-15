@@ -113,7 +113,9 @@ namespace music.API.Controllers
             var tokenId = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
             if (tokenId != playlistPostModel.OwnerId)
                 return Forbid();
+            PlaylistDto prevPlaylistDto = await _iService.GetByIdAsync(id);
             PlaylistDto playlistDto = _mapper.Map<PlaylistDto>(playlistPostModel);
+            playlistDto.CreatedAt = prevPlaylistDto.CreatedAt;
             playlistDto = await _iService.UpdateAsync(id, playlistDto);
             if (playlistDto == null)
                 return NotFound();

@@ -15,7 +15,7 @@
 }
 
 .MuiMenuItem-root {
-  font-size: 0.75rem !important;
+  font-size: 0.9rem !important;
   /* padding: 10px 16px !important; */
   transition: all 0.2s ease !important;
   color: var(--color-white) !important;
@@ -49,7 +49,7 @@
 .menu-icon {
   margin-right: 8px !important;
   color: rgba(255, 255, 255, 0.7) !important;
-  font-size: 1.2rem !important;
+  font-size: 1.3rem !important;
 }
 
 @keyframes menuFadeIn {

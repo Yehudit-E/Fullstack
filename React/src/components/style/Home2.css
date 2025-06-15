@@ -1,4 +1,4 @@
-/* HomePage.css */
+/* HomePage.css
 
 .home-page {
     color: var(--color-white);
@@ -259,7 +259,7 @@
     display: inline-block;
   } */
   
-  .section-subtitle {
+  /* .section-subtitle {
     font-size: 1.1rem;
     color: rgba(255, 255, 255, 0.7);
     max-width: 700px;
@@ -1049,4 +1049,4 @@
       justify-content: center;
     }
   }
-  
+    */

@@ -212,26 +212,26 @@ export default function SongDetailsPage() {
                         <p className="song-details-artist">{song.artist}</p>
                         <div className="song-details-actions">
                             <div>
-                                <span className="song-details"> <Disc size={15} /> {song.album}</span>
-                                <span className="song-details"> <Music2 size={15} /> {song.genre}</span>
+                                <span className="song-details"> <Disc size={16} /> {song.album}</span>
+                                <span className="song-details"> <Music2 size={16} /> {song.genre}</span>
                                 {song.isPublic && (
-                                    <span className="song-details"> <Headphones size={15} /> {song.countOfPlays}</span>
+                                    <span className="song-details"> <Headphones size={16} /> {song.countOfPlays}</span>
                                 )}
-                                <span className="song-details"> <Calendar size={15} /> {song.year}</span>
+                                <span className="song-details"> <Calendar size={16} /> {song.year}</span>
                             </div>
                             <div>
                                 <IconButton className="action-icon-button" onClick={() => handleDownload(song)} title="Download">
-                                    <Download size={20} />
+                                    <Download size={21} />
                                 </IconButton>
                                 <IconButton className="action-icon-button" onClick={() => setShowAddToPlaylist(true)} title="Add to Playlist">
-                                    <Plus size={20} />
+                                    <Plus size={21} />
                                 </IconButton>
                                 <IconButton className="action-icon-button" onClick={() => { setShowShareSongDialog(true); }} title="Share by email">
-                                    <Share2 size={20} />
+                                    <Share2 size={21} />
                                 </IconButton>
                                 { !song.isPublic && (
                                 <IconButton className="action-icon-button" onClick={() => { setShowEditSongDialog(true); }} title="Share by email">
-                                    <Edit size={20} />
+                                    <Edit size={21} />
                                 </IconButton>
                                 )}
                             </div>
@@ -242,7 +242,7 @@ export default function SongDetailsPage() {
                         <div className="lyrics-header">
                             <h2>Lyrics</h2>
                             <button onClick={handleFetchLyrics} className="fetch-lyrics-button" disabled={loadingLyrics}>
-                                <Sparkles size={18} />
+                                <Sparkles size={21} />
                                 {loadingLyrics ? "Generating..." : "Generate Lyrics with AI"}
                             </button>
                         </div>

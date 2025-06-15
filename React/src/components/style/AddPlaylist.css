@@ -29,7 +29,7 @@
   background-color: #121111 !important;
   /* #121111 */
   border: 1px solid #ffffff1a !important;
-  width: 60% !important;
+  width: 85% !important;
   background-color: var(--color-gray, #1e1e1e);
   color: var(--color-white, #ffffff);
   border-radius: 8px;
@@ -86,8 +86,8 @@
 }
 
 .image-preview {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   border-radius: 0.5rem;
   background-color: rgba(0, 0, 0, 0.2);
   display: flex;
@@ -116,7 +116,7 @@
 }
 
 .upload-icon {
-  font-size: 2.5rem;
+  font-size: 2.7rem;
 }
 
 .form-fields {
@@ -134,7 +134,7 @@
 
 .form-group label {
   color: var(--color-white);
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
 }
 
