@@ -1,4 +1,3 @@
-"use client"
 
 import type React from "react"
 
@@ -15,9 +14,6 @@ import { MoreHoriz } from "@mui/icons-material"
 import {
   Play,
   Clock,
-  Music,
-  Users,
-  Calendar,
   ListMusic,
   User,
   ExternalLink,
