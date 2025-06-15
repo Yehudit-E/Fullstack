@@ -1,0 +1,151 @@
+[1mdiff --git a/React/src/components/AddPlaylist.tsx b/React/src/components/AddPlaylist.tsx[m
+[1mindex 2cd05b6..92f5d60 100644[m
+[1m--- a/React/src/components/AddPlaylist.tsx[m
+[1m+++ b/React/src/components/AddPlaylist.tsx[m
+[36m@@ -165,14 +165,14 @@[m [mconst AddPlaylist = ({ setPlaylists }: AddPlaylistProps) => {[m
+           background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",[m
+           color: "var(--color-white)",[m
+           borderRadius: "3px",[m
+[31m-          padding: "4px 8px",[m
+[32m+[m[32m          padding: "4.5px 10px",[m
+           display: "flex",[m
+           alignItems: "center",[m
+           justifyContent: "center",[m
+[31m-          fontSize: "13px",[m
+[32m+[m[32m          fontSize: "16px",[m
+           border: "none",[m
+           cursor: "pointer",[m
+[31m-          marginTop: "30px",[m
+[32m+[m[32m          // marginTop: "30px",[m
+           width: "auto",[m
+           height: "auto",[m
+           textTransform: "none",[m
+[1mdiff --git a/React/src/components/EditSong.tsx b/React/src/components/EditSong.tsx[m
+[1mindex 58a047c..12602e1 100644[m
+[1m--- a/React/src/components/EditSong.tsx[m
+[1m+++ b/React/src/components/EditSong.tsx[m
+[36m@@ -124,9 +124,10 @@[m [mconst EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi[m
+         style: {[m
+           backgroundColor: "var(--color-gray, #1e1e1e)",[m
+           borderRadius: "8px",[m
+[31m-          maxWidth: "700px",[m
+[32m+[m[32m          maxWidth: "850px",[m
+           width: "90%",[m
+           maxHeight: "90vh",[m
+[32m+[m[32m          minHeight:"500px"[m
+         },[m
+       }}[m
+       TransitionProps={{[m
+[36m@@ -140,7 +141,7 @@[m [mconst EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi[m
+             background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",[m
+             WebkitBackgroundClip: "text",[m
+             color: "transparent",[m
+[31m-            fontSize: "22px",[m
+[32m+[m[32m            fontSize: "25px",[m
+             fontWeight: "700",[m
+           }}[m
+         >[m
+[36m@@ -159,13 +160,13 @@[m [mconst EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi[m
+                 className="image-preview"[m
+                 style={{[m
+                   backgroundImage: song.imageFilePath ? `url(${song.imageFilePath})` : "none",[m
+[31m-                  width: "180px",[m
+[31m-                  height: "180px",[m
+[32m+[m[32m                  width: "220px",[m
+[32m+[m[32m                  height: "220px",[m
+                 }}[m
+               >[m
+                 {!song.imageFilePath && ([m
+                   <div className="upload-placeholder">[m
+[31m-                    <Music className="upload-icon" size={40} />[m
+[32m+[m[32m                    <Music className="upload-icon" size={60} />[m
+                     <span style={{ fontSize: "0.8rem" }}>No Cover Image</span>[m
+                   </div>[m
+                 )}[m
+[36m@@ -176,7 +177,7 @@[m [mconst EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi[m
+               <div style={{ display: "flex", gap: "1rem" }}>[m
+ [m
+                 <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>[m
+[31m-                  <label htmlFor="name" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>[m
+[32m+[m[32m                  <label htmlFor="name" style={{ color: "var(--color-white)", fontSize: "0.95rem", fontWeight: "500" }}>[m
+                     Song Name[m
+                   </label>[m
+                   <input[m
+[36m@@ -194,7 +195,7 @@[m [mconst EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi[m
+                       color: "var(--color-white)",[m
+                       padding: "0.4rem 0.8rem",[m
+                       width: "100%",[m
+[31m-                      fontSize: "0.85rem",[m
+[32m+[m[32m                      fontSize: "0.95rem",[m
+                     }}[m
+                   />[m
+                 </div>[m
+[36m@@ -202,7 +203,7 @@[m [mconst EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi[m
+                 <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>[m
+                   <label[m
+                     htmlFor="artist"[m
+[31m-                    style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}[m
+[32m+[m[32m                    style={{ color: "var(--color-white)", fontSize: "0.95rem", fontWeight: "500" }}[m
+                   >[m
+                     Artist[m
+                   </label>[m
+[36m@@ -221,7 +222,7 @@[m [mconst EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi[m
+                       color: "var(--color-white)",[m
+                       padding: "0.4rem 0.8rem",[m
+                       width: "100%",[m
+[31m-                      fontSize: "0.85rem",[m
+[32m+[m[32m                      fontSize: "0.95rem",[m
+                     }}[m
+                   />[m
+                 </div>[m
+[36m@@ -229,7 +230,7 @@[m [mconst EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi[m
+ [m
+               <div style={{ display: "flex", gap: "1rem" }}>[m
+                 <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>[m
+[31m-                  <label htmlFor="album" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>[m
+[32m+[m[32m                  <label htmlFor="album" style={{ color: "var(--color-white)", fontSize: "0.95rem", fontWeight: "500" }}>[m
+                     Album[m
+                   </label>[m
+                   <input[m
+[36m@@ -246,13 +247,13 @@[m [mconst EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi[m
+                       color: "var(--color-white)",[m
+                       padding: "0.4rem 0.8rem",[m
+                       width: "100%",[m
+[31m-                      fontSize: "0.85rem",[m
+[32m+[m[32m                      fontSize: "0.95rem",[m
+                     }}[m
+                   />[m
+                 </div>[m
+ [m
+                 <div className="form-group" style={{ flex: 1, gap: "0.3rem" }}>[m
+[31m-                  <label htmlFor="year" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>[m
+[32m+[m[32m                  <label htmlFor="year" style={{ color: "var(--color-white)", fontSize: "0.95rem", fontWeight: "500" }}>[m
+                     Year[m
+                   </label>[m
+                   <input[m
+[36m@@ -272,14 +273,14 @@[m [mconst EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi[m
+                       color: "var(--color-white)",[m
+                       padding: "0.4rem 0.8rem",[m
+                       width: "100%",[m
+[31m-                      fontSize: "0.85rem",[m
+[32m+[m[32m                      fontSize: "0.95rem",[m
+                     }}[m
+                   />[m
+                 </div>[m
+               </div>[m
+ [m
+               <div className="form-group" style={{ gap: "0.3rem" }}>[m
+[31m-                <label htmlFor="genre" style={{ color: "var(--color-white)", fontSize: "0.8rem", fontWeight: "500" }}>[m
+[32m+[m[32m                <label htmlFor="genre" style={{ color: "var(--color-white)", fontSize: "0.95rem", fontWeight: "500" }}>[m
+                   Genre[m
+                 </label>[m
+                 <select[m
+[36m@@ -295,7 +296,7 @@[m [mconst EditSong = ({ song, playlistId,setPlaylist,setSong, closeEditDialog }: Edi[m
+                     color: "var(--color-white)",[m
+                     padding: "0.4rem 0.8rem",[m
+                     width: "100%",[m
+[31m-                    fontSize: "0.85rem",[m
+[32m+[m[32m                    fontSize: "0.95rem",[m
+                   }}[m
+                 >[m
+                   {!songData.genre && <option value="">Select genre</option>}
