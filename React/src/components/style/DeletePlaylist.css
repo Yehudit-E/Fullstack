@@ -47,6 +47,7 @@
 }
 
 .delete-icon {
+  margin-top: 30px;
   width: 80px;
   height: 80px;
   object-fit: cover;
@@ -54,7 +55,7 @@
 }
 
 .delete-message {
-  font-size: 15px;
+  font-size: 20px;
   margin: 0;
   color: var(--color-white);
 }

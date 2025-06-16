@@ -50,9 +50,9 @@ const RemoveSharingInPlaylist = ({ playlistId, setPlaylists,closeOnRemoveDialog,
         style: {
           backgroundColor: "var(--color-gray, #1e1e1e)",
           borderRadius: "8px",
-          maxWidth: "500px",
+          maxWidth: "700px",
           width: "100%",
-        
+          minHeight:"400px"
         },
       }}
     >
@@ -63,7 +63,7 @@ const RemoveSharingInPlaylist = ({ playlistId, setPlaylists,closeOnRemoveDialog,
             background: "linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end))",
             WebkitBackgroundClip: "text",
             color: "transparent",
-            fontSize: "22px",
+            fontSize: "25px",
             fontWeight: "700",
             width: "100%",
           }}

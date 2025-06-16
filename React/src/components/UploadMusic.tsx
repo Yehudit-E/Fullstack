@@ -40,12 +40,12 @@ const UploadMusic = () => {
         setError("Please select an audio file (mp3, wav, etc.)")
         return
       }
-
       setFile(selectedFile)
       extractMetaData(selectedFile)
       setError("")
     }
   }
+
 
   const handleFileDrop = (e: React.DragEvent) => {
     e.preventDefault()
@@ -65,21 +65,15 @@ const UploadMusic = () => {
   const extractMetaData = async (file: File) => {
     try {
       const metadata = await mm.parseBlob(file)
-      console.log(metadata);
-
       const title = metadata.common.title || file.name.replace(/\.[^/.]+$/, "")
       const artist = metadata.common.artist || metadata.common.albumartist || "Unknown Artist"
       const genre = metadata.common.genre?.[0] || "Unknown Genre"
       const album = metadata.common.album || ""
       const year = metadata.common.year?.toString() || new Date().getFullYear().toString()
-      console.log("Extracted Metadata:", { title, artist, genre, album, year });
 
       setMetaData({ title, artist, genre, album, year })
-
       return metadata
     } catch (e) {
-      console.error("Metadata error:", e)
-      // Set filename as title if metadata extraction fails
       setMetaData({
         ...metaData,
         title: file.name.replace(/\.[^/.]+$/, ""),
@@ -87,35 +81,25 @@ const UploadMusic = () => {
       return null
     }
   }
+
   const uploadImage = async (imageData: Buffer, imageName: string, imageFormat: string): Promise<string | null> => {
     try {
       const uploadUrl = await SongService.getUploadUrl(imageName, `image/${imageFormat}`)
-      const imageUrl = uploadUrl.split("?")[0] // Remove query parameters from URL
-
-      // Create a Promise that resolves when the XHR completes
+      const imageUrl = uploadUrl.split("?")[0]
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
         xhr.open("PUT", uploadUrl)
         xhr.setRequestHeader("Content-Type", `image/${imageFormat}`)
 
         xhr.onload = () => {
-          if (xhr.status === 200) {
-            resolve(imageUrl) // Return the image URL
-          } else {
-            console.error("Error uploading image")
-            reject(null)
-          }
+          if (xhr.status === 200) resolve(imageUrl)
+          else reject(null)
         }
 
-        xhr.onerror = () => {
-          console.error("Error uploading image")
-          reject(null)
-        }
-
+        xhr.onerror = () => reject(null)
         xhr.send(imageData)
       })
     } catch (err) {
-      console.error("Error uploading image:", err)
       return null
     }
   }
@@ -217,14 +201,15 @@ const UploadMusic = () => {
         const uploadedImageUrl = await uploadImage(image, imageName, imageFormat)
         if (uploadedImageUrl) {
           imageUrl = uploadedImageUrl
+          console.log("Image URL:", imageUrl)
         }
       } else {
         imageUrl = "https://yehuditmusic.s3.us-east-1.amazonaws.com/default-image.png" // Default cover image URL
       }
-        console.log(metaData.year);
       // Create request
       const request: Request = {
         userId: userId,
+        song:{
         songName: metaData.title,
         songArtist: metaData.artist,
         songGenre: metaData.genre,
@@ -232,6 +217,7 @@ const UploadMusic = () => {
         songImageFilePath: imageUrl,
         songYear: Number.parseInt(metaData.year),
         songAlbum: metaData.album
+        }
         }
 
      await RequestService.createRequest(request)

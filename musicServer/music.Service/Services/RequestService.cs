@@ -52,7 +52,7 @@ namespace music.Service.Services
             Song song = new Song()
             {
                 AudioFilePath = requestDto.Song.SongAudioFilePath,
-                ImageFilePath = requestDto.Song.SongAudioFilePath,
+                ImageFilePath = requestDto.Song.SongImageFilePath,
                 Name = requestDto.Song.SongName,
                 Artist = requestDto.Song.SongArtist,
                 Genre = requestDto.Song.SongGenre,

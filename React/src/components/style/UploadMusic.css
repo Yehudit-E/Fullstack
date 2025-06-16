@@ -2,18 +2,18 @@
 
 /* Page Container - Centered Layout */
 .upload-page-container {
-  /* display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 2rem 1rem;
-  background-color: var(--color-black); */
+  background-color: var(--color-black);
 }
 
 /* Card Container */
 .upload-card {
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   background-color: rgba(30, 30, 30, 0.3);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -194,7 +194,7 @@
 .upload-dropzone {
   border: 2px dashed rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  padding: 2rem 1.5rem;
+  padding: 10rem 1.5rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;

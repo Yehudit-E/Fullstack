@@ -148,7 +148,14 @@ const PublicSongs = () => {
 
   return (
     <div className="music-page-container">
-  
+   {/* <div className="color-splash-background">
+        <div className="color-splash splash-1"></div>
+        <div className="color-splash splash-2"></div>
+        <div className="color-splash splash-3"></div>
+        <div className="color-splash splash-4"></div>
+        <div className="color-splash splash-5"></div>
+      </div> */}
+
       {/* Header Section */}
       <div className="music-page-header">
         <div className="header-text">

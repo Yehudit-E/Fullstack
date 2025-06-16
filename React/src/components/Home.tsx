@@ -495,7 +495,7 @@ const Home = () => {
             >
               Your Music,
               <br />
-              <span className="gradient-text">Your Universe</span>
+              <span className="gradient-text">Your Way</span>
             </motion.h1>
             <motion.p
               className="hero-subtitle"
@@ -537,7 +537,7 @@ const Home = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.8 }}
             >
-              <img src="/placeholder.svg?height=300&width=300" alt="Album cover" className="album-cover" />
+              <img src="/images/musical-notes.png" alt="Album cover" className="album-cover" />
               <div className="album-reflection"></div>
             </motion.div>
             <motion.div
@@ -546,26 +546,26 @@ const Home = () => {
               animate={{ opacity: 0.8 }}
               transition={{ duration: 1.2, delay: 1 }}
             >
-              <svg width="300" height="150" viewBox="0 0 300 150">
-                <path
-                  d="M0,75 C30,45 60,105 90,75 C120,45 150,105 180,75 C210,45 240,105 270,75 C300,45 330,105 360,75"
-                  stroke="url(#gradient)"
-                  strokeWidth="3"
-                  fill="none"
-                />
-                <defs>
-                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#ff6b6b" />
-                    <stop offset="50%" stopColor="#4ecdc4" />
-                    <stop offset="100%" stopColor="#45b7d1" />
-                  </linearGradient>
-                </defs>
-              </svg>
+<svg width="300" height="150" viewBox="0 0 300 150">
+  <path
+    d="M0,75 C30,45 60,105 90,75 C120,45 150,105 180,75 C210,45 240,105 270,75 C300,45 330,105 360,75"
+    stroke="url(#gradient)"
+    strokeWidth="3"
+    fill="none"
+  />
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stopColor="#f05371" />
+      <stop offset="50%" stopColor="#bd4ed5" />
+      <stop offset="100%" stopColor="#7940d4" />
+    </linearGradient>
+  </defs>
+</svg>
             </motion.div>
             <div className="floating-music-note note-1">♪</div>
             <div className="floating-music-note note-2">♫</div>
             <div className="floating-music-note note-3">♩</div>
-            <div className="floating-music-note note-4">♬</div>
+            {/* <div className="floating-music-note note-4">♬</div> */}
           </div>
         </section>
 
@@ -608,10 +608,9 @@ const Home = () => {
               <div className="feature-icon-wrapper">
                 <ListMusic size={32} className="feature-icon" />
               </div>
-              <h3 className="feature-title">Smart Playlists</h3>
+              <h3 className="feature-title">Public Song Requests</h3>
               <p className="feature-description">
-                Create intelligent playlists that adapt to your mood and preferences. Share them with friends and
-                discover collaborative music experiences that bring people together.
+                Suggest songs for everyone to enjoy – easily send a request to add your favorite song to the public library.
               </p>
             </div>
 
@@ -632,8 +631,7 @@ const Home = () => {
               </div>
               <h3 className="feature-title">Playlist Sharing</h3>
               <p className="feature-description">
-                Share your musical discoveries with the world. Create collaborative playlists, join music communities,
-                and connect with fellow music enthusiasts globally.
+                Share your musical discoveries with others – create personal or collaborative playlists, send secure links to friends, and let them add songs too.
               </p>
             </div>
 
@@ -652,10 +650,9 @@ const Home = () => {
               <div className="feature-icon-wrapper">
                 <Sparkles size={32} className="feature-icon" />
               </div>
-              <h3 className="feature-title">AI Recommendations</h3>
+              <h3 className="feature-title">Smart Global Player</h3>
               <p className="feature-description">
-                Discover new music tailored to your taste with our advanced AI recommendation engine. Explore genres,
-                artists, and tracks you never knew you'd love.
+                Listen to music from any page – the player stays open and continues playing in the background.
               </p>
             </div>
 
@@ -663,10 +660,9 @@ const Home = () => {
               <div className="feature-icon-wrapper">
                 <Heart size={32} className="feature-icon" />
               </div>
-              <h3 className="feature-title">Social Music</h3>
+              <h3 className="feature-title">Advanced Filtering & Search</h3>
               <p className="feature-description">
-                Connect with friends, see what they're listening to, and create shared musical experiences. Music is
-                better when it's social and collaborative.
+                Find exactly what you're looking for – filter songs by genre, language, or category, and search easily across songs and playlists.
               </p>
             </div>
           </div>
@@ -691,9 +687,6 @@ const Home = () => {
               <ul className="feature-list">
                 <li>
                   <Zap size={20} /> Ultra high-quality audio streaming
-                </li>
-                <li>
-                  <Heart size={20} /> AI-powered personalized recommendations
                 </li>
                 <li>
                   <Users size={20} /> Real-time collaborative playlists
@@ -721,7 +714,7 @@ const Home = () => {
               transition={{ duration: 0.8 }}
             >
               <div className="app-screenshot">
-                <img src="/placeholder.svg?height=600&width=400" alt="App screenshot" />
+                <img src="/images/image.png" alt="App screenshot" />
                 <div className="app-screenshot-reflection"></div>
               </div>
             </motion.div>
@@ -741,8 +734,8 @@ const Home = () => {
               <div className="step-content">
                 <h3 className="step-title">Create Your Account</h3>
                 <p className="step-description">
-                  Sign up for free and create your personalized music profile. Set your preferences and let our AI learn
-                  your taste.
+                  Sign up for free and create your personal profile to get started. We value your privacy and
+                  security.
                 </p>
               </div>
             </div>
@@ -754,8 +747,7 @@ const Home = () => {
               <div className="step-content">
                 <h3 className="step-title">Discover & Transcribe</h3>
                 <p className="step-description">
-                  Explore our vast library with AI-powered recommendations. Get instant transcriptions and lyrics for
-                  any song you love.
+                  Browse the public library and get accurate AI-powered transcriptions – great for karaoke, learning, or understanding lyrics.
                 </p>
               </div>
             </div>
@@ -767,8 +759,7 @@ const Home = () => {
               <div className="step-content">
                 <h3 className="step-title">Create & Collaborate</h3>
                 <p className="step-description">
-                  Build smart playlists and invite friends to collaborate. Share your musical discoveries with the
-                  community.
+                 Create personal or shared playlists, send secure links to friends, and let them add songs too.
                 </p>
               </div>
             </div>
@@ -778,10 +769,9 @@ const Home = () => {
             <div className="step-item">
               <div className="step-number">4</div>
               <div className="step-content">
-                <h3 className="step-title">Share & Connect</h3>
+                <h3 className="step-title">Share & Suggest to the Public</h3>
                 <p className="step-description">
-                  Share your playlists globally, connect with music lovers, and discover new communities around your
-                  favorite genres.
+Share the music you love and suggest new tracks to the public library – any user can submit, admin-approved.
                 </p>
               </div>
             </div>
@@ -830,8 +820,7 @@ const Home = () => {
                 <Star size={18} className="star-icon filled" />
               </div>
               <p className="testimonial-text">
-                "The collaborative playlist feature changed how I share music with friends. We create playlists together
-                in real-time, and the AI recommendations always surprise us with perfect additions!"
+                "Collaborative playlists completely changed the way I enjoy music with friends. Everyone adds songs in real time, and it all flows together. It's more than just a playlist — it's a shared experience!"
               </p>
               <div className="testimonial-author">
                 <div className="testimonial-avatar">
@@ -887,11 +876,11 @@ const Home = () => {
               </Link>
             </div>
           </div>
-          <div className="cta-background">
+          {/* <div className="cta-background">
             <div className="cta-shape shape-1"></div>
             <div className="cta-shape shape-2"></div>
             <div className="cta-shape shape-3"></div>
-          </div>
+          </div> */}
         </section>
       </div>
     </div>

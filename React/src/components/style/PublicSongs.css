@@ -56,8 +56,8 @@
 }
 .search-container {
   position: relative;
-  width: 42%; /* חצי מהרוחב */
-  margin-right: 70px;
+  width: 50%; /* חצי מהרוחב */
+  margin-right: 2px;
 }
 /* Search input and filters */
 
