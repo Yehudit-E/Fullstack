@@ -254,7 +254,7 @@ console.log("----------------------------------------------",playlist,playlistId
         name: metaData.title,
         artist: metaData.artist || "Unknown Artist",
         genre: metaData.genre || "Unknown Genre",
-        year: Number.parseInt(metaData.year) || new Date().getFullYear(),
+        year: Number.parseInt(metaData.year)?Number.parseInt(metaData.year):new Date().getFullYear(),
         album: metaData.album || "Unknown Album",
         audioFilePath: audioUrl,
         imageFilePath: imageUrl,

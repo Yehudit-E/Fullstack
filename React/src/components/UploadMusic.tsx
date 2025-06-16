@@ -215,7 +215,7 @@ const UploadMusic = () => {
         songGenre: metaData.genre,
         songAudioFilePath: uploadUrl.split("?")[0],
         songImageFilePath: imageUrl,
-        songYear: Number.parseInt(metaData.year),
+        songYear: Number.parseInt(metaData.year)?Number.parseInt(metaData.year):new Date().getFullYear(),
         songAlbum: metaData.album
         }
         }
