@@ -714,7 +714,7 @@ const Home = () => {
               transition={{ duration: 0.8 }}
             >
               <div className="app-screenshot">
-                <img src="/images/image.png" alt="App screenshot" />
+                <img src="/images/image2.png" alt="App screenshot" />
                 <div className="app-screenshot-reflection"></div>
               </div>
             </motion.div>
