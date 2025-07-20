@@ -35,7 +35,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  weight:auto;
+  /* weight:auto; */
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -362,13 +362,7 @@
 }
 
 /* Focus States for Accessibility */
-ץמשה-צקמו ש:כםבודת
-.nav-menu a:focus,
-.user-profile-button:focus,
-.dropdown-item:focus {
-  /* outline: 2px solid var(--gradient-middle); */
-  /* outline-offset: 2px; */
-}
+
 
 /* Loading State */
 .nav-menu a.loading {
